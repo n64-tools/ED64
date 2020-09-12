@@ -45,7 +45,7 @@ jobs:
         -DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/ED64-XIO/CMake/toolchain.libdragon.cmake
         -DTOOLCHAIN_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/gcc-toolchain-mips64
         -DLIBDRAGON_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/libdragon
-        $(Build.SourcesDirectory)
+        $(Build.SourcesDirectory)/ED64-XIO/
     displayName: Set CMake Options
 
   - task: CMake@1
