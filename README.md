@@ -1,4 +1,4 @@
-# EverrDrive-64 reference source
+# Everdrive-64 reference source
 
 ## Folders
 ### usb64

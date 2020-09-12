@@ -29,9 +29,9 @@ if(NOT BUILD_VERSION)
 endif()
 
 string(REPLACE "." ";" VERSION_LIST ${BUILD_VERSION})
-list(GET VERSION_LIST 0 BUILD_VER_MAJOR)
-list(GET VERSION_LIST 1 BUILD_VER_MINOR)
-list(GET VERSION_LIST 2 BUILD_VER_REV)
+list(GET VERSION_LIST 3 BUILD_VER_MAJOR)
+list(GET VERSION_LIST 4 BUILD_VER_MINOR)
+list(GET VERSION_LIST 1 BUILD_VER_REV)
 
 
 
@@ -53,13 +53,18 @@ target_sources( ${ELF_NAME} PUBLIC
 	${CMAKE_CURRENT_LIST_DIR}/src/incs.s
 	${CMAKE_CURRENT_LIST_DIR}/src/main.c
 	${CMAKE_CURRENT_LIST_DIR}/src/sys.c
+	${CMAKE_CURRENT_LIST_DIR}/ff/diskio.c
+	${CMAKE_CURRENT_LIST_DIR}/ff/ff.c
+	${CMAKE_CURRENT_LIST_DIR}/ff/ffsystem.c
+	${CMAKE_CURRENT_LIST_DIR}/ff/ffunicode.c
+	${CMAKE_CURRENT_LIST_DIR}/ff/fileio.c
+	${CMAKE_CURRENT_LIST_DIR}/ff/usb.c
 )
-
-SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_LIST_DIR}/src/gscore.c PROPERTIES COMPILE_FLAGS -O0) #probably a better way to do this, but it seems to work for the moment!
 
 target_include_directories( ${ELF_NAME}
 	PUBLIC
 	${CMAKE_CURRENT_LIST_DIR}/inc
+	${CMAKE_CURRENT_LIST_DIR}/ff
 )
 
 target_link_directories( ${ELF_NAME}
