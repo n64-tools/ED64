@@ -38,7 +38,7 @@ jobs:
   - task: CMake@1
     inputs:
       cmakeArgs: 
-        -DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/ED64-XIO/CMake/toolchain.libdragon.cmake
+        -DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/ED64-XIO/CMake/toolchain-libdragon.cmake
         -DTOOLCHAIN_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/gcc-toolchain-mips64
         -DLIBDRAGON_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/libdragon
         $(Build.SourcesDirectory)/ED64-XIO/
