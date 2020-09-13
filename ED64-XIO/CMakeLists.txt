@@ -9,8 +9,6 @@ set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "ON" FORCE) # debug helper
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
-message(STATUS "Building for hardware: ${HARDWARE_TYPE} v${HARDWARE_REVISION}")
-
 # make sure the version is set
 if(NOT BUILD_VERSION)
 	set(BUILD_VERSION 3.14.0)
