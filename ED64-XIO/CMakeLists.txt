@@ -23,13 +23,13 @@ set( ELF_NAME 			${PROJECT_NAME}.elf )
 set( BIN_NAME 			${PROJECT_NAME}.bin )
 set( ROM_NAME 			${PROJECT_NAME}.v64 )
 
-set( LINKER_FILE_NAME "${LIBDRAGON_PREFIX}/ldscripts/ed64.ld" )
-set(ROM_HEADER ${LIBDRAGON_PREFIX}/headers/header)
+set( LINKER_FILE_NAME "${CMAKE_CURRENT_LIST_DIR}/ldscripts/ed64.ld" )
+set(ROM_HEADER ${CMAKE_CURRENT_LIST_DIR}/headers/header)
 
 string(REPLACE "." ";" VERSION_LIST ${BUILD_VERSION})
 list(GET VERSION_LIST 3 BUILD_VER_MAJOR)
-list(GET VERSION_LIST 4 BUILD_VER_MINOR)
-list(GET VERSION_LIST 1 BUILD_VER_REV)
+list(GET VERSION_LIST 14 BUILD_VER_MINOR)
+list(GET VERSION_LIST 0 BUILD_VER_REV)
 
 add_executable( ${ELF_NAME}
 )
@@ -61,10 +61,10 @@ target_include_directories( ${ELF_NAME}
 	${CMAKE_CURRENT_LIST_DIR}/ff
 )
 
-target_link_directories( ${ELF_NAME}
-	PUBLIC
-	${CMAKE_CURRENT_LIST_DIR}/lib
-)
+# target_link_directories( ${ELF_NAME}
+# 	PUBLIC
+# 	${CMAKE_CURRENT_LIST_DIR}/lib
+# )
 
 set_target_properties( ${ELF_NAME} 
 	PROPERTIES LINK_FLAGS "-T ${LINKER_FILE_NAME}"
@@ -77,7 +77,7 @@ add_custom_command(TARGET ${ELF_NAME}
 				  	
 add_custom_command(TARGET ${ELF_NAME}
                   POST_BUILD
-                  COMMAND ${N64_TOOL} ARGS -l 1M -t "${PROJECT_NAME}" -h ${ROM_HEADER} -o ${ROM_NAME} ${BIN_NAME}
+				  COMMAND ${N64_TOOL} ARGS -l 256K -t "${PROJECT_NAME}" -h ${ROM_HEADER} -o ${ROM_NAME} ${BIN_NAME} -s
 				  )
 				  
 add_custom_command(TARGET ${ELF_NAME}
