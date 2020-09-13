@@ -22,4 +22,4 @@ set(LINKER_FLAGS_START		"-ldragon")
 set(LINKER_FLAGS_END		"-ldragonsys")
 
 
-include(${PROJECT_SOURCE_DIR}/CMake/toolchain.mips64-elf.cmake)
+include(${PROJECT_SOURCE_DIR}/CMake/toolchain.mips64.cmake)
