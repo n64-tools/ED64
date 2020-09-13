@@ -31,9 +31,6 @@ jobs:
     displayName: 'Extract libdragon-win64'
     continueOnError: false
 
-  - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\ED64-XIO\tools"
-    displayName: Tweak PATH for Ninja
-
     #not sure why this is needed, but fails if not there!
   - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\ED64-XIO\toolchain\libdragon\tools"
     displayName: Tweak PATH for libdragon tools
@@ -41,7 +38,6 @@ jobs:
   - task: CMake@1
     inputs:
       cmakeArgs: 
-        -G Ninja
         -DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/ED64-XIO/CMake/toolchain.libdragon.cmake
         -DTOOLCHAIN_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/gcc-toolchain-mips64
         -DLIBDRAGON_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/libdragon
