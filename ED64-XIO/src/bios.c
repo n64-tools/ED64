@@ -248,7 +248,7 @@ void bi_sd_speed(u8 speed) {
     bi_reg_wr(REG_SD_STATUS, bi_sd_cfg);
 }
 u16 bi_old_sd_mode;
-//this function gives time for set stable values on open bus
+//this function gives time for setting stable values on open bus
 
 void bi_sd_switch_mode(u16 mode) {
 
@@ -538,7 +538,7 @@ void bi_game_cfg_set(u8 type) {
     bi_reg_wr(REG_GAM_CFG, type);
 }
 
-//swap bytes copied from SD card. affect only reads to ROM area
+//swaps bytes copied from SD card. only affects reads to ROM area
 void bi_wr_swap(u8 swap_on) {
 
     if (swap_on) {

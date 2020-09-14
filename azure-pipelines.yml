@@ -58,14 +58,15 @@ jobs:
         $(Build.SourcesDirectory)/ED64-XIO/
     displayName: Set CMake Options
 
+    #Builds to the rootdir/build?
   - task: CMake@1
     inputs:
-      cmakeArgs: '--build $(Build.SourcesDirectory)/ED64-XIO/build --target all --config Release'
+      cmakeArgs: '--build $(Build.SourcesDirectory)/build --target all --config Release'
     displayName: Build with CMake
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: $(Build.SourcesDirectory)/ED64-XIO/
+      sourceFolder: $(Build.SourcesDirectory)/
       contents: 'build\*.v64' 
       targetFolder: $(Build.ArtifactStagingDirectory)
       flattenFolders: true
