@@ -52,10 +52,6 @@ jobs:
   - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\ED64-XIO\toolchain\libdragon\tools"
     displayName: Tweak PATH for libdragon tools
 
-    #not sure why this is needed, but fails if not there!
-  - script: echo "##vso[task.prependpath]C:\Windows\System32"
-    displayName: Tweak PATH for cmd
-
   - task: CMake@1
     inputs:
       cmakeArgs:
@@ -64,12 +60,14 @@ jobs:
         -DTOOLCHAIN_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/gcc-toolchain-mips64
         -DLIBDRAGON_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/libdragon
         $(Build.SourcesDirectory)/ED64-XIO/
+    workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
     displayName: Set CMake Options
 
     #Builds to the rootdir/build?
   - task: CMake@1
     inputs:
       cmakeArgs: '--build $(Build.SourcesDirectory)/build --target all --config Release'
+    workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
     displayName: Build with CMake
 
   - task: CopyFiles@2
