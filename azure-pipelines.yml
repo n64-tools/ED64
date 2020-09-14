@@ -63,10 +63,9 @@ jobs:
       workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
     displayName: Set CMake Options
 
-    #Builds to the rootdir/build?
   - task: CMake@1
     inputs:
-      cmakeArgs: '--build $(Build.SourcesDirectory)/build --target all --config Release'
+      cmakeArgs: '--build $(Build.SourcesDirectory)/ED64-XIO/build --target all --config Release'
       workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
     displayName: Build with CMake
 
