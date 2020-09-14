@@ -11,7 +11,7 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 # make sure the version is set
 if(NOT BUILD_VERSION)
-	set(BUILD_VERSION 3.14.0)
+	set(BUILD_VERSION 3.14.1)
 endif()
 
 project(ED64-XIO-SAMPLE #rename for your ROM name
@@ -29,7 +29,7 @@ set(ROM_HEADER ${CMAKE_CURRENT_LIST_DIR}/headers/header)
 string(REPLACE "." ";" VERSION_LIST ${BUILD_VERSION})
 list(GET VERSION_LIST 3 BUILD_VER_MAJOR)
 list(GET VERSION_LIST 14 BUILD_VER_MINOR)
-list(GET VERSION_LIST 0 BUILD_VER_REV)
+list(GET VERSION_LIST 1 BUILD_VER_REV)
 
 add_executable( ${ELF_NAME}
 )
