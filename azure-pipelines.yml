@@ -5,6 +5,20 @@ jobs:
 
   steps:
   - script: |
+      curl -L  https://github.com/ninja-build/ninja/releases/download/v1.10.1/ninja-win.zip
+    displayName: 'Get Ninja build'
+    continueOnError: false
+    
+  - task: ExtractFiles@1
+    inputs:
+      archiveFilePatterns: 'ninja-win.zip' 
+      destinationFolder: ED64-XIO/tools
+      cleanDestinationFolder: false 
+    displayName: 'Extract ninja build'
+    #condition: ne(variables.GCC_CACHE_RESTORED, 'true')
+    continueOnError: false  
+
+  - script: |
       curl -L https://n64tools.blob.core.windows.net/binaries/N64-tools/mips64-gcc-toolchain/master/latest/gcc-toolchain-mips64-win64.zip --output gcc-toolchain-mips64-win64.zip
     displayName: 'Get GCC toolchain'
     continueOnError: false
@@ -31,13 +45,13 @@ jobs:
     displayName: 'Extract libdragon-win64'
     continueOnError: false
 
-    #not sure why this is needed, but fails if not there!
-  - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\ED64-XIO\toolchain\libdragon\tools"
-    displayName: Tweak PATH for libdragon tools
+  - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\ED64-XIO\tools"
+    displayName: Tweak PATH for Ninja
 
   - task: CMake@1
     inputs:
-      cmakeArgs: 
+      cmakeArgs:
+        -G Ninja 
         -DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/ED64-XIO/CMake/toolchain-libdragon.cmake
         -DTOOLCHAIN_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/gcc-toolchain-mips64
         -DLIBDRAGON_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/libdragon
