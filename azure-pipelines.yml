@@ -48,6 +48,14 @@ jobs:
   - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\ED64-XIO\tools"
     displayName: Tweak PATH for Ninja
 
+    #not sure why this is needed, but fails if not there!
+  - script: echo "##vso[task.prependpath]$(Build.SourcesDirectory)\toolchain\libdragon\tools"
+    displayName: Tweak PATH for libdragon tools
+
+    #not sure why this is needed, but fails if not there!
+  - script: echo "##vso[task.prependpath]C:\Windows\System32"
+    displayName: Tweak PATH for cmd
+
   - task: CMake@1
     inputs:
       cmakeArgs:
