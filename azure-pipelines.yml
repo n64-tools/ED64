@@ -60,14 +60,14 @@ jobs:
         -DTOOLCHAIN_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/gcc-toolchain-mips64
         -DLIBDRAGON_PREFIX=$(Build.SourcesDirectory)/ED64-XIO/toolchain/libdragon
         $(Build.SourcesDirectory)/ED64-XIO/
-    workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
+      workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
     displayName: Set CMake Options
 
     #Builds to the rootdir/build?
   - task: CMake@1
     inputs:
       cmakeArgs: '--build $(Build.SourcesDirectory)/build --target all --config Release'
-    workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
+      workingDirectory: '$(Build.SourcesDirectory)/ED64-XIO/build'
     displayName: Build with CMake
 
   - task: CopyFiles@2
