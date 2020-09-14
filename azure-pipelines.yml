@@ -5,7 +5,7 @@ jobs:
 
   steps:
   - script: |
-      curl -L  https://github.com/ninja-build/ninja/releases/download/v1.10.1/ninja-win.zip
+      curl -L https://github.com/ninja-build/ninja/releases/download/v1.10.1/ninja-win.zip
     displayName: 'Get Ninja build'
     continueOnError: false
     
@@ -33,7 +33,7 @@ jobs:
     continueOnError: false
 
   - script: |
-      curl -L https://n64tools.blob.core.windows.net/binaries/N64-tools/libdragon/develop-displaytest/latest/libdragon-win64.zip --output libdragon-win64.zip
+      curl -L https://n64tools.blob.core.windows.net/binaries/N64-tools/libdragon/develop/latest/libdragon-win64.zip --output libdragon-win64.zip
     displayName: 'Get libdragon'
     continueOnError: false
 
