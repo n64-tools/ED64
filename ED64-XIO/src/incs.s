@@ -3,6 +3,6 @@
 .align 4
 .global font
 font:
-.incbin "../res/font64.bin"
+.incbin "../ED64-XIO/res/font64.bin"
 
 
