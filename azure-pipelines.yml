@@ -103,15 +103,25 @@ jobs:
 
   pool:
     vmImage: 'windows-latest'
+
+  variables:
+    solution: '**/*.sln'
+    project: '**/*.csproj'
+    buildPlatform: 'Any CPU'
+    buildConfiguration: 'Release'
   
   steps:
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
-        projects: '**/*.csproj'
+        projects: '$(project)'
         arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
-      displayName: 'build netcoreapp3.1'
+      displayName: 'build netcoreapp3.1 app'
 
     - task: CopyFiles@2
       inputs:
@@ -125,9 +135,9 @@ jobs:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
-        projects: '**/*.csproj'
+        projects: '$(project)'
         arguments: '--configuration $(buildConfiguration) --framework net45'
-      displayName: 'build net45'
+      displayName: 'build net45 app'
 
     - task: CopyFiles@2
       inputs:
