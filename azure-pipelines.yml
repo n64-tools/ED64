@@ -123,6 +123,15 @@ jobs:
         arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
       displayName: 'build netcoreapp3.1 app'
 
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/netcoreapp3.1/
+        contents: '**' 
+        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/netcoreapp3.1/
+        flattenFolders: true
+      displayName: 'Copy Application'
+      continueOnError: false
+
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
@@ -132,9 +141,9 @@ jobs:
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/
+        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/net45/
         contents: '**' 
-        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/
+        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/net45/
         flattenFolders: true
       displayName: 'Copy Application'
       continueOnError: false
