@@ -110,21 +110,30 @@ jobs:
       inputs:
         command: 'build'
         projects: '**/*.csproj'
-        arguments: '--framework netcoreapp3.1'
-      displayName: 'dotnet build release netcoreapp3.1'
+        arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
+      displayName: 'build netcoreapp3.1'
+
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/netcoreapp3.1/
+        contents: '**' 
+        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/netcoreapp3.1/
+        flattenFolders: true
+      displayName: 'Copy Application'
+      continueOnError: false
 
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
         projects: '**/*.csproj'
-        arguments: '--framework net45'
-      displayName: 'dotnet build release net45'
+        arguments: '--configuration $(buildConfiguration) --framework net45'
+      displayName: 'build net45'
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin
+        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/net45/
         contents: '**' 
-        targetFolder: $(Build.ArtifactStagingDirectory)/usb64
+        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/net45/
         flattenFolders: true
       displayName: 'Copy Application'
       continueOnError: false
