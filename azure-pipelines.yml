@@ -111,7 +111,14 @@ jobs:
         command: 'build'
         projects: '**/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
-      displayName: 'dotnet build $(buildConfiguration)'
+      displayName: 'dotnet build release --framework netcoreapp3.1'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+      displayName: 'dotnet build release --framework net45'
 
     - task: CopyFiles@2
       inputs:
