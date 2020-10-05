@@ -108,16 +108,20 @@ jobs:
 
     - task: DotNetCoreCLI@2
       inputs:
+        command: 'restore'
+
+    - task: DotNetCoreCLI@2
+      inputs:
         command: 'build'
         projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
+        arguments: '--framework netcoreapp3.1'
       displayName: 'dotnet build release netcoreapp3.1'
 
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
         projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration) --framework net45'
+        arguments: '--framework net45'
       displayName: 'dotnet build release net45'
 
     - task: CopyFiles@2
