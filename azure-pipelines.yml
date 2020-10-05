@@ -107,9 +107,9 @@ jobs:
   steps:
 
     - task: NuGetToolInstaller@0
-    inputs:
-      versionSpec: '>=4.3.0'
-      checkLatest: true
+      inputs:
+        versionSpec: '>=4.3.0'
+        checkLatest: true
 
     - script: dotnet restore
     - task: NuGetCommand@2
