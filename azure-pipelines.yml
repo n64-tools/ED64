@@ -112,21 +112,6 @@ jobs:
         arguments: '--configuration $(buildConfiguration)'
       displayName: 'dotnet build $(buildConfiguration)'
 
-    - task: VSBuild@1
-      inputs:
-        solution: '**\*.sln' 
-        vsVersion: 'latest' # Optional. Options: latest, 16.0, 15.0, 14.0, 12.0, 11.0
-        #msbuildArgs: # Optiona
-        #platform: # Optional
-        configuration: 'release'
-        #clean: false # Optional
-        #maximumCpuCount: false # Optional
-        restoreNugetPackages: true # Optional
-        #msbuildArchitecture: 'x86' # Optional. Options: x86, x64
-        #logProjectEvents: true # Optional
-        #createLogFile: false # Optional
-        #logFileVerbosity: 'normal' # Optional. Options: quiet, minimal, normal, detailed, diagnostic
-
     - task: CopyFiles@2
       inputs:
         sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin
