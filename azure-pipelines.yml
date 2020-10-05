@@ -106,19 +106,21 @@ jobs:
   
   steps:
 
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-      displayName: 'dotnet build release --framework netcoreapp3.1'
+    - task: NuGetToolInstaller@0
+    inputs:
+      versionSpec: '>=4.3.0'
+      checkLatest: true
 
-    - task: DotNetCoreCLI@2
+    - script: dotnet restore
+    - task: NuGetCommand@2
       inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-      displayName: 'dotnet build release --framework net45'
+        restoreSolution: '**\*.sln'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '**\*.sln' 
+        vsVersion: 'latest'
+        configuration: 'release'
 
     - task: CopyFiles@2
       inputs:
