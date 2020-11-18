@@ -21,6 +21,22 @@ namespace ed64usb
         const int SIZE_8_MEGABYTE = 0x800000;
         const int SIZE_32_MEGABYTE = 0x2000000;
 
+        private enum SystemRegion : byte
+        {
+            PAL = (byte)'p',
+            NTSC = (byte)'n',
+            MPAL = (byte)'m',
+            Unknown = (byte)'u'
+        }
+
+        private enum CartId : byte
+        {
+            V2_5 = 2,
+            V3_0 = 3,
+            X5 = 5,
+            X7 = 7
+        }
+
         private enum TransmitCommand : byte
         {
             RomFillCartridgeSpace = (byte)'c', //char ROM fill 'c' artridge space
@@ -31,7 +47,11 @@ namespace ed64usb
 
             RamRead = (byte)'r', //char RAM 'r' ead
             //RamWrite = (byte)'w', //char RAM 'w' rite
-            FpgaWrite = (byte)'f' //char 'f' pga write
+            FpgaWrite = (byte)'f', //char 'f' pga write
+
+            UnofficialRtcGet = (byte)'d', //char get RTC 'd' atetime
+            UnofficialRtcSet = (byte)'D', //char set RTC 'D' atetime
+            UnofficialResolutionGet = (byte)'p' //char get Resolution in 'p' ixels
 
         }
 
@@ -39,6 +59,8 @@ namespace ed64usb
         {
             CommsReply = (byte)'r',
             CommsReplyLegacy = (byte)'k',
+            UnofficialRtcDate = (byte)'d',
+            UnofficialResolutionPixels = (byte)'p'
 
         }
 
@@ -48,20 +70,47 @@ namespace ed64usb
         /// <param name="filename">The file to be written to</param>
         public static void DumpScreenBuffer(string filename)
         {
-            //TODO: the OS menu only currently supports 320x240 resolution, but should be read from the appropriate RAM register for forward compatibility! 
+            //TODO: the official OS only currently supports 320x240 resolution, but should be read from the appropriate RAM register for forward compatibility! 
             // See https://n64brew.dev/wiki/Video_Interface for how this possibily could be improved.
             short width = 320; //TODO: the OS menu only currently supports 320x240 resolution, but should be read from the appropriate RAM register for forward compatibility! 
             short height = 240;
+
+            
+
+            //try
+            //{ //The unofficial OS supports getting the resolution as a command packet type. This is run in a try statement incase we are using the official OS.
+            //    CommandPacketTransmit(TransmitCommand.UnofficialResolutionGet);
+            //    var responseBytes = CommandPacketReceive();
+            //    if (responseBytes[3] == (byte)ReceiveCommand.UnofficialResolutionPixels)
+            //    {
+            //        if (BitConverter.IsLittleEndian)
+            //        {
+
+            //            Array.Reverse(responseBytes, 4, 2); //convert endian for width short
+            //            Array.Reverse(responseBytes, 6, 2); //convert endian for height short
+            //        }
+            //        width = BitConverter.ToInt16(responseBytes, 4);
+            //        height = BitConverter.ToInt16(responseBytes, 6);
+            //        Console.WriteLine($"width = {width}, height = {height}");
+            //    }
+            //}
+            //catch (Exception)
+            //{
+
+            //    //the packet is not supported on this OS. Just ignore and use the default.
+            //}
+
+            var length = width * height * 2;
+            Console.WriteLine($"len = {length}");
 
             var data = RamRead(0xA4400004, 512); // get the framebuffer address from its pointer in cartridge RAM (requires reading the whole 512 byte buffer, otherwise USB comms will fail)
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(data, 0, 4); //convert endian (we only need the first 4 bytes)
             }
-            var framebufferAddress = BitConverter.ToInt32(data, 0);
-            var length = width * height * 2;
+            var framebufferAddress = BitConverter.ToUInt32(data, 0);
 
-            data = RamRead((uint)(RAM_BASE_ADDRESS | framebufferAddress), length); // Get the framebuffer data from cartridge RAM
+            data = RamRead(RAM_BASE_ADDRESS | framebufferAddress, length); // Get the framebuffer data from cartridge RAM
             File.WriteAllBytes(filename, ImageUtilities.ConvertToBitmap(width, height, data));       
         }
 
@@ -278,6 +327,59 @@ namespace ed64usb
 
         }
 
+        /// <summary>
+        /// Reads the time from the Real Time Clock
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime ReadRtc()
+        {
+            CommandPacketTransmit(TransmitCommand.UnofficialRtcGet);
+            var responseBytes = CommandPacketReceive();
+            if (responseBytes[3] != (byte)ReceiveCommand.UnofficialRtcDate)
+            {
+                throw new Exception("Unexpected RTC Response");
+            }
+
+            //The received bytes are used as a "hex string" interpretation of the number, so it must be read as hex and then converted to an integer.
+            var seconds = int.Parse(BitConverter.ToString(new byte[] { responseBytes[4] }));
+            var minutes = int.Parse(BitConverter.ToString(new byte[] { responseBytes[5] }));
+            var hours = int.Parse(BitConverter.ToString(new byte[] { responseBytes[6] }));
+            //var dayOfWeek = int.Parse(BitConverter.ToString(new byte[] { responseBytes[7] }));
+            var dayOfMonth = int.Parse(BitConverter.ToString(new byte[] { responseBytes[8] }));
+            var month = int.Parse(BitConverter.ToString(new byte[] { responseBytes[9] }));
+            var year = int.Parse(BitConverter.ToString(new byte[] { responseBytes[10] })) + 2000; // the year has a base offset of 2000
+            return new DateTime(year, month, dayOfMonth, hours, minutes, seconds);
+        }
+
+        /// <summary>
+        /// Writes the time to the Real Time Clock
+        /// </summary>
+        /// <param name="dateTime">The DateTime to send</param>
+        public static void WriteRtc(DateTime dateTime)
+        { //This does not conform to the CommandPacket Schema, so we will just create the expected packet and send it directly.
+
+            List<byte> RtcPacket = new List<byte>
+            {
+                (byte)'c',
+                (byte)'m',
+                (byte)'d',
+                (byte)TransmitCommand.UnofficialRtcSet,
+                //we need to convert the values to be literal values as in the reverse of ReadRtc
+                Convert.ToByte(dateTime.Second.ToString(), 16),
+                Convert.ToByte(dateTime.Minute.ToString(), 16),
+                Convert.ToByte(dateTime.Hour.ToString(), 16),
+                Convert.ToByte(dateTime.DayOfWeek.ToString("x"), 16),
+                Convert.ToByte(dateTime.Day.ToString(), 16),
+                Convert.ToByte(dateTime.Month.ToString(), 16),
+                Convert.ToByte(dateTime.ToString("yy"), 16) //todo, need to minus 2000
+            };
+            RtcPacket.AddRange(new byte[512 - 11]); //need to send as 512 bytes!
+
+            //Console.WriteLine($"RTC Send: {BitConverter.ToString(RtcPacket.ToArray())}");
+
+            UsbInterface.Write(RtcPacket.ToArray());
+        }
+
 
         private static void FillCartridgeRomSpace(int romLength, uint value)
         {
@@ -299,7 +401,16 @@ namespace ed64usb
         public static void TestCommunication()
         {
             CommandPacketTransmit(TransmitCommand.TestConnection);
-            CommandPacketReceive();
+            var responseBytes = CommandPacketReceive(); //the unofficial OS returns the system info as a response...
+            if (responseBytes[4] != 0) //check for packet version (would be zero on the official OS)
+            {
+                if (responseBytes[4] == 1) // packet version 1
+                {
+                    var cartType = (char)responseBytes[5];
+                    var systemRegion = Convert.ToChar(responseBytes[6]);
+                    Console.WriteLine($"ED64 Version = {cartType}, N64 region = {(SystemRegion)systemRegion}.");
+                }
+            }
         }
 
         private static bool IsBootLoader(byte[] data)
@@ -342,7 +453,9 @@ namespace ed64usb
                 commandPacket.AddRange(BitConverter.GetBytes(length));
                 commandPacket.AddRange(BitConverter.GetBytes(argument));
             }
-
+            //It is uncertain whether the unofficial OS can support commands with a buffer size != to 512 bytes, but the official OS can.
+            //Until we can do it with Unofficial OS, lets just send the whole 512 bytes!
+            commandPacket.AddRange(new byte[512 - 16]); //TODO: find a way to support 16 byte commands in the unofficial OS!
             UsbInterface.Write(commandPacket.ToArray());
 
         }
@@ -354,11 +467,13 @@ namespace ed64usb
         private static byte[] CommandPacketReceive()
         {
 
-            var cmd = UsbInterface.Read(16);
+            var cmd = UsbInterface.Read(512); //should be 16, but this is needed for the unofficial OS?!
             if (Encoding.ASCII.GetString(cmd).ToLower().StartsWith("cmd") || Encoding.ASCII.GetString(cmd).ToLower().StartsWith("RSP"))
             {
                 switch ((ReceiveCommand)cmd[3])
                 {
+                    case ReceiveCommand.UnofficialResolutionPixels:
+                    case ReceiveCommand.UnofficialRtcDate:
                     case ReceiveCommand.CommsReply:
                         return cmd;
                     case ReceiveCommand.CommsReplyLegacy: //Certain ROM's may reply that used the old OSes without case sensitivity on the test commnad, this ensures they are handled.
@@ -369,7 +484,7 @@ namespace ed64usb
             }
             else
             {
-                throw new Exception("Corrupted response received from USB port.");
+                throw new Exception($"Corrupted response received from USB port: {BitConverter.ToString(cmd)}.");
             }
         }
 

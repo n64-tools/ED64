@@ -34,6 +34,8 @@ namespace ed64usb
             Console.WriteLine("-diag");
             Console.WriteLine("-drom=<filename>");
             Console.WriteLine("-screen=<filename>");
+            Console.WriteLine("-getrtc");
+            Console.WriteLine("-setrtc=<datetimestring>");
             Console.WriteLine();
 
 
@@ -151,6 +153,14 @@ namespace ed64usb
                         case string x when x.StartsWith("-screen"):
                             Console.WriteLine("Reading Framebuffer.");
                             CommandProcessor.DumpScreenBuffer(ExtractSubArg(arg));
+                            break;
+                        case string x when x.StartsWith("-getrtc"):
+                            Console.WriteLine("Reading from RTC.");
+                            Console.WriteLine($"time = {CommandProcessor.ReadRtc()}");
+                            break;
+                        case string x when x.StartsWith("-setrtc"):
+                            Console.WriteLine("Writing to RTC.");
+                            CommandProcessor.WriteRtc(DateTime.Parse(ExtractSubArg(arg)));
                             break;
 
                         default:

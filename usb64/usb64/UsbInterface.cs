@@ -19,7 +19,10 @@ namespace ed64usb
             while (length > 0)
             {
                 var blockSize = DEFAULT_BLOCK_SIZE;
-                if (blockSize > length) blockSize = length;
+                if (blockSize > length)
+                {
+                    blockSize = length;
+                }
                 var bytesread = port.Read(data, offset, blockSize);
                 length -= bytesread;
                 offset += bytesread;
