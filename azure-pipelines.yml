@@ -1,27 +1,27 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# Only trigger when something useful happens
 trigger:
   branches:
     include: ["master", "develop*", "release-*", "refs/tags/*" ]
   paths:
     exclude: [ "doc", "*.md", ".gitignore", "README.md" ]
 
+# Dont build twice if the the branch is also a PR.
 pr:
   autoCancel: true
 
+# Generate jobs for parallel builds dependent on targets.
 jobs:
-# - job: Windows_CMake_ROM
-#   pool:
-#     vmImage: 'windows-latest'
+  #Build the libdragon demo.
+  #TODO: (requires work).
+- job: Windows_libdragon_demo_rom
+  pool:
+    vmImage: 'windows-latest'
 
-#   steps:
-#   - script: |
-#       curl -LJO https://github.com/ninja-build/ninja/releases/download/v1.10.1/ninja-win.zip
-#     displayName: 'Get Ninja build'
-#     continueOnError: false
+  steps:
+  - script: |
+      curl -LJO https://github.com/ninja-build/ninja/releases/download/v1.10.1/ninja-win.zip
+    displayName: 'Get Ninja build'
+    continueOnError: false
     
 #   - task: ExtractFiles@1
 #     inputs:
@@ -99,7 +99,8 @@ jobs:
 #     continueOnError: false
 
 ##############################
-- job: Windows_USB64_App
+# Build the .netCore 3.1 app for Windows 10.
+- job: Windows_USB64_App_netcoreapp3_1
 
   pool:
     vmImage: 'windows-latest'
@@ -132,6 +133,76 @@ jobs:
       displayName: 'Copy Application'
       continueOnError: false
 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'windows-binaries' 
+        publishLocation: 'Container'
+      displayName: Publish Build Artifacts
+      continueOnError: false
+
+##############################
+# Build the .net5 app for Windows 10 and latest linux systems. (not yet compatible with latest azure pipeline).
+# - job: Windows_USB64_App_net5
+
+#   pool:
+#     vmImage: 'windows-latest'
+
+#   variables:
+#     solution: '**/*.sln'
+#     project: '**/*.csproj'
+#     buildPlatform: 'Any CPU'
+#     buildConfiguration: 'Release'
+  
+#   steps:
+
+#     - task: NuGetCommand@2
+#       inputs:
+#         restoreSolution: '$(solution)'
+
+#     - task: DotNetCoreCLI@2
+#       inputs:
+#         command: 'build'
+#         projects: '$(project)'
+#         arguments: '--configuration $(buildConfiguration) --framework net5'
+#       displayName: 'build net5 app'
+
+#     - task: CopyFiles@2
+#       inputs:
+#         sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/net5/
+#         contents: '**' 
+#         targetFolder: $(Build.ArtifactStagingDirectory)/usb64/net5/
+#         flattenFolders: true
+#       displayName: 'Copy Application'
+#       continueOnError: false
+
+#     - task: PublishBuildArtifacts@1
+#       inputs:
+#         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#         artifactName: 'windows-binaries' 
+#         publishLocation: 'Container'
+#       displayName: Publish Build Artifacts
+#       continueOnError: false
+
+##############################
+# Build the .net 4.5 app for Windows 7 and above.
+- job: Windows_USB64_App_net45
+
+  pool:
+    vmImage: 'windows-latest'
+
+  variables:
+    solution: '**/*.sln'
+    project: '**/*.csproj'
+    buildPlatform: 'Any CPU'
+    buildConfiguration: 'Release'
+  
+  steps:
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
@@ -151,7 +222,93 @@ jobs:
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: 'binaries' 
+        artifactName: 'windows-binaries' 
+        publishLocation: 'Container'
+      displayName: Publish Build Artifacts
+      continueOnError: false
+
+##############################
+# Build the .net 4.0 app for Windows XP and above.
+- job: Windows_USB64_App_net40
+
+  pool:
+    vmImage: 'windows-latest'
+
+  variables:
+    solution: '**/*.sln'
+    project: '**/*.csproj'
+    buildPlatform: 'Any CPU'
+    buildConfiguration: 'Release'
+  
+  steps:
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '$(project)'
+        arguments: '--configuration $(buildConfiguration) --framework net40'
+      displayName: 'build net40 app'
+
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/net40/
+        contents: '**' 
+        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/net40/
+        flattenFolders: true
+      displayName: 'Copy Application'
+      continueOnError: false
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'windows-binaries' 
+        publishLocation: 'Container'
+      displayName: Publish Build Artifacts
+      continueOnError: false
+
+##############################
+# Build the .netcore 3.1 app for supported linux systems.
+- job: Linux_USB64_App_netcoreapp3_1
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  variables:
+    solution: '**/*.sln'
+    project: '**/*.csproj'
+    buildPlatform: 'Any CPU'
+    buildConfiguration: 'Release'
+  
+  steps:
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '$(project)'
+        arguments: '--configuration $(buildConfiguration) --framework netcoreapp3.1'
+      displayName: 'build netcoreapp3.1 app'
+
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)/usb64/usb64/bin/$(buildConfiguration)/netcoreapp3.1/
+        contents: '**' 
+        targetFolder: $(Build.ArtifactStagingDirectory)/usb64/netcoreapp3.1/
+        flattenFolders: true
+      displayName: 'Copy Application'
+      continueOnError: false
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'linux-binaries' 
         publishLocation: 'Container'
       displayName: Publish Build Artifacts
       continueOnError: false
