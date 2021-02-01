@@ -35,6 +35,7 @@ namespace ed64usb
             Console.WriteLine("-diag (Runs communications diagnostics.");
             Console.WriteLine("-drom=<filename> (Dumps loaded ROM to PC).");
             Console.WriteLine("-screen=<filename> (Dumps framebuffer as BMP to PC).");
+            Console.WriteLine("-unfdebug (Runs the unf Debugger).");
             Console.WriteLine();
 
 
@@ -92,6 +93,7 @@ namespace ed64usb
             var romFilePath = string.Empty;
             var startFileName = string.Empty;
             var startRom = false;
+            var unfDebug = false;
 
             var time = DateTime.Now.Ticks;
 
@@ -112,6 +114,10 @@ namespace ed64usb
                 {
                     switch (arg)
                     {
+                        case string x when x.StartsWith("-unfdebug"):
+                            unfDebug = true;
+                            break;
+
                         case string x when x.StartsWith("-fpga"):
                             Console.Write("Sending FPGA config... ");
                             var result = CommandProcessor.LoadFpga(ExtractSubArg(arg));
@@ -192,6 +198,12 @@ namespace ed64usb
                         throw new Exception("Could not start ROM");
                     }
 
+                }
+                
+                if (unfDebug)
+                {
+                    Console.Write("Starting unf debug session, ");
+                    //var debug = new Unf.Debuggger(UsbInterface.port);
                 }
             }
 
