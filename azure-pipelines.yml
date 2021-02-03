@@ -113,6 +113,11 @@ jobs:
   
   steps:
 
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '5.8.0' # Optional
+        #checkLatest: false # Optional
+
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
@@ -213,6 +218,11 @@ jobs:
   
   steps:
 
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '5.8.0' # Optional
+        #checkLatest: false # Optional
+
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
@@ -262,6 +272,12 @@ jobs:
     buildConfiguration: 'Release'
   
   steps:
+
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '5.8.0' # Optional
+        #checkLatest: false # Optional
+
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
@@ -312,6 +328,11 @@ jobs:
   
   steps:
 
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '5.8.0' # Optional
+        #checkLatest: false # Optional
+        
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
