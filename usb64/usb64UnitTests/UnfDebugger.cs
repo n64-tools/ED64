@@ -12,7 +12,7 @@ namespace usb64UnitTests
     public class UnfDebugger
     {
         [TestMethod]
-        public void Check_Basic_Command_String_Works()
+        public void send_basic_string_command()
         {
             string command = "commandname arg1 arg2";
             var output = new Unf.Debugger().ProcessSendCommand(command);
@@ -20,7 +20,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_File_Command_String_Works()
+        public void send_text_file_command()
         {
             string filename = @"c:\temp.txt";
             string command = $"@{filename}@";
@@ -35,13 +35,13 @@ namespace usb64UnitTests
         }
 
         //[TestMethod]
-        //public void Check_File_Command_Binary_Fails_when_over_8MB()
+        //public void send_binary_file_command()
         //{
         //    string filename = @"c:\temp.txt";
         //    string command = $"@{filename}@";
 
         //    // Put random bytes into this array.
-        //    byte[] fileContent = new byte[0x800001]; //Max is 0x800000
+        //    byte[] fileContent = new byte[0x800000]; //Max is 0x800000 (8MB)
         //    // Use Random class and NextBytes method.
         //    // ... Display the bytes with following method.
         //    Random random = new Random();
@@ -57,7 +57,7 @@ namespace usb64UnitTests
         //}
 
         [TestMethod]
-        public void Check_Append_File_Command_String_Alignment_Works()
+        public void send_file_command_with_4_byte_alignment()
         {
             string filename = @"c:\temp.txt";
             string command = $"@{filename}@";
@@ -72,7 +72,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_Append_File_Command_String_After_Works()
+        public void send_file_command_with_string_after()
         {
             string filename = @"c:\temp.txt";
             string command = $"commandname arg1 arg2 @{filename}@";
@@ -87,7 +87,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_Append_File_Command_String_Before_Works()
+        public void send_file_command_with_string_before()
         {
             string filename = @"c:\temp.txt";
             string command = $"@{filename}@ arg3";
@@ -102,7 +102,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_Append_File_Command_String_Before_And_After_Works()
+        public void send_file_command_with_string_before_and_after()
         {
             string filename = @"c:\temp.txt";
             string command = $"commandname arg1 arg2 @{filename}@ arg3";
@@ -117,7 +117,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_Text_Receive_Command_Processing_Works()
+        public void process_received_text_packet_body()
         {
             var packetBody = "abcd";
             var command = new List<byte>();
@@ -133,7 +133,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_Binary_Receive_Command_Processing_Works()
+        public void process_received_binary_packet_body()
         {
             var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03};
             var command = new List<byte>();
@@ -153,7 +153,7 @@ namespace usb64UnitTests
         }
 
         [TestMethod]
-        public void Check_ScreenshotHeader_Receive_Command_Processing_Works()
+        public void process_received_screenshot_info_packet_body()
         {
             var packetBody = new Unf.ScreenshotInfo() 
             { 
@@ -177,7 +177,7 @@ namespace usb64UnitTests
         }
 
         //[TestMethod]
-        //public void Check_Screenshot_Receive_Command_Processing_Works()
+        //public void process_received_screenshot_packet_body()
         //{
         //    var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };//need to collect a sample from somewhere!
         //    var command = new List<byte>();
