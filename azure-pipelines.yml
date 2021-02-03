@@ -118,6 +118,13 @@ jobs:
         restoreSolution: '$(solution)'
 
     - task: DotNetCoreCLI@2
+      displayName: dotnet restore
+      inputs:
+        command: restore
+        projects: '**/*.csproj'
+        includeNuGetOrg: true
+
+    - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
         projects: '$(project)'
@@ -159,6 +166,13 @@ jobs:
 #     - task: NuGetCommand@2
 #       inputs:
 #         restoreSolution: '$(solution)'
+
+#     - task: DotNetCoreCLI@2
+#       displayName: dotnet restore
+#       inputs:
+#         command: restore
+#         projects: '**/*.csproj'
+#         includeNuGetOrg: true
 
 #     - task: DotNetCoreCLI@2
 #       inputs:
@@ -204,6 +218,13 @@ jobs:
         restoreSolution: '$(solution)'
 
     - task: DotNetCoreCLI@2
+      displayName: dotnet restore
+      inputs:
+        command: restore
+        projects: '**/*.csproj'
+        includeNuGetOrg: true
+
+    - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
         projects: '$(project)'
@@ -241,10 +262,16 @@ jobs:
     buildConfiguration: 'Release'
   
   steps:
-
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
+
+    - task: DotNetCoreCLI@2
+      displayName: dotnet restore
+      inputs:
+        command: restore
+        projects: '**/*.csproj'
+        includeNuGetOrg: true
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -288,6 +315,13 @@ jobs:
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
+
+    - task: DotNetCoreCLI@2
+      displayName: dotnet restore
+      inputs:
+        command: restore
+        projects: '**/*.csproj'
+        includeNuGetOrg: true
 
     - task: DotNetCoreCLI@2
       inputs:
