@@ -116,7 +116,7 @@ namespace usb64UnitTests
             var command = new List<byte>();
             command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
             //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)1)); //text, high byte so no need to reverse.
+            command.AddRange(BitConverter.GetBytes((short)(int)Unf.Debugger.ReceiveCommandType.TEXT)); //text, high byte so no need to reverse.
             command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
             command.AddRange(Encoding.ASCII.GetBytes(packetBody));
             command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
@@ -132,7 +132,7 @@ namespace usb64UnitTests
             var command = new List<byte>();
             command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
             //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)2)); //text, high byte so no need to reverse.
+            command.AddRange(BitConverter.GetBytes((short)Unf.Debugger.ReceiveCommandType.BINARY)); //text, high byte so no need to reverse.
             command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
             command.AddRange(packetBody);
             command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
@@ -174,12 +174,12 @@ namespace usb64UnitTests
         //{
         //    var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };//need to collect a sample from somewhere!
         //    var command = new List<byte>();
-        //    command.AddRange(Encoding.ASCII.GetBytes("DMA@"));
+        //    command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
         //    //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
         //    command.AddRange(BitConverter.GetBytes((short)4)); //text, high byte so no need to reverse.
         //    command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
         //    command.AddRange(packetBody);
-        //    command.AddRange(Encoding.ASCII.GetBytes("CMPH"));
+        //    command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
         //    command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
         //    var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
 
