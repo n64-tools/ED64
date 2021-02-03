@@ -29,24 +29,31 @@ namespace usb64UnitTests
             {
                 { $"{filename}", new MockFileData(fileText) },
             });
-            string commandResult = "@4@abcd";
+            string commandResult = $"@{fileText.Length}@{fileText}";
             var output = new Unf.Debugger(fileSystem).ProcessSendCommand(command);
             Assert.AreEqual(commandResult, Encoding.ASCII.GetString(output));
         }
 
         //[TestMethod]
-        //public void Check_File_Command_String_Fails_when_over_8MB()
+        //public void Check_File_Command_Binary_Fails_when_over_8MB()
         //{
         //    string filename = @"c:\temp.txt";
         //    string command = $"@{filename}@";
-        //    string fileText = "abcd";
+
+        //    // Put random bytes into this array.
+        //    byte[] fileContent = new byte[0x800001]; //Max is 0x800000
+        //    // Use Random class and NextBytes method.
+        //    // ... Display the bytes with following method.
+        //    Random random = new Random();
+        //    random.NextBytes(array);
+
         //    var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
         //    {
-        //        { $"{filename}", new MockFileData(fileText) },
+        //        { $"{filename}", new MockFileData(fileContent) },
         //    });
-        //    string commandResult = "@4@abcd";
-        //    var output = new Unf.Debugger(fileSystem).ProcessCommand(command);
-        //    Assert.AreEqual(commandResult, output.CommandString);
+        //    string commandResult = $"@{fileContent.Length}@{fileContent}";
+        //    var output = new Unf.Debugger(fileSystem).ProcessSendCommand(command);
+        //    Assert.AreEqual(commandResult, Encoding.ASCII.GetString(output));
         //}
 
         [TestMethod]
@@ -74,7 +81,7 @@ namespace usb64UnitTests
             {
                 { $"{filename}", new MockFileData(fileText) },
             });
-            string commandResult = "commandname arg1 arg2 @4@abcd";
+            string commandResult = $"commandname arg1 arg2 @{fileText.Length}@{fileText}";
             var output = new Unf.Debugger(fileSystem).ProcessSendCommand(command);
             Assert.AreEqual(commandResult, Encoding.ASCII.GetString(output));
         }
@@ -104,7 +111,7 @@ namespace usb64UnitTests
             {
                 { $"{filename}", new MockFileData(fileText) },
             });
-            string commandResult = "commandname arg1 arg2 @4@abcd arg3";
+            string commandResult = $"commandname arg1 arg2 @{fileText.Length}@{fileText} arg3";
             var output = new Unf.Debugger(fileSystem).ProcessSendCommand(command);
             Assert.AreEqual(commandResult, Encoding.ASCII.GetString(output));
         }
@@ -176,7 +183,7 @@ namespace usb64UnitTests
         //    var command = new List<byte>();
         //    command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
         //    //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-        //    command.AddRange(BitConverter.GetBytes((short)4)); //text, high byte so no need to reverse.
+        //    command.AddRange(BitConverter.GetBytes((short)Unf.Debugger.ReceiveCommandType.SCREENSHOT_BODY)); //text, high byte so no need to reverse.
         //    command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
         //    command.AddRange(packetBody);
         //    command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
