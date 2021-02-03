@@ -121,7 +121,7 @@ namespace usb64UnitTests
         {
             var packetBody = "abcd";
             var command = new Unf.ReceiveCommandPacket();
-            command.Type = Unf.ReceiveCommandPacket.CommandType.TEXT;
+            command.Type = Unf.ReceiveCommandPacket.CommandType.Text;
             command.Body = Encoding.ASCII.GetBytes(packetBody);
             var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
             Assert.AreEqual(packetBody, output);
@@ -136,7 +136,7 @@ namespace usb64UnitTests
             random.NextBytes(packetBody);
             var command = new Unf.ReceiveCommandPacket
             {
-                Type = Unf.ReceiveCommandPacket.CommandType.BINARY,
+                Type = Unf.ReceiveCommandPacket.CommandType.Binary,
                 Body = packetBody
             };
             var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
@@ -153,7 +153,7 @@ namespace usb64UnitTests
             var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };
             var command = new Unf.ReceiveCommandPacket
             {
-                Type = Unf.ReceiveCommandPacket.CommandType.BINARY,
+                Type = Unf.ReceiveCommandPacket.CommandType.Binary,
                 Body = packetBody
             };
             var commandWithPadding = new List<byte>();
@@ -171,9 +171,9 @@ namespace usb64UnitTests
         [TestMethod]
         public void Receive_command_screenshot_info_packet_body()
         {
-            var packetBody = new Unf.ScreenshotInfoPacket() 
+            var packetBody = new Unf.FramebufferInfoPacket() 
             { 
-                CommandType = (int)Unf.ReceiveCommandPacket.CommandType.SCREENSHOT_BODY,
+                CommandType = (int)Unf.ReceiveCommandPacket.CommandType.FramebufferBytes,
                 ImageType = 2, //TODO: what does this actually mean?
                 Width = 320,
                 Height = 240
@@ -182,7 +182,7 @@ namespace usb64UnitTests
 
             var command = new Unf.ReceiveCommandPacket
             {
-                Type = Unf.ReceiveCommandPacket.CommandType.SCREENSHOT_HEADER,
+                Type = Unf.ReceiveCommandPacket.CommandType.FramebufferInfo,
                 Body = packetBody.Encode()
             };
             var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());

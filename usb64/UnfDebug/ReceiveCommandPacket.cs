@@ -9,10 +9,10 @@ namespace Unf
     {
         public enum CommandType : int
         {
-            TEXT = 0x01,
-            BINARY = 0x02,
-            SCREENSHOT_HEADER = 0x03,
-            SCREENSHOT_BODY = 0x04
+            Text = 0x01,
+            Binary = 0x02,
+            FramebufferInfo = 0x03,
+            FramebufferBytes = 0x04
         }
 
         public const string DEFAULT_PACKET_HEADER = "DMA@";

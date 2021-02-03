@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Unf
 {
-    public class ScreenshotInfoPacket //should be internal?
+    public class FramebufferInfoPacket //should be internal?
     {
         public int Width { get; set; } = 0;
         public int ImageType { get; set; } = 0;

@@ -96,24 +96,24 @@ namespace Unf
         }
 
 
-        private static ScreenshotInfoPacket ImageInfo = new ScreenshotInfoPacket();
+        private static FramebufferInfoPacket ImageInfo = new FramebufferInfoPacket();
 
         private string HandleReceivedCommand(ReceiveCommandPacket.CommandType packetCommand, byte[] packetBody)
         {
             switch (packetCommand)
             {
-                case ReceiveCommandPacket.CommandType.TEXT:
+                case ReceiveCommandPacket.CommandType.Text:
                     return Encoding.ASCII.GetString(packetBody);
-                case ReceiveCommandPacket.CommandType.BINARY:
+                case ReceiveCommandPacket.CommandType.Binary:
                     var filename = fileSystem.Path.GetTempFileName();
                     fileSystem.File.WriteAllBytes(filename, packetBody);
                     return filename;
-                case ReceiveCommandPacket.CommandType.SCREENSHOT_HEADER:
-                    ImageInfo = new ScreenshotInfoPacket();
+                case ReceiveCommandPacket.CommandType.FramebufferInfo:
+                    ImageInfo = new FramebufferInfoPacket();
                     ImageInfo.Decode(packetBody);
                     return $"w={ImageInfo.Width} h={ImageInfo.Height}";
                 //break;
-                case ReceiveCommandPacket.CommandType.SCREENSHOT_BODY:
+                case ReceiveCommandPacket.CommandType.FramebufferBytes:
                     //TODO: handle.
                     // Ensure we got a data header of type screenshot
                     // if (ImageInfo.CommandType == (int)ReceiveCommandType.SCREENSHOT_BODY)
