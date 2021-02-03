@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Unf</RootNamespace>
+    <AssemblyName>UnfDebugger</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

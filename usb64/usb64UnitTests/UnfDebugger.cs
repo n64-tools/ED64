@@ -171,7 +171,7 @@ namespace usb64UnitTests
         [TestMethod]
         public void Receive_command_screenshot_info_packet_body()
         {
-            var packetBody = new Unf.ScreenshotInfo() 
+            var packetBody = new Unf.ScreenshotInfoPacket() 
             { 
                 CommandType = (int)Unf.ReceiveCommandPacket.CommandType.SCREENSHOT_BODY,
                 ImageType = 2, //TODO: what does this actually mean?

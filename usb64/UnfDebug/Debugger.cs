@@ -87,8 +87,6 @@ namespace Unf
             }
         }
 
-        private static ScreenshotInfo ImageInfo = new ScreenshotInfo();
-
         public string ProcessReceiveCommand(byte[] input)
         {
             var packet = new ReceiveCommandPacket();
@@ -97,6 +95,8 @@ namespace Unf
 
         }
 
+
+        private static ScreenshotInfoPacket ImageInfo = new ScreenshotInfoPacket();
 
         private string HandleReceivedCommand(ReceiveCommandPacket.CommandType packetCommand, byte[] packetBody)
         {
@@ -109,7 +109,7 @@ namespace Unf
                     fileSystem.File.WriteAllBytes(filename, packetBody);
                     return filename;
                 case ReceiveCommandPacket.CommandType.SCREENSHOT_HEADER:
-                    ImageInfo = new ScreenshotInfo();
+                    ImageInfo = new ScreenshotInfoPacket();
                     ImageInfo.Decode(packetBody);
                     return $"w={ImageInfo.Width} h={ImageInfo.Height}";
                 //break;
@@ -132,129 +132,4 @@ namespace Unf
             return "";
         }
     }
-
-
-    public class ScreenshotInfo
-    {
-        public int Width { get; set; } = 0;
-        public int ImageType { get; set; } = 0;
-        public int Height { get; set; } = 0;
-        public int CommandType { get; set; } = 0;
-
-        public const int IMAGE_INFO_SIZE = 4 * sizeof(int);
-        public void Decode(byte[] packetBody)
-        {
-            
-            var imageInfo = new int[IMAGE_INFO_SIZE / 4];
-            if (packetBody.Length == IMAGE_INFO_SIZE)
-            {
-                for (int i = 0; i < packetBody.Length; i += sizeof(int))
-                {
-                    if (BitConverter.IsLittleEndian)
-                    {
-                        Array.Reverse(packetBody, i, sizeof(int));
-                    }
-                    imageInfo[i / 4] = BitConverter.ToInt32(packetBody, i);
-                }
-            }
-            else
-            {
-                throw new Exception("Packet decode failed.");
-            }
-            CommandType = imageInfo[0];
-            ImageType = imageInfo[1];
-            Width = imageInfo[2];
-            Height = imageInfo[3];
-            
-        }
-
-        public byte[] Encode()
-        {
-            var body = new List<byte>();
-            if (BitConverter.IsLittleEndian)
-            {
-                body.AddRange(BitConverter.GetBytes(CommandType).Reverse());
-                body.AddRange(BitConverter.GetBytes(ImageType).Reverse());
-                body.AddRange(BitConverter.GetBytes(Width).Reverse());
-                body.AddRange(BitConverter.GetBytes(Height).Reverse());
-            }
-            else
-            {
-                body.AddRange(BitConverter.GetBytes(CommandType));
-                body.AddRange(BitConverter.GetBytes(ImageType));
-                body.AddRange(BitConverter.GetBytes(Width));
-                body.AddRange(BitConverter.GetBytes(Height));
-            }
-            return body.ToArray();
-        }
-
-    }
-
-    public class ReceiveCommandPacket
-    {
-        public enum CommandType : int
-        {
-            TEXT = 0x01,
-            BINARY = 0x02,
-            SCREENSHOT_HEADER = 0x03,
-            SCREENSHOT_BODY = 0x04
-        }
-
-        public const string DEFAULT_PACKET_HEADER = "DMA@";
-        public const string DEFAULT_PACKET_FOOTER = "CMPH";
-
-        public string Header { get; set; } = DEFAULT_PACKET_HEADER;
-        public CommandType Type { get; set; }
-        public byte[] Body { get; set; }
-
-        public string Footer { get; set; } = DEFAULT_PACKET_FOOTER;
-
-        public byte[] Encode()
-        {
-            var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes(Header));
-            //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); // Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)Type)); // High byte so no need to reverse.
-            if (BitConverter.IsLittleEndian)
-            {
-                command.AddRange(BitConverter.GetBytes((short)Body.Length).Reverse()); // Convert to Big Endian
-            }
-            else
-            {
-                command.AddRange(BitConverter.GetBytes((short)Body.Length));
-            }
-            command.AddRange(Body);
-            command.AddRange(Encoding.ASCII.GetBytes(Footer));
-            return command.ToArray();
-        }
-
-        public void Decode(byte[] input)
-        {
-            if (Encoding.ASCII.GetString(input, 0, 4) != DEFAULT_PACKET_HEADER)
-            {
-                throw new Exception("Unexpected packet header");
-            }
-            //The next four bytes is the length of the body and commandtype as an integer in big endian format.
-            byte[] lengthBytes = new byte[4];
-            Buffer.BlockCopy(input, 4, lengthBytes, 0, 4);
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(lengthBytes);
-            }
-            int packetInfo = BitConverter.ToInt32(lengthBytes, 0);
-            Type = (CommandType)((packetInfo >> 24) & 0xFF); //the high byte
-            int packetSize = packetInfo & 0xFFFFFF;
-
-
-            if (Encoding.ASCII.GetString(input, DEFAULT_PACKET_HEADER.Length + sizeof(int) + packetSize, DEFAULT_PACKET_FOOTER.Length) != DEFAULT_PACKET_FOOTER)
-            {
-                throw new Exception("Unexpected packet footer");
-            }
-
-
-            Body = new byte[packetSize];
-            Buffer.BlockCopy(input, DEFAULT_PACKET_HEADER.Length + sizeof(int), Body, 0, packetSize);
-        }
-    }
-
 }
