@@ -88,33 +88,18 @@ namespace Unf
         }
 
         private static ScreenshotInfo ImageInfo = new ScreenshotInfo();
+
         public string ProcessReceiveCommand(byte[] input)
         {
-            if (Encoding.ASCII.GetString(input, 0, 4) != ReceiveCommandPacket.DEFAULT_PACKET_HEADER)
-            {
-                throw new Exception("Unexpected packet header");
-            }
-            //The next four bytes is the length of the body and commandtype as an integer in big endian format.
-            byte[] lengthBytes = new byte[4];
-            Buffer.BlockCopy(input, 4, lengthBytes, 0, 4);
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(lengthBytes);
-            }
-            int packetInfo = BitConverter.ToInt32(lengthBytes, 0);
-            ReceiveCommandPacket.CommandType packetCommand = (ReceiveCommandPacket.CommandType)((packetInfo >> 24) & 0xFF); //the high byte
-            int packetSize = packetInfo & 0xFFFFFF;
+            var packet = new ReceiveCommandPacket();
+            packet.Decode(input);
+            return HandleReceivedCommand(packet.Type, packet.Body);
+
+        }
 
 
-            if (Encoding.ASCII.GetString(input, ReceiveCommandPacket.DEFAULT_PACKET_HEADER.Length + sizeof(int) + packetSize, ReceiveCommandPacket.DEFAULT_PACKET_FOOTER.Length) != ReceiveCommandPacket.DEFAULT_PACKET_FOOTER)
-            {
-                throw new Exception("Unexpected packet footer");
-            }
-
-
-            byte[] packetBody = new byte[packetSize];
-            Buffer.BlockCopy(input, ReceiveCommandPacket.DEFAULT_PACKET_HEADER.Length + sizeof(int), packetBody, 0, packetSize);
-
+        private string HandleReceivedCommand(ReceiveCommandPacket.CommandType packetCommand, byte[] packetBody)
+        {
             switch (packetCommand)
             {
                 case ReceiveCommandPacket.CommandType.TEXT:
@@ -219,7 +204,7 @@ namespace Unf
         public const string DEFAULT_PACKET_FOOTER = "CMPH";
 
         public string Header { get; set; } = DEFAULT_PACKET_HEADER;
-        public int Type { get; set; }
+        public CommandType Type { get; set; }
         public byte[] Body { get; set; }
 
         public string Footer { get; set; } = DEFAULT_PACKET_FOOTER;
@@ -241,6 +226,34 @@ namespace Unf
             command.AddRange(Body);
             command.AddRange(Encoding.ASCII.GetBytes(Footer));
             return command.ToArray();
+        }
+
+        public void Decode(byte[] input)
+        {
+            if (Encoding.ASCII.GetString(input, 0, 4) != DEFAULT_PACKET_HEADER)
+            {
+                throw new Exception("Unexpected packet header");
+            }
+            //The next four bytes is the length of the body and commandtype as an integer in big endian format.
+            byte[] lengthBytes = new byte[4];
+            Buffer.BlockCopy(input, 4, lengthBytes, 0, 4);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(lengthBytes);
+            }
+            int packetInfo = BitConverter.ToInt32(lengthBytes, 0);
+            Type = (CommandType)((packetInfo >> 24) & 0xFF); //the high byte
+            int packetSize = packetInfo & 0xFFFFFF;
+
+
+            if (Encoding.ASCII.GetString(input, DEFAULT_PACKET_HEADER.Length + sizeof(int) + packetSize, DEFAULT_PACKET_FOOTER.Length) != DEFAULT_PACKET_FOOTER)
+            {
+                throw new Exception("Unexpected packet footer");
+            }
+
+
+            Body = new byte[packetSize];
+            Buffer.BlockCopy(input, DEFAULT_PACKET_HEADER.Length + sizeof(int), Body, 0, packetSize);
         }
     }
 
