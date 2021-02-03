@@ -13,8 +13,8 @@ namespace Unf
         //TODO: On the ED64, we should take into account that we are overriding the end of the ROM space here.
         const int MAX_FILE_SIZE = 0x800000; //8MB is the max file size that is allowed (on the 64Drive)
 
-        const string RECEIVE_PACKET_HEADER = "DMA@";
-        const string RECEIVE_PACKET_FOOTER = "CMPH";
+        public const string RECEIVE_PACKET_HEADER = "DMA@";
+        public const string RECEIVE_PACKET_FOOTER = "CMPH";
 
         readonly IFileSystem fileSystem;
 
@@ -90,7 +90,7 @@ namespace Unf
             }
         }
 
-        enum ReceiveCommandType : int
+        public enum ReceiveCommandType : int
         {
             TEXT = 0x01,
             BINARY = 0x02,
@@ -98,6 +98,7 @@ namespace Unf
             SCREENSHOT_BODY = 0x04
         }
 
+        private static ScreenshotInfo ImageInfo = new ScreenshotInfo();
         public string ProcessReceiveCommand(byte[] input)
         {
             if (Encoding.ASCII.GetString(input, 0, 4) != RECEIVE_PACKET_HEADER)
@@ -134,17 +135,17 @@ namespace Unf
                     fileSystem.File.WriteAllBytes(filename, packetBody);
                     return filename;
                 case ReceiveCommandType.SCREENSHOT_HEADER:
-                    var imageInfo = new ScreenshotInfo();
-                    imageInfo.Decode(packetBody);
-                    return $"w={imageInfo.Width} h={imageInfo.Height}";
+                    ImageInfo = new ScreenshotInfo();
+                    ImageInfo.Decode(packetBody);
+                    return $"w={ImageInfo.Width} h={ImageInfo.Height}";
                 //break;
                 case ReceiveCommandType.SCREENSHOT_BODY:
                     //TODO: handle.
                     // Ensure we got a data header of type screenshot
-                    // if (headerdata[0] == (int)ReceiveCommandType.SCREENSHOT_BODY)
+                    // if (ImageInfo.CommandType == (int)ReceiveCommandType.SCREENSHOT_BODY)
                     //{
-                    //  int pngType = headerdata[1] // = 2 in most cases?
-                    //  int width = headerdata[2], height = headerdata[3];
+                    //  int pngType = ImageInfo.Type // = 2 in most cases?
+                    //  int width = ImageInfo.Width, height = ImageInfo.Height;
                     //  if (pngType == 2)
                     //  { Convert to PNG. }
                     //  else
@@ -161,12 +162,12 @@ namespace Unf
 
     public class ScreenshotInfo
     {
-        public int Width { get; set; }
-        public int ImageType { get; set; }
-        public int Height { get; set; }
-        public int CommandType { get; set; }
+        public int Width { get; set; } = 0;
+        public int ImageType { get; set; } = 0;
+        public int Height { get; set; } = 0;
+        public int CommandType { get; set; } = 0;
 
-        private const int IMAGE_INFO_SIZE = 4 * sizeof(int);
+        public const int IMAGE_INFO_SIZE = 4 * sizeof(int);
         public void Decode(byte[] packetBody)
         {
             

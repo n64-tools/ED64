@@ -114,12 +114,12 @@ namespace usb64UnitTests
         {
             var packetBody = "abcd";
             var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes("DMA@"));
+            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
             //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
             command.AddRange(BitConverter.GetBytes((short)1)); //text, high byte so no need to reverse.
             command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
             command.AddRange(Encoding.ASCII.GetBytes(packetBody));
-            command.AddRange(Encoding.ASCII.GetBytes("CMPH"));
+            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
             command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
             var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
             Assert.AreEqual(packetBody, output);
@@ -130,12 +130,12 @@ namespace usb64UnitTests
         {
             var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03};
             var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes("DMA@"));
+            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
             //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
             command.AddRange(BitConverter.GetBytes((short)2)); //text, high byte so no need to reverse.
             command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
             command.AddRange(packetBody);
-            command.AddRange(Encoding.ASCII.GetBytes("CMPH"));
+            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
             command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
             var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
 
@@ -148,19 +148,22 @@ namespace usb64UnitTests
         [TestMethod]
         public void Check_ScreenshotHeader_Receive_Command_Processing_Works()
         {
-            var packetBody = new List<byte>();
-            packetBody.AddRange(BitConverter.GetBytes(4).Reverse()); //screenshot body
-            packetBody.AddRange(BitConverter.GetBytes(2).Reverse()); //png
-            packetBody.AddRange(BitConverter.GetBytes(320).Reverse()); //width
-            packetBody.AddRange(BitConverter.GetBytes(240).Reverse()); //height
+            var packetBody = new Unf.ScreenshotInfo() 
+            { 
+                CommandType = (int)Unf.Debugger.ReceiveCommandType.SCREENSHOT_BODY,
+                ImageType = 2,
+                Width = 320,
+                Height = 240
+            };
+
 
             var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes("DMA@"));
+            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
             //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)3)); //text, high byte so no need to reverse.
-            command.AddRange(BitConverter.GetBytes((short)packetBody.Count).Reverse()); //Big Endian
-            command.AddRange(packetBody.ToArray());
-            command.AddRange(Encoding.ASCII.GetBytes("CMPH"));
+            command.AddRange(BitConverter.GetBytes((short)Unf.Debugger.ReceiveCommandType.SCREENSHOT_HEADER)); //text, high byte so no need to reverse.
+            command.AddRange(BitConverter.GetBytes((short)Unf.ScreenshotInfo.IMAGE_INFO_SIZE).Reverse()); //Big Endian
+            command.AddRange(packetBody.Encode());
+            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
             command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
             var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
             Assert.IsTrue(output.Length > 4);
