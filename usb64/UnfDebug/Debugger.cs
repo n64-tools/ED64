@@ -87,14 +87,6 @@ namespace Unf
             }
         }
 
-        public enum ReceiveCommandType : int
-        {
-            TEXT = 0x01,
-            BINARY = 0x02,
-            SCREENSHOT_HEADER = 0x03,
-            SCREENSHOT_BODY = 0x04
-        }
-
         private static ScreenshotInfo ImageInfo = new ScreenshotInfo();
         public string ProcessReceiveCommand(byte[] input)
         {
@@ -110,7 +102,7 @@ namespace Unf
                 Array.Reverse(lengthBytes);
             }
             int packetInfo = BitConverter.ToInt32(lengthBytes, 0);
-            ReceiveCommandType packetCommand = (ReceiveCommandType)((packetInfo >> 24) & 0xFF); //the high byte
+            ReceiveCommandPacket.CommandType packetCommand = (ReceiveCommandPacket.CommandType)((packetInfo >> 24) & 0xFF); //the high byte
             int packetSize = packetInfo & 0xFFFFFF;
 
 
@@ -125,18 +117,18 @@ namespace Unf
 
             switch (packetCommand)
             {
-                case ReceiveCommandType.TEXT:
+                case ReceiveCommandPacket.CommandType.TEXT:
                     return Encoding.ASCII.GetString(packetBody);
-                case ReceiveCommandType.BINARY:
+                case ReceiveCommandPacket.CommandType.BINARY:
                     var filename = fileSystem.Path.GetTempFileName();
                     fileSystem.File.WriteAllBytes(filename, packetBody);
                     return filename;
-                case ReceiveCommandType.SCREENSHOT_HEADER:
+                case ReceiveCommandPacket.CommandType.SCREENSHOT_HEADER:
                     ImageInfo = new ScreenshotInfo();
                     ImageInfo.Decode(packetBody);
                     return $"w={ImageInfo.Width} h={ImageInfo.Height}";
                 //break;
-                case ReceiveCommandType.SCREENSHOT_BODY:
+                case ReceiveCommandPacket.CommandType.SCREENSHOT_BODY:
                     //TODO: handle.
                     // Ensure we got a data header of type screenshot
                     // if (ImageInfo.CommandType == (int)ReceiveCommandType.SCREENSHOT_BODY)
@@ -215,6 +207,14 @@ namespace Unf
 
     public class ReceiveCommandPacket
     {
+        public enum CommandType : int
+        {
+            TEXT = 0x01,
+            BINARY = 0x02,
+            SCREENSHOT_HEADER = 0x03,
+            SCREENSHOT_BODY = 0x04
+        }
+
         public const string DEFAULT_PACKET_HEADER = "DMA@";
         public const string DEFAULT_PACKET_FOOTER = "CMPH";
 
