@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Text;
 
 namespace Unf
@@ -133,25 +134,10 @@ namespace Unf
                     fileSystem.File.WriteAllBytes(filename, packetBody);
                     return filename;
                 case ReceiveCommandType.SCREENSHOT_HEADER:
-                    const int HEADER_SIZE = 4 * sizeof(int); //consists of 4 int32
-                    if (packetBody.Length == HEADER_SIZE)
-                    {
-                        var headerdata = new int[HEADER_SIZE / 4]; //TODO: this will be needed for the screenshot body so need to store it globally?
-                        for (int i = 0; i < packetSize; i += sizeof(int))
-                        {
-                            if (BitConverter.IsLittleEndian)
-                            {
-                                Array.Reverse(packetBody, i, sizeof(int));
-                            }
-                            headerdata[i / 4] = BitConverter.ToInt32(packetBody, i);
-                        }
-                        return $"w={headerdata[2]} h={headerdata[3]}"; //TODO: something better needed!
-                    }
-                    else
-                    {
-                        throw new Exception("Packet decode failed.");
-                    }
-                    //break;
+                    var imageInfo = new ScreenshotInfo();
+                    imageInfo.Decode(packetBody);
+                    return $"w={imageInfo.Width} h={imageInfo.Height}";
+                //break;
                 case ReceiveCommandType.SCREENSHOT_BODY:
                     //TODO: handle.
                     // Ensure we got a data header of type screenshot
@@ -170,7 +156,78 @@ namespace Unf
             }
             return "";
         }
+    }
 
+
+    public class ScreenshotInfo
+    {
+        public int Width { get; set; }
+        public int ImageType { get; set; }
+        public int Height { get; set; }
+        public int CommandType { get; set; }
+
+        private const int IMAGE_INFO_SIZE = 4 * sizeof(int);
+        public void Decode(byte[] packetBody)
+        {
+            
+            var imageInfo = new int[IMAGE_INFO_SIZE / 4];
+            if (packetBody.Length == IMAGE_INFO_SIZE)
+            {
+                for (int i = 0; i < packetBody.Length; i += sizeof(int))
+                {
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(packetBody, i, sizeof(int));
+                    }
+                    imageInfo[i / 4] = BitConverter.ToInt32(packetBody, i);
+                }
+            }
+            else
+            {
+                throw new Exception("Packet decode failed.");
+            }
+            CommandType = imageInfo[0];
+            ImageType = imageInfo[1];
+            Width = imageInfo[2];
+            Height = imageInfo[3];
+            
+        }
+
+        public byte[] Encode()
+        {
+            var body = new List<byte>();
+            if (BitConverter.IsLittleEndian)
+            {
+                body.AddRange(BitConverter.GetBytes(CommandType).Reverse());
+                body.AddRange(BitConverter.GetBytes(ImageType).Reverse());
+                body.AddRange(BitConverter.GetBytes(Width).Reverse());
+                body.AddRange(BitConverter.GetBytes(Height).Reverse());
+            }
+            else
+            {
+                body.AddRange(BitConverter.GetBytes(CommandType));
+                body.AddRange(BitConverter.GetBytes(ImageType));
+                body.AddRange(BitConverter.GetBytes(Width));
+                body.AddRange(BitConverter.GetBytes(Height));
+            }
+            return body.ToArray();
+        }
+
+    }
+
+    public class CommandPacket
+    {
+        public string Header { get; set; }
+        public int Type { get; set; }
+        public byte[] Body { get; set; }
+
+        public string Footer { get; set; }
+
+        public byte[] ToBytes()
+        {
+
+            return Body;
+        }
     }
 
 }
