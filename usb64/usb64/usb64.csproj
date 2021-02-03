@@ -17,13 +17,13 @@
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
+    <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System.IO.Ports" />
+    <Reference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System.IO.Ports" />
+    <Reference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
 
 </Project>
