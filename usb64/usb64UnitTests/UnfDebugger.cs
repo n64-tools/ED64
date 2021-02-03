@@ -145,6 +145,27 @@ namespace usb64UnitTests
             Assert.IsTrue(packetBody.SequenceEqual(outputcontent));
         }
 
+        [TestMethod]
+        public void Check_ScreenshotHeader_Receive_Command_Processing_Works()
+        {
+            var packetBody = new List<byte>();
+            packetBody.AddRange(BitConverter.GetBytes(4).Reverse()); //screenshot body
+            packetBody.AddRange(BitConverter.GetBytes(2).Reverse()); //png
+            packetBody.AddRange(BitConverter.GetBytes(320).Reverse()); //width
+            packetBody.AddRange(BitConverter.GetBytes(240).Reverse()); //height
+
+            var command = new List<byte>();
+            command.AddRange(Encoding.ASCII.GetBytes("DMA@"));
+            //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
+            command.AddRange(BitConverter.GetBytes((short)3)); //text, high byte so no need to reverse.
+            command.AddRange(BitConverter.GetBytes((short)packetBody.Count).Reverse()); //Big Endian
+            command.AddRange(packetBody.ToArray());
+            command.AddRange(Encoding.ASCII.GetBytes("CMPH"));
+            command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
+            var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
+            Assert.AreEqual(output, "ss");
+        }
+
         //[TestMethod]
         //public void Check_Screenshot_Decode_Works()
         //{

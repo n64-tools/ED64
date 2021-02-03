@@ -150,11 +150,12 @@ namespace Unf
                     {
                         throw new Exception("Packet decode failed.");
                     }
-                    break;
+                    return "ss"; //TODO: something better needed!
+                    //break;
                 case ReceiveCommandType.SCREENSHOT_BODY:
                     //TODO: handle.
                     // Ensure we got a data header of type screenshot
-                    // if (headerdata[0] == (int)ReceiveCommandType.SCREENSHOT)
+                    // if (headerdata[0] == (int)ReceiveCommandType.SCREENSHOT_BODY)
                     //{
                     //  int pngType = headerdata[1] // = 2 in most cases?
                     //  int width = headerdata[2], height = headerdata[3];
