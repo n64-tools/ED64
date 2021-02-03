@@ -120,31 +120,47 @@ namespace usb64UnitTests
         public void process_received_text_packet_body()
         {
             var packetBody = "abcd";
-            var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
-            //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)(int)Unf.Debugger.ReceiveCommandType.TEXT)); //text, high byte so no need to reverse.
-            command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
-            command.AddRange(Encoding.ASCII.GetBytes(packetBody));
-            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
-            command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
-            var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
+            var command = new Unf.ReceiveCommandPacket();
+            command.Type = (int)Unf.Debugger.ReceiveCommandType.TEXT;
+            command.Body = Encoding.ASCII.GetBytes(packetBody);
+            var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
             Assert.AreEqual(packetBody, output);
         }
 
         [TestMethod]
         public void process_received_binary_packet_body()
         {
-            var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03};
-            var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
-            //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)Unf.Debugger.ReceiveCommandType.BINARY)); //text, high byte so no need to reverse.
-            command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
-            command.AddRange(packetBody);
-            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
-            command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
-            var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
+            // Put random bytes into this array.
+            byte[] packetBody = new byte[0x20];
+            Random random = new Random(); // Use Random class and NextBytes method.
+            random.NextBytes(packetBody);
+            var command = new Unf.ReceiveCommandPacket
+            {
+                Type = (int)Unf.Debugger.ReceiveCommandType.BINARY,
+                Body = packetBody
+            };
+            var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
+
+            //read back the file created and compare it...
+            var outputcontent = File.ReadAllBytes(output);
+
+            Assert.IsTrue(packetBody.SequenceEqual(outputcontent));
+        }
+
+        [TestMethod]
+        public void process_received_binary_packet_body_with_padding()
+        {
+            var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };
+            var command = new Unf.ReceiveCommandPacket
+            {
+                Type = (int)Unf.Debugger.ReceiveCommandType.BINARY,
+                Body = packetBody
+            };
+            var commandWithPadding = new List<byte>();
+            commandWithPadding.AddRange(command.Encode());
+            commandWithPadding.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding.)
+
+            var output = new Unf.Debugger().ProcessReceiveCommand(commandWithPadding.ToArray());
 
             //read back the file created and compare it...
             var outputcontent = File.ReadAllBytes(output);
@@ -158,21 +174,18 @@ namespace usb64UnitTests
             var packetBody = new Unf.ScreenshotInfo() 
             { 
                 CommandType = (int)Unf.Debugger.ReceiveCommandType.SCREENSHOT_BODY,
-                ImageType = 2,
+                ImageType = 2, //TODO: what does this actually mean?
                 Width = 320,
                 Height = 240
             };
 
 
-            var command = new List<byte>();
-            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
-            //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-            command.AddRange(BitConverter.GetBytes((short)Unf.Debugger.ReceiveCommandType.SCREENSHOT_HEADER)); //text, high byte so no need to reverse.
-            command.AddRange(BitConverter.GetBytes((short)Unf.ScreenshotInfo.IMAGE_INFO_SIZE).Reverse()); //Big Endian
-            command.AddRange(packetBody.Encode());
-            command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
-            command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
-            var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
+            var command = new Unf.ReceiveCommandPacket
+            {
+                Type = (int)Unf.Debugger.ReceiveCommandType.SCREENSHOT_HEADER,
+                Body = packetBody.Encode()
+            };
+            var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
             Assert.IsTrue(output.Length > 4);
         }
 

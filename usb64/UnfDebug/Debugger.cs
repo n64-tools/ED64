@@ -13,9 +13,6 @@ namespace Unf
         //TODO: On the ED64, we should take into account that we are overriding the end of the ROM space here.
         const int MAX_FILE_SIZE = 0x800000; //8MB is the max file size that is allowed (on the 64Drive)
 
-        public const string RECEIVE_PACKET_HEADER = "DMA@";
-        public const string RECEIVE_PACKET_FOOTER = "CMPH";
-
         readonly IFileSystem fileSystem;
 
         // <summary>Create MyComponent with the given fileSystem implementation</summary>
@@ -101,7 +98,7 @@ namespace Unf
         private static ScreenshotInfo ImageInfo = new ScreenshotInfo();
         public string ProcessReceiveCommand(byte[] input)
         {
-            if (Encoding.ASCII.GetString(input, 0, 4) != RECEIVE_PACKET_HEADER)
+            if (Encoding.ASCII.GetString(input, 0, 4) != ReceiveCommandPacket.DEFAULT_PACKET_HEADER)
             {
                 throw new Exception("Unexpected packet header");
             }
@@ -117,14 +114,14 @@ namespace Unf
             int packetSize = packetInfo & 0xFFFFFF;
 
 
-            if (Encoding.ASCII.GetString(input, RECEIVE_PACKET_HEADER.Length + sizeof(int) + packetSize, RECEIVE_PACKET_FOOTER.Length) != RECEIVE_PACKET_FOOTER)
+            if (Encoding.ASCII.GetString(input, ReceiveCommandPacket.DEFAULT_PACKET_HEADER.Length + sizeof(int) + packetSize, ReceiveCommandPacket.DEFAULT_PACKET_FOOTER.Length) != ReceiveCommandPacket.DEFAULT_PACKET_FOOTER)
             {
                 throw new Exception("Unexpected packet footer");
             }
 
 
             byte[] packetBody = new byte[packetSize];
-            Buffer.BlockCopy(input, RECEIVE_PACKET_HEADER.Length + sizeof(int), packetBody, 0, packetSize);
+            Buffer.BlockCopy(input, ReceiveCommandPacket.DEFAULT_PACKET_HEADER.Length + sizeof(int), packetBody, 0, packetSize);
 
             switch (packetCommand)
             {
@@ -216,18 +213,34 @@ namespace Unf
 
     }
 
-    public class CommandPacket
+    public class ReceiveCommandPacket
     {
-        public string Header { get; set; }
+        public const string DEFAULT_PACKET_HEADER = "DMA@";
+        public const string DEFAULT_PACKET_FOOTER = "CMPH";
+
+        public string Header { get; set; } = DEFAULT_PACKET_HEADER;
         public int Type { get; set; }
         public byte[] Body { get; set; }
 
-        public string Footer { get; set; }
+        public string Footer { get; set; } = DEFAULT_PACKET_FOOTER;
 
-        public byte[] ToBytes()
+        public byte[] Encode()
         {
-
-            return Body;
+            var command = new List<byte>();
+            command.AddRange(Encoding.ASCII.GetBytes(Header));
+            //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); // Big Endian Example for below:
+            command.AddRange(BitConverter.GetBytes((short)Type)); // High byte so no need to reverse.
+            if (BitConverter.IsLittleEndian)
+            {
+                command.AddRange(BitConverter.GetBytes((short)Body.Length).Reverse()); // Convert to Big Endian
+            }
+            else
+            {
+                command.AddRange(BitConverter.GetBytes((short)Body.Length));
+            }
+            command.AddRange(Body);
+            command.AddRange(Encoding.ASCII.GetBytes(Footer));
+            return command.ToArray();
         }
     }
 
