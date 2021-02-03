@@ -112,19 +112,20 @@ namespace Unf
                     ImageInfo = new FramebufferInfoPacket();
                     ImageInfo.Decode(packetBody);
                     return $"w={ImageInfo.Width} h={ImageInfo.Height}";
-                //break;
                 case ReceiveCommandPacket.CommandType.FramebufferBytes:
-                    //TODO: handle.
-                    // Ensure we got a data header of type screenshot
-                    // if (ImageInfo.CommandType == (int)ReceiveCommandType.SCREENSHOT_BODY)
-                    //{
-                    //  int pngType = ImageInfo.Type // = 2 in most cases?
-                    //  int width = ImageInfo.Width, height = ImageInfo.Height;
-                    //  if (pngType == 2)
-                    //  { Convert to PNG. }
-                    //  else
-                    //  { }
-                    //}
+                    if (ImageInfo.CommandType == (int)ReceiveCommandPacket.CommandType.FramebufferBytes)
+                    {
+                        int imageType = ImageInfo.ImageType; // = 2 in most cases?
+                        int width = ImageInfo.Width, height = ImageInfo.Height;
+                        if (imageType == 2)
+                        {
+                            ImageUtilities.ConvertToBitmap((short)width, (short)height, packetBody); //TODO: probably wrong
+                        }
+                        else
+                        {
+                            ImageUtilities.ConvertToBitmap((short)width, (short)height, packetBody);
+                        }
+                    }
                     break;
                 default:
                     throw new Exception("Unknown packet type.");
