@@ -145,12 +145,12 @@ namespace Unf
                             }
                             headerdata[i / 4] = BitConverter.ToInt32(packetBody, i);
                         }
+                        return $"w={headerdata[2]} h={headerdata[3]}"; //TODO: something better needed!
                     }
                     else
                     {
                         throw new Exception("Packet decode failed.");
                     }
-                    return "ss"; //TODO: something better needed!
                     //break;
                 case ReceiveCommandType.SCREENSHOT_BODY:
                     //TODO: handle.

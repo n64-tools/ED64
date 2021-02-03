@@ -220,8 +220,8 @@ jobs:
 
     - task: NuGetToolInstaller@1
       inputs:
-        #versionSpec: # Optional
-        #checkLatest: false # Optional
+        versionSpec: # Optional
+        checkLatest: false # Optional
 
     - task: NuGetCommand@2
       inputs:
@@ -330,8 +330,8 @@ jobs:
 
     - task: NuGetToolInstaller@1
       inputs:
-        #versionSpec: # Optional
-        #checkLatest: false # Optional
+        versionSpec: # Optional
+        checkLatest: false # Optional
 
     - task: NuGetCommand@2
       inputs:
