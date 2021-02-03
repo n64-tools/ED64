@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Text;
@@ -7,9 +8,12 @@ namespace Unf
 {
     public class Debugger
     {
-        //8MB is the max file size that is allowed (on the 64Drive)
+        
         //TODO: On the ED64, we should take into account that we are overriding the end of the ROM space here.
-        const int MAX_FILE_SIZE = 0x800000; 
+        const int MAX_FILE_SIZE = 0x800000; //8MB is the max file size that is allowed (on the 64Drive)
+
+        const string RECEIVE_PACKET_HEADER = "DMA@";
+        const string RECEIVE_PACKET_FOOTER = "CMPH";
 
         readonly IFileSystem fileSystem;
 
@@ -26,20 +30,17 @@ namespace Unf
         }
 
 
-        public DebugCommand ProcessCommand(string command, int alignment = 1)
+        public byte[] ProcessSendCommand(string command, int alignment = 1)
         {
             if (command.Contains("@"))
             {
                 var filePath = command.Split('@')[1];
                 var fileSize = fileSystem.FileInfo.FromFileName(filePath).Length;
 
-                // should do this in the file send?!
                 if (fileSize > MAX_FILE_SIZE)
                 {
                     throw new Exception("Exceeds maximum file size");
                 }
-
-                var filecontent = "";
 
                 int start = command.IndexOf("@");
                 int end = command.IndexOf("@", start + 1);
@@ -55,12 +56,8 @@ namespace Unf
                 {
                     textAfter = command.Substring(end + 1);
                 }
-                if (!string.IsNullOrEmpty(filePath))
-                {
-                    filecontent = fileSystem.File.ReadAllText(filePath);
-                }
 
-                // should do this straight after the file send!
+                // Ensure the file buffer size is aligned if required.
                 if (alignment != 0)
                 {
                     if (fileSize % alignment != 0)
@@ -70,63 +67,109 @@ namespace Unf
                     }
                 }
 
-                //the file content might be binary, if so, handle!
-                string adjustedCommand = $"{textBefore}@{fileSize}@{filecontent}{textAfter}";
-                //send text before (if not blank
-                //send @{fileSize}@
-                //send file
-                //send text after (if not empty)
+                var filecontent = new byte[fileSize];
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    //the file content might be binary, so lets just read it as such!
+                    filecontent = fileSystem.File.ReadAllBytes(filePath);
+                }
 
-                return new DebugCommand() {CommandString = adjustedCommand, FilePath = filePath };
+                var ret = new List<byte>();
+                ret.AddRange(Encoding.ASCII.GetBytes(textBefore));
+                ret.Add((byte)'@');
+                ret.AddRange(Encoding.ASCII.GetBytes(fileSize.ToString()));
+                ret.Add( (byte)'@' );
+                ret.AddRange(filecontent);
+                ret.AddRange(Encoding.ASCII.GetBytes(textAfter));
+                return ret.ToArray();
             }
             else
             {
-                return new DebugCommand() { CommandString = command };
+                return Encoding.ASCII.GetBytes(command);
             }
         }
 
-        ///// <summary>
-        ///// Sends the file to the flashcart
-        ///// </summary>
-        ///// <param name="filename">The filename of the file to send wrapped around @ symbols</param>
-        //    void FileSend(string filename, int alignment = 0)
-        //    {
-        //        try
-        //        {
-        //            using (FileStream fs = File.OpenRead(filename))
-        //            {
-        //                // Ensure the filesize isn't too large
-        //                if (fs.Length > MAX_FILE_SIZE)
-        //                {
-        //                    throw new Exception($"Cannot upload data larger than {MAX_FILE_SIZE}");
-        //                }
+        enum ReceiveCommandType : int
+        {
+            TEXT = 0x01,
+            BINARY = 0x02,
+            SCREENSHOT_HEADER = 0x03,
+            SCREENSHOT_BODY = 0x04
+        }
 
-        //                // Send the data to the connected flashcart
-        //                port.Write($"@{fs.Length}@");
+        public string ProcessReceiveCommand(byte[] input)
+        {
+            if (Encoding.ASCII.GetString(input, 0, 4) != RECEIVE_PACKET_HEADER)
+            {
+                throw new Exception("Unexpected packet header");
+            }
+            //The next four bytes is the length of the body and commandtype as an integer in big endian format.
+            byte[] lengthBytes = new byte[4];
+            Buffer.BlockCopy(input, 4, lengthBytes, 0, 4);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(lengthBytes);
+            }
+            int packetInfo = BitConverter.ToInt32(lengthBytes, 0);
+            ReceiveCommandType packetCommand = (ReceiveCommandType)((packetInfo >> 24) & 0xFF); //the high byte
+            int packetSize = packetInfo & 0xFFFFFF;
 
-        //                port.Write((new BinaryReader(fs)).ReadBytes((int)fs.Length), 0, (int)fs.Length);
 
-        //                // Console.WriteLine($"Sent file: {fs.Name}, with length: {fs.Length}");
+            if (Encoding.ASCII.GetString(input, RECEIVE_PACKET_HEADER.Length + sizeof(int) + packetSize, RECEIVE_PACKET_FOOTER.Length) != RECEIVE_PACKET_FOOTER)
+            {
+                throw new Exception("Unexpected packet footer");
+            }
 
-        //          if (fs.Size % alignment != 0) //ignore alignment when zero (since div by 0)
-        //          {
-        //              var alignmentBytes = (fs.Size + alignment - fs.Size % alignment) - bytesWritten;
-        //              port.Write(0, alignmentBytes);
-        //          }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw ex;
-        //        }
-        // TODO: return file sent length?
-        //    }
+
+            byte[] packetBody = new byte[packetSize];
+            Buffer.BlockCopy(input, RECEIVE_PACKET_HEADER.Length + sizeof(int), packetBody, 0, packetSize);
+
+            switch (packetCommand)
+            {
+                case ReceiveCommandType.TEXT:
+                    return Encoding.ASCII.GetString(packetBody);
+                case ReceiveCommandType.BINARY:
+                    var filename = fileSystem.Path.GetTempFileName();
+                    fileSystem.File.WriteAllBytes(filename, packetBody);
+                    return filename;
+                case ReceiveCommandType.SCREENSHOT_HEADER:
+                    const int HEADER_SIZE = 4 * sizeof(int); //consists of 4 int32
+                    if (packetBody.Length == HEADER_SIZE)
+                    {
+                        var headerdata = new int[HEADER_SIZE / 4]; //TODO: this will be needed for the screenshot body so need to store it globally?
+                        for (int i = 0; i < packetSize; i += sizeof(int))
+                        {
+                            if (BitConverter.IsLittleEndian)
+                            {
+                                Array.Reverse(packetBody, i, sizeof(int));
+                            }
+                            headerdata[i / 4] = BitConverter.ToInt32(packetBody, i);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Packet decode failed.");
+                    }
+                    break;
+                case ReceiveCommandType.SCREENSHOT_BODY:
+                    //TODO: handle.
+                    // Ensure we got a data header of type screenshot
+                    // if (headerdata[0] == (int)ReceiveCommandType.SCREENSHOT)
+                    //{
+                    //  int pngType = headerdata[1] // = 2 in most cases?
+                    //  int width = headerdata[2], height = headerdata[3];
+                    //  if (pngType == 2)
+                    //  { Convert to PNG. }
+                    //  else
+                    //  { }
+                    //}
+                    break;
+                default:
+                    throw new Exception("Unknown packet type.");
+            }
+            return "";
+        }
 
     }
 
-    public class DebugCommand
-    {
-        public string CommandString { get; set; } = "";
-        public string FilePath { get; set; } = "";
-    }
 }
