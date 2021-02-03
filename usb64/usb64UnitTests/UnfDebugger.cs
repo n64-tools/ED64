@@ -167,13 +167,23 @@ namespace usb64UnitTests
         }
 
         //[TestMethod]
-        //public void Check_Screenshot_Decode_Works()
+        //public void Check_Screenshot_Receive_Command_Processing_Works()
         //{
-        //    string command = "commandname arg1 arg2 @filename@ arg3";
-        //    string fileText = "abcd";
-        //    string commandResult = "commandname arg1 arg2 @4@abcd arg3";
-        //    var output = UnfDebug.HandleCommand(command);
-        //    Assert.AreEqual(output, command);
+        //    var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };//need to collect a sample from somewhere!
+        //    var command = new List<byte>();
+        //    command.AddRange(Encoding.ASCII.GetBytes("DMA@"));
+        //    //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
+        //    command.AddRange(BitConverter.GetBytes((short)4)); //text, high byte so no need to reverse.
+        //    command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
+        //    command.AddRange(packetBody);
+        //    command.AddRange(Encoding.ASCII.GetBytes("CMPH"));
+        //    command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
+        //    var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
+
+        //    //read back the file created and compare it...
+        //    var outputcontent = File.ReadAllBytes(output);
+
+        //    Assert.IsTrue(packetBody.SequenceEqual(outputcontent));
         //}
     }
 }
