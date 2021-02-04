@@ -115,16 +115,7 @@ namespace Unf
                 case ReceiveCommandPacket.CommandType.FramebufferBytes:
                     if (ImageInfo.CommandType == (int)ReceiveCommandPacket.CommandType.FramebufferBytes)
                     {
-                        int imageType = ImageInfo.ImageType; // = 2 in most cases?
-                        int width = ImageInfo.Width, height = ImageInfo.Height;
-                        if (imageType == 2)
-                        {
-                            ImageUtilities.ConvertToBitmap((short)width, (short)height, packetBody); //TODO: probably wrong
-                        }
-                        else
-                        {
-                            ImageUtilities.ConvertToBitmap((short)width, (short)height, packetBody);
-                        }
+                        ImageUtilities.ConvertToBitmap((short)ImageInfo.Width, (short)ImageInfo.Height, packetBody);
                     }
                     break;
                 default:

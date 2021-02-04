@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Unf
 {
     public class FramebufferInfoPacket //should be internal?
     {
-        public int Width { get; set; } = 0;
-        public int ImageType { get; set; } = 0;
-        public int Height { get; set; } = 0;
         public int CommandType { get; set; } = 0;
+        public int Width { get; set; } = 0;
+        public int Height { get; set; } = 0;
 
         public const int IMAGE_INFO_SIZE = 4 * sizeof(int);
         public void Decode(byte[] packetBody)
@@ -33,7 +31,10 @@ namespace Unf
                 throw new Exception("Packet decode failed.");
             }
             CommandType = imageInfo[0];
-            ImageType = imageInfo[1];
+            if (imageInfo[1] != 2)
+            {
+                throw new Exception("Unexpected packet length"); //This would affect the size of the packet...
+            }
             Width = imageInfo[2];
             Height = imageInfo[3];
 
@@ -45,14 +46,14 @@ namespace Unf
             if (BitConverter.IsLittleEndian)
             {
                 body.AddRange(BitConverter.GetBytes(CommandType).Reverse());
-                body.AddRange(BitConverter.GetBytes(ImageType).Reverse());
+                body.AddRange(BitConverter.GetBytes(2).Reverse()); //Size of packet (below parameters)
                 body.AddRange(BitConverter.GetBytes(Width).Reverse());
                 body.AddRange(BitConverter.GetBytes(Height).Reverse());
             }
             else
             {
                 body.AddRange(BitConverter.GetBytes(CommandType));
-                body.AddRange(BitConverter.GetBytes(ImageType));
+                body.AddRange(BitConverter.GetBytes(2)); //Size of packet (below parameters)
                 body.AddRange(BitConverter.GetBytes(Width));
                 body.AddRange(BitConverter.GetBytes(Height));
             }

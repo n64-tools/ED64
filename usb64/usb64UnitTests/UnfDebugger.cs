@@ -174,7 +174,6 @@ namespace usb64UnitTests
             var packetBody = new Unf.FramebufferInfoPacket() 
             { 
                 CommandType = (int)Unf.ReceiveCommandPacket.CommandType.FramebufferBytes,
-                ImageType = 2, //TODO: what does this actually mean?
                 Width = 320,
                 Height = 240
             };
