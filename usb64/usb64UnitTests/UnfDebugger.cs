@@ -192,11 +192,11 @@ namespace usb64UnitTests
         //public void Receive_command_screenshot_packet_body()
         //{
         //    var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };//need to collect a sample from somewhere!
-        //var command = new Unf.ReceiveCommandPacket
-        //{
-        //    Type = Unf.ReceiveCommandPacket.CommandType.FramebufferBytes,
-        //    Body = packetBody
-        //};
+        //    var command = new Unf.ReceiveCommandPacket
+        //    {
+        //        Type = Unf.ReceiveCommandPacket.CommandType.FramebufferBytes,
+        //        Body = packetBody
+        //    };
         //    var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
 
         //    //read back the file created and compare it...

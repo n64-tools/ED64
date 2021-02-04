@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Text;
+//using System.IO.Ports;
+
 
 namespace Unf
 {
@@ -35,7 +37,7 @@ namespace Unf
 
                 if (fileSize > MAX_FILE_SIZE)
                 {
-                    throw new Exception("Exceeds maximum file size");
+                    throw new Exception($"File size exceeds maximum allowed: {MAX_FILE_SIZE}");
                 }
 
                 int start = command.IndexOf("@");
