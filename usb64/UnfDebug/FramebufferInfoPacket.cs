@@ -31,9 +31,9 @@ namespace Unf
                 throw new Exception("Packet decode failed.");
             }
             CommandType = imageInfo[0];
-            if (imageInfo[1] != 2)
+            if (imageInfo[1] != 2) // This describes the "body" parameters (in int32's) of the packet...
             {
-                throw new Exception("Unexpected packet length"); //This would affect the size of the packet...
+                throw new Exception("Unexpected packet length");
             }
             Width = imageInfo[2];
             Height = imageInfo[3];

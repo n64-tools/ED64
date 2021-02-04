@@ -97,7 +97,6 @@ namespace Unf
 
 
         private static FramebufferInfoPacket ImageInfo = new FramebufferInfoPacket();
-
         private string HandleReceivedCommand(ReceiveCommandPacket.CommandType packetCommand, byte[] packetBody)
         {
             switch (packetCommand)
@@ -114,7 +113,7 @@ namespace Unf
                     return $"w={ImageInfo.Width} h={ImageInfo.Height}";
                 case ReceiveCommandPacket.CommandType.FramebufferBytes:
                     if (ImageInfo.CommandType == (int)ReceiveCommandPacket.CommandType.FramebufferBytes)
-                    {
+                    { // We have already received the required info packet, so we are good to go!
                         ImageUtilities.ConvertToBitmap((short)ImageInfo.Width, (short)ImageInfo.Height, packetBody);
                     }
                     break;
