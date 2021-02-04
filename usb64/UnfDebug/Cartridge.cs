@@ -29,12 +29,13 @@ namespace Unf
 
         public enum SaveType
         {
-            Unknown = 0,
+            Off = 0,
             EEPROM4K,
             EEPROM16K,
             SRAM,
+            SRAM768K,
             FRAM,
-            CPAK
+            SRAM128K
 
         }
 
@@ -43,7 +44,14 @@ namespace Unf
             Unknown = 0,
             NTSC,
             PAL,
-            MPAL
+            MPAL,
+            Free
+        }
+
+        public enum Rtc
+        {
+            Off = 0,
+            On,
         }
 
 
@@ -52,6 +60,7 @@ namespace Unf
             //retroactive
             //krikzz
             //SummerCart
+            //Unknown
             return "";
         }
 
