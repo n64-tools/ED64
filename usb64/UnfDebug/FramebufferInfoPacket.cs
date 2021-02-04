@@ -7,8 +7,8 @@ namespace Unf
     public class FramebufferInfoPacket //should be internal?
     {
         public int CommandType { get; set; } = 0;
-        public int Width { get; set; } = 0;
-        public int Height { get; set; } = 0;
+        public int Horizontal { get; set; } = 0;
+        public int Vertical { get; set; } = 0;
 
         public const int IMAGE_INFO_SIZE = 4 * sizeof(int);
         public void Decode(byte[] packetBody)
@@ -35,8 +35,8 @@ namespace Unf
             {
                 throw new Exception("Unexpected packet length");
             }
-            Width = imageInfo[2];
-            Height = imageInfo[3];
+            Horizontal = imageInfo[2];
+            Vertical = imageInfo[3];
 
         }
 
@@ -47,15 +47,15 @@ namespace Unf
             {
                 body.AddRange(BitConverter.GetBytes(CommandType).Reverse());
                 body.AddRange(BitConverter.GetBytes(2).Reverse()); //Size of packet (below parameters)
-                body.AddRange(BitConverter.GetBytes(Width).Reverse());
-                body.AddRange(BitConverter.GetBytes(Height).Reverse());
+                body.AddRange(BitConverter.GetBytes(Horizontal).Reverse());
+                body.AddRange(BitConverter.GetBytes(Vertical).Reverse());
             }
             else
             {
                 body.AddRange(BitConverter.GetBytes(CommandType));
                 body.AddRange(BitConverter.GetBytes(2)); //Size of packet (below parameters)
-                body.AddRange(BitConverter.GetBytes(Width));
-                body.AddRange(BitConverter.GetBytes(Height));
+                body.AddRange(BitConverter.GetBytes(Horizontal));
+                body.AddRange(BitConverter.GetBytes(Vertical));
             }
             return body.ToArray();
         }

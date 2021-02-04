@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Text;
 
 namespace Unf
@@ -110,11 +108,11 @@ namespace Unf
                 case ReceiveCommandPacket.CommandType.FramebufferInfo:
                     ImageInfo = new FramebufferInfoPacket();
                     ImageInfo.Decode(packetBody);
-                    return $"w={ImageInfo.Width} h={ImageInfo.Height}";
+                    return $"w={ImageInfo.Horizontal} h={ImageInfo.Vertical}";
                 case ReceiveCommandPacket.CommandType.FramebufferBytes:
                     if (ImageInfo.CommandType == (int)ReceiveCommandPacket.CommandType.FramebufferBytes)
                     { // We have already received the required info packet, so we are good to go!
-                        ImageUtilities.ConvertToBitmap((short)ImageInfo.Width, (short)ImageInfo.Height, packetBody);
+                        ImageUtilities.ConvertToBitmap((short)ImageInfo.Horizontal, (short)ImageInfo.Vertical, packetBody);
                     }
                     break;
                 default:

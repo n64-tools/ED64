@@ -31,13 +31,13 @@ namespace Unf
         /// <summary>
         /// Converts the N64 framebuffer to a bitmap image
         /// </summary>
-        /// <param name="width">The screen width</param>
-        /// <param name="height">The screen height</param>
-        /// <param name="frameBuffer">The framebuffer as a byte arrat</param>
+        /// <param name="horizontal">The screen width</param>
+        /// <param name="vertical">The screen height</param>
+        /// <param name="frameBuffer">The framebuffer as a byte array</param>
         /// <returns></returns>
-        public static byte[] ConvertToBitmap(short width, short height, byte[] frameBuffer)
+        public static byte[] ConvertToBitmap(short horizontal, short vertical, byte[] frameBuffer)
         {
-            var imageSize = width * height * 3; //Colour Data(3 bytes)
+            var imageSize = horizontal * vertical * 3; //Colour Data(3 bytes)
 
             //filesize = imagesize + 54 //generally it is not used, but we will set it just incase!
             var filesize = imageSize + 54;
@@ -47,13 +47,13 @@ namespace Unf
             bmpHeader[5] = 0;
 
             //image width (using short as the max res is 640)
-            bmpHeader[18] = (byte)(width & 0xff);
-            bmpHeader[19] = (byte)(width >> 8);
+            bmpHeader[18] = (byte)(horizontal & 0xff);
+            bmpHeader[19] = (byte)(horizontal >> 8);
             bmpHeader[20] = 0;
             bmpHeader[21] = 0;
 
             //negitive height for "top-down" bitmap (using short as the max res is 480)
-            var topdownHeight = height * -1;
+            var topdownHeight = vertical * -1;
             bmpHeader[22] = (byte)(topdownHeight & 0xff);
             bmpHeader[23] = (byte)(topdownHeight >> 8);
             bmpHeader[24] = 0xff;
@@ -71,9 +71,9 @@ namespace Unf
             using (BinaryReader stream = new BinaryReader(new MemoryStream(frameBuffer)))
             {
 
-                for (int h = 0; h < height; h++)
+                for (int h = 0; h < vertical; h++)
                 {
-                    for (int w = 0; w < width; w++)
+                    for (int w = 0; w < horizontal; w++)
                     {
                         var colour = stream.ReadBytes(2);
 

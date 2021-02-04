@@ -174,8 +174,8 @@ namespace usb64UnitTests
             var packetBody = new Unf.FramebufferInfoPacket() 
             { 
                 CommandType = (int)Unf.ReceiveCommandPacket.CommandType.FramebufferBytes,
-                Width = 320,
-                Height = 240
+                Horizontal = 320,
+                Vertical = 240
             };
 
 
@@ -192,15 +192,12 @@ namespace usb64UnitTests
         //public void Receive_command_screenshot_packet_body()
         //{
         //    var packetBody = new byte[] { 0x00, 0x01, 0x02, 0x03 };//need to collect a sample from somewhere!
-        //    var command = new List<byte>();
-        //    command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_HEADER));
-        //    //command.AddRange(new byte[] { 0x01, 0x00, 0x00, 0x04} ); //Big Endian Example for below:
-        //    command.AddRange(BitConverter.GetBytes((short)Unf.Debugger.ReceiveCommandType.SCREENSHOT_BODY)); //text, high byte so no need to reverse.
-        //    command.AddRange(BitConverter.GetBytes((short)packetBody.Length).Reverse()); //Big Endian
-        //    command.AddRange(packetBody);
-        //    command.AddRange(Encoding.ASCII.GetBytes(Unf.Debugger.RECEIVE_PACKET_FOOTER));
-        //    command.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00 }); //added padding. Should be a different test!
-        //    var output = new Unf.Debugger().ProcessReceiveCommand(command.ToArray());
+        //var command = new Unf.ReceiveCommandPacket
+        //{
+        //    Type = Unf.ReceiveCommandPacket.CommandType.FramebufferBytes,
+        //    Body = packetBody
+        //};
+        //    var output = new Unf.Debugger().ProcessReceiveCommand(command.Encode());
 
         //    //read back the file created and compare it...
         //    var outputcontent = File.ReadAllBytes(output);
