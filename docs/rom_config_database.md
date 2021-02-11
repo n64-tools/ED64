@@ -1,7 +1,7 @@
 # ROM configuration database:
 
 ## Developer override
-The developer ID `ED` will cause the config to be loaded from the ROM header (one byte at offset 0x3F) instead of using the save database built into the ED64 menu.
+The developer ID `0xED` (at ROM offset 0x3C) will cause the config to be loaded from the ROM header (one byte at offset 0x3F) instead of using the save database built into the ED64 menu.
 
 ## Usage
 The ROM ID or CRC HI can be used for game detection (check "ROM Info" from the Everdrive OS menu for the value needed).
