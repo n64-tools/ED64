@@ -92,10 +92,10 @@ namespace Unf
         }
 
         ///// <summary>
-        ///// Converts the N64 framebuffer to a bitmap image
+        ///// Converts the N64 framebuffer to a png image
         ///// </summary>
-        ///// <param name="width">The screen width</param>
-        ///// <param name="height">The screen height</param>
+        ///// <param name="horizontal">The screen width</param>
+        ///// <param name="vertical">The screen height</param>
         ///// <param name="frameBuffer">The framebuffer as a byte arrat</param>
         ///// <returns></returns>
         //public static byte[] ConvertToPng(short width, short height, byte[] frameBuffer)
