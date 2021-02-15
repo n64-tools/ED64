@@ -31,7 +31,7 @@ namespace ed64usb
             Console.WriteLine("-fpga=<filename> (Loads specified FPGA file).");
             Console.WriteLine("-rom=<filename> (Loads specified ROM).");
             Console.WriteLine("-forcerom=<filename> (Loads specified ROM, even though it is not of a known type (e.g. 64dd).");
-            Console.WriteLine("-start[=<filepathAndNameFromSdRoot>] (Used for ROM save file).");
+            Console.WriteLine("-start[=<ROM filename>] (Used for ROM save file. Only required when different from '-rom=<filename>').");
             Console.WriteLine("-diag (Runs communications diagnostics.");
             Console.WriteLine("-drom=<filename> (Dumps loaded ROM to PC).");
             Console.WriteLine("-screen=<filename> (Dumps framebuffer as BMP to PC).");
