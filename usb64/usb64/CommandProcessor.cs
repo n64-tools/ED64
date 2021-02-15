@@ -122,7 +122,7 @@ namespace ed64usb
         /// Loads a ROM
         /// </summary>
         /// <param name="filename">The filename to load</param>
-        public static void LoadRom(string filename, bool forceLoad = false)
+        public static void LoadRom(string filename, DeveloperRom.SaveType saveType = 0, bool forceLoad = false)
         {
             if (File.Exists(filename))
             {
@@ -192,6 +192,16 @@ namespace ed64usb
                         var fillValue = IsBootLoader(romBytes.ToArray()) ? 0xffffffff : 0;
 
                         FillCartridgeRomSpace(romBytes.ToArray().Length, fillValue);
+
+                        //we can deal with save types, RTC and region here!
+                        if (saveType != 0)
+                        {
+                            romBytes[0x3c] = (byte)'E';
+                            romBytes[0x3d] = (byte)'D';
+                            romBytes[0x3f] = (byte)saveType; //high nibble
+                            //romBytes[0x3f] |= (byte)rtcOrRegionType; //low nibble
+                        }
+
                         RomWrite(romBytes.ToArray(), baseAddress);
                     }
                 }

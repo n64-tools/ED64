@@ -91,7 +91,9 @@ namespace ed64usb
         {
 
             var romFilePath = string.Empty;
+            var saveType = DeveloperRom.SaveType.None;
             var startFileName = string.Empty;
+            var loadRom = false;
             var startRom = false;
             var unfDebug = false;
 
@@ -127,16 +129,23 @@ namespace ed64usb
                             }
                             break;
 
+                        //case string x when x.StartsWith("-save"):
+                        //    Console.Write("Configuring ROM Save, ");
+                        //    saveType = Enum.Parse(DeveloperRom.SaveType, ExtractSubArg(arg));
+
+                        //    break;
+
                         case string x when x.StartsWith("-rom"):
                             Console.Write("Writing ROM, ");
                             romFilePath = ExtractSubArg(arg);
-                            CommandProcessor.LoadRom(romFilePath, false);
+                            loadRom = true;
+                            
                             break;
 
                         case string x when x.StartsWith("-forcerom"):
                             Console.Write("Writing unknown file to ROM space, "); //Stops loader thinking that the ROM is for an emulator. Useful for 64DD tests.
                             romFilePath = ExtractSubArg(arg);
-                            CommandProcessor.LoadRom(romFilePath, true);
+                            CommandProcessor.LoadRom(romFilePath, DeveloperRom.SaveType.None, true);
                             break;
 
                         case string x when x.StartsWith("-start"):
@@ -183,6 +192,10 @@ namespace ed64usb
                     }
                 }
 
+                if (loadRom)
+                {
+                    CommandProcessor.LoadRom(romFilePath, DeveloperRom.SaveType.None, false);
+                }
                 if (startRom)
                 {
                     if (!string.IsNullOrEmpty(startFileName))
