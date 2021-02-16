@@ -36,6 +36,7 @@ namespace ed64usb
             Console.WriteLine("-drom=<filename> (Dumps loaded ROM to PC).");
             Console.WriteLine("-screen=<filename> (Dumps framebuffer as BMP to PC).");
             Console.WriteLine("-unfdebug (Runs the unf Debugger).");
+            Console.WriteLine("-save=<savetype> (Runs the ROM with a save type) Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k].");
             Console.WriteLine();
 
 
@@ -129,11 +130,11 @@ namespace ed64usb
                             }
                             break;
 
-                        //case string x when x.StartsWith("-save"):
-                        //    Console.Write("Configuring ROM Save, ");
-                        //    saveType = Enum.Parse(DeveloperRom.SaveType, ExtractSubArg(arg));
+                        case string x when x.StartsWith("-save"):
+                            Console.Write("Configuring ROM Save, ");
+                            saveType = (DeveloperRom.SaveType)Enum.Parse(typeof(DeveloperRom.SaveType), ExtractSubArg(arg));
 
-                        //    break;
+                            break;
 
                         case string x when x.StartsWith("-rom"):
                             Console.Write("Writing ROM, ");
@@ -194,7 +195,7 @@ namespace ed64usb
 
                 if (loadRom)
                 {
-                    CommandProcessor.LoadRom(romFilePath, DeveloperRom.SaveType.None, false);
+                    CommandProcessor.LoadRom(romFilePath, saveType, false);
                 }
                 if (startRom)
                 {
