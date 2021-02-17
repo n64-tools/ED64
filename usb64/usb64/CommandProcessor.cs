@@ -220,9 +220,9 @@ namespace ed64usb
             CommandPacketTransmit(TransmitCommand.RomRead, startAddress, length, 0);
 
             UsbInterface.ProgressBarTimerInterval = length > MAX_ROM_SIZE / 2 ? 0x100000 : 0x80000;
-            var time = DateTime.Now.Ticks;
+            var time = DateTime.UtcNow.Ticks;
             var data = UsbInterface.Read(length);
-            time = DateTime.Now.Ticks - time;
+            time = DateTime.UtcNow.Ticks - time;
             Console.WriteLine($"OK. speed: {GetSpeedString(data.Length, time)}"); //TODO: this should be in the main program! or at least return the time!
             return data;
         }
@@ -240,9 +240,9 @@ namespace ed64usb
 
             Console.Write("Reading RAM...");
             UsbInterface.ProgressBarTimerInterval = length > 0x2000000 ? 0x100000 : 0x80000;
-            var time = DateTime.Now.Ticks;
+            var time = DateTime.UtcNow.Ticks;
             var data = UsbInterface.Read(length);
-            time = DateTime.Now.Ticks - time;
+            time = DateTime.UtcNow.Ticks - time;
             Console.WriteLine($"OK. speed: {GetSpeedString(data.Length, time)}"); //TODO: this should be in the main program! or at least return the time!
             return data;
         }
@@ -261,9 +261,9 @@ namespace ed64usb
             CommandPacketTransmit(TransmitCommand.RomWrite, startAddress, length, 0);
 
             UsbInterface.ProgressBarTimerInterval = length > 0x2000000 ? 0x100000 : 0x80000;
-            var time = DateTime.Now.Ticks;
+            var time = DateTime.UtcNow.Ticks;
             UsbInterface.Write(data);
-            time = DateTime.Now.Ticks - time;
+            time = DateTime.UtcNow.Ticks - time;
 
             Console.WriteLine($"OK. speed: {GetSpeedString(data.Length, time)}"); //TODO: this should be in the main program! or at least return the time!
 
