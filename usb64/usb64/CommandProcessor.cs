@@ -277,6 +277,11 @@ namespace ed64usb
         /// <remarks> The filename (optional) is used for creating a save file on the SD card</remarks>
         public static void StartRom(string fileName = "")
         {
+            if (fileName.Length > 256)
+            {
+                throw new Exception("Filename exceeds the 256 character limit.");
+            }
+            
             CommandPacketTransmit(TransmitCommand.RomStart, 0, 0, 1);
 
             if (fileName.Length <= 256 && fileName.Length >= 1)
@@ -285,10 +290,6 @@ namespace ed64usb
                 var filenameBytes = Encoding.ASCII.GetBytes(fileName);
                 Array.Resize(ref filenameBytes, 256); //The packet must be 256 bytes in length, so resize it.
                 UsbInterface.Write(filenameBytes);
-            }
-            else if (fileName.Length > 256)
-            {
-                throw new Exception("Filename exceeds the 256 character limit.");
             }
 
         }
