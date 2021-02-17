@@ -36,7 +36,10 @@ namespace ed64usb
             Console.WriteLine("-drom=<filename> (Dumps loaded ROM to PC).");
             Console.WriteLine("-screen=<filename> (Dumps framebuffer as BMP to PC).");
             Console.WriteLine("-unfdebug (Runs the unf Debugger).");
-            Console.WriteLine("-save=<savetype> (Runs the ROM with a save type) Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k].");
+            Console.WriteLine("-save=<savetype> (Runs the ROM with a save type when not matched in the internal database)");
+            Console.WriteLine("      Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k].");
+            Console.WriteLine("-extra=<RTC-RegionType> (Runs the ROM with RTC or forced region)");
+            Console.WriteLine("      Options: [Off,Rtc,NoRegion,All].");
             Console.WriteLine();
 
 
@@ -93,7 +96,9 @@ namespace ed64usb
 
             var romFilePath = string.Empty;
             var saveType = DeveloperRom.SaveType.None;
+            var extraInfo = DeveloperRom.ExtraInfo.Off;
             var startFileName = string.Empty;
+            var forceRom = false;
             var loadRom = false;
             var startRom = false;
             var unfDebug = false;
@@ -136,6 +141,12 @@ namespace ed64usb
 
                             break;
 
+                        case string x when x.StartsWith("-extra"):
+                            Console.Write("Configuring ROM Save, ");
+                            extraInfo = (DeveloperRom.ExtraInfo)Enum.Parse(typeof(DeveloperRom.ExtraInfo), ExtractSubArg(arg));
+
+                            break;
+
                         case string x when x.StartsWith("-rom"):
                             Console.Write("Writing ROM, ");
                             romFilePath = ExtractSubArg(arg);
@@ -146,7 +157,8 @@ namespace ed64usb
                         case string x when x.StartsWith("-forcerom"):
                             Console.Write("Writing unknown file to ROM space, "); //Stops loader thinking that the ROM is for an emulator. Useful for 64DD tests.
                             romFilePath = ExtractSubArg(arg);
-                            CommandProcessor.LoadRom(romFilePath, DeveloperRom.SaveType.None, true);
+                            forceRom = true;
+                            loadRom = true;
                             break;
 
                         case string x when x.StartsWith("-start"):
@@ -195,7 +207,7 @@ namespace ed64usb
 
                 if (loadRom)
                 {
-                    CommandProcessor.LoadRom(romFilePath, saveType, false);
+                    CommandProcessor.LoadRom(romFilePath, saveType, extraInfo, forceRom);
                 }
                 if (startRom)
                 {
