@@ -94,19 +94,6 @@ namespace ed64usb
         private static void HandleArguments(string[] args)
         {
 
-            var romFilePath = string.Empty;
-            var saveType = DeveloperRom.SaveType.None;
-            var extraInfo = DeveloperRom.ExtraInfo.Off;
-            var startFileName = string.Empty;
-            var forceRom = false;
-            var loadRom = false;
-            var startRom = false;
-            var unfDebug = false;
-
-            var time = DateTime.Now.Ticks;
-
-
-
             if (args.Length == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -117,6 +104,16 @@ namespace ed64usb
             }
             else
             {
+                var romFilePath = string.Empty;
+                var saveType = DeveloperRom.SaveType.None;
+                var extraInfo = DeveloperRom.ExtraInfo.Off;
+                var startFileName = string.Empty;
+                var forceRom = false;
+                var loadRom = false;
+                var startRom = false;
+                var unfDebug = false;
+
+                var time = DateTime.UtcNow.Ticks;
 
                 foreach (string arg in args)
                 {
@@ -225,17 +222,16 @@ namespace ed64usb
                     }
 
                 }
-                
+
+                time = (DateTime.UtcNow.Ticks - time) / 10000;
+                Console.WriteLine("Finished in: {0:D}.{1:D3} seconds.", time / 1000, time % 1000);
+
                 if (unfDebug)
                 {
                     Console.Write("Starting unf debug session, ");
                     //var debug = new Unf.Debuggger(UsbInterface.port);
                 }
             }
-
-            time = (DateTime.Now.Ticks - time) / 10000;
-            Console.WriteLine("Finished in: {0:D}.{1:D3} seconds.", time / 1000, time % 1000);
-
 
         }
 
