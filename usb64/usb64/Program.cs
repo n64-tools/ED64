@@ -218,7 +218,8 @@ namespace ed64usb
                     }
                     else
                     {
-                        throw new Exception("Could not start ROM");
+                        //throw new Exception("Could not start ROM");
+                        CommandProcessor.StartRom();
                     }
 
                 }
