@@ -19,14 +19,14 @@ jobs:
       with:
         nuget-version: '5.x'
 
-    - uses: actions/cache@v1
-      id: cache
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+    # - uses: actions/cache@v1
+    #   id: cache
+    #   with:
+    #     path: ~/.nuget/packages
+    #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
      
     - name: Restore NuGet Packages
-      if: steps.cache.outputs.cache-hit != 'true'
+      #if: steps.cache.outputs.cache-hit != 'true'
       run: nuget restore ./usb64/usb64.sln
  
     - name: Build and Publish Web App
