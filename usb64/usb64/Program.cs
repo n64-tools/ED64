@@ -148,7 +148,7 @@ namespace ed64usb
                             Console.Write("Writing ROM, ");
                             romFilePath = ExtractSubArg(arg);
                             loadRom = true;
-                            
+
                             break;
 
                         case string x when x.StartsWith("-forcerom"):
