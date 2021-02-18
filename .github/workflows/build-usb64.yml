@@ -22,7 +22,7 @@ jobs:
         run: nuget restore ./usb64/usb64.sln
   
       - name: Build App
-        run: msbuild ./usb64/usb64.sln /p:Configuration=Release /p:framework net40
+        run: msbuild ./usb64/usb64.sln /p:Configuration=Release /p:framework=net40
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v1.0.0
