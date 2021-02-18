@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: usb64-binaries
-          path: '**\bin\Release\**\*.exe'
+          path: ./usb64/usb64/bin/Release/**/*.exe
