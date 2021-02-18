@@ -1,30 +1,31 @@
-name: Build Web App
+name: Build Usb64 App
  
 on: [push, pull_request]
- 
 jobs:
   build:
- 
     runs-on: windows-latest
- 
+    strategy:
+      matrix:
+        dotnet: [ '3.0', '3.1.x' ]
+    name: Build ${{ matrix.dotnet }} usb64
     steps:
-    - uses: actions/checkout@v1
-      name: Checkout Code
+      - uses: actions/checkout@v2
+        name: Checkout Code
      
-    - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v1.0.2
-       
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.2
-     
-    - name: Restore NuGet Packages
-      run: nuget restore ./usb64/usb64.sln
- 
-    - name: Build and Publish Web App
-      run: msbuild ./usb64/usb64.sln /p:Configuration=Release
- 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: usb64-binaries
-        path: bin\Release\Publish
+      - name: Setup MSBuild Path
+        uses: microsoft/setup-msbuild@v1.0.2
+        
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+      
+      - name: Restore NuGet Packages
+        run: nuget restore ./usb64/usb64.sln
+  
+      - name: Build and Publish Web App
+        run: msbuild ./usb64/usb64.sln /p:Configuration=Release
+  
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: usb64-binaries
+          path: bin\Release\Publish
