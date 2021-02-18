@@ -111,7 +111,7 @@ namespace ed64usb
                 var forceRom = false;
                 var loadRom = false;
                 var startRom = false;
-                var unfDebug = false;
+                //var unfDebug = false;
 
                 var time = DateTime.UtcNow.Ticks;
 
@@ -119,9 +119,9 @@ namespace ed64usb
                 {
                     switch (arg)
                     {
-                        case string x when x.StartsWith("-unfdebug"):
-                            unfDebug = true;
-                            break;
+                        // case string x when x.StartsWith("-unfdebug"):
+                        //     unfDebug = true;
+                        //     break;
 
                         case string x when x.StartsWith("-fpga"):
                             Console.Write("Sending FPGA config... ");
