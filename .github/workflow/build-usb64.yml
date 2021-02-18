@@ -17,8 +17,8 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
       - run: dotnet build ./usb64/usb64.csproj
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: usb64-binaries
-        path: bin\Release\Publish
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: usb64-binaries
+          path: bin\Release\Publish
