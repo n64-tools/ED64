@@ -35,7 +35,7 @@ namespace ed64usb
             Console.WriteLine("-diag (Runs communications diagnostics.");
             Console.WriteLine("-drom=<filename> (Dumps loaded ROM to PC).");
             Console.WriteLine("-screen=<filename> (Dumps framebuffer as BMP to PC).");
-            Console.WriteLine("-unfdebug (Runs the unf Debugger).");
+            //Console.WriteLine("-unfdebug (Runs the unf Debugger).");
             Console.WriteLine("-save=<savetype> (Runs the ROM with a save type when not matched in the internal database)");
             Console.WriteLine("      Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k].");
             Console.WriteLine("-extra=<RTC-RegionType> (Runs the ROM with RTC or forced region)");
@@ -227,11 +227,11 @@ namespace ed64usb
                 time = (DateTime.UtcNow.Ticks - time) / 10000;
                 Console.WriteLine("Finished in: {0:D}.{1:D3} seconds.", time / 1000, time % 1000);
 
-                if (unfDebug)
-                {
-                    Console.Write("Starting unf debug session, ");
-                    //var debug = new Unf.Debuggger(UsbInterface.port);
-                }
+                // if (unfDebug)
+                // {
+                //     Console.Write("Starting unf debug session, ");
+                //     //var debug = new Unf.Debuggger(UsbInterface.port);
+                // }
             }
 
         }

@@ -37,11 +37,12 @@ Upper records have priority over records below.
 
 
 Note: The CONFIG options can be mixed using addition (1+2=3 for rtc+region).
-| ID | config   | Region? |
-|:- |---        | --- |
-| 0 | OFF       | |
-| 1 | Force RTC | |
-| 2 | Region free ROM. Use native system region for game launch. For applications without region lock | |
+| ID | config          | Region? |
+|:-  |---              | ---     |
+| 0  | Off             |         |
+| 1  | Rtc             |         |
+| 2  | Region free ROM | Use native system region for game launch. For applications without region lock. |
+| 3  | All             | Rtc and native system region are enabled. |
 
 
 ### Sample

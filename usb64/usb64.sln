@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "usb64", "usb64\usb64.csproj", "{72FEBDD2-077B-4F28-9049-69D4A84F3C1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "usb64UnitTests", "usb64UnitTests\usb64UnitTests.csproj", "{2502B562-DF6E-4E1A-A7E0-8C0ECA0217CE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnfDebug", "UnfDebug\UnfDebug.csproj", "{2E70E258-597B-40D0-989E-220D60592BBB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
