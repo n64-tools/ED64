@@ -1,0 +1,30 @@
+name: Build Web App
+ 
+on: [push, pull_request]
+ 
+jobs:
+  build:
+ 
+    runs-on: windows-latest
+ 
+    steps:
+    - uses: actions/checkout@v1
+      name: Checkout Code
+     
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1
+       
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+     
+    - name: Restore NuGet Packages
+      run: nuget restore ./usb64/usb64.sln
+ 
+    - name: Build and Publish Web App
+      run: msbuild ./usb64/usb64.sln /p:Configuration=Release
+ 
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: usb64-binaries
+        path: bin\Release\Publish
