@@ -22,10 +22,10 @@ jobs:
         run: nuget restore ./usb64/usb64.sln
   
       - name: Build App
-        run: msbuild ./usb64/usb64.sln /p:Configuration=Release
+        run: msbuild ./usb64/usb64.sln /p:Configuration=Release /p:framework net40
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: usb64-binaries
-          path: ./usb64/usb64/bin/Release/**/usb64.exe
+          path: usb64\usb64\bin\Release\net40\usb64.exe
