@@ -29,12 +29,14 @@ AS = $(GCCN64PREFIX)as
 LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
 
-SOURCES = $(wildcard $(SRCDIR)/*.c)
-SOURCES_S = $(wildcard $(SRCDIR)/*.s)
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
-OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-OBJECTS_S = $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
+SOURCES_S = $(wildcard $(SRCDIR)/*.s)
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+
 OBJECTS_FF = $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS_S = $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
+OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(OBJCOPY) $(BINDIR)/$(PROG_NAME).elf $(BINDIR)/$(PROG_NAME).bin -O binary
@@ -42,18 +44,17 @@ $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(N64TOOL) -l 256K -t $(HEADERTITLE) -h $(HDDIR)/$(HEADERNAME) -o $(BINDIR)/$(PROG_NAME).v64 $(BINDIR)/$(PROG_NAME).bin
 	$(CHKSUM64PATH) $(BINDIR)/$(PROG_NAME).v64
 
-$(PROG_NAME).elf : $(OBJECTS) $(OBJECTS_S) $(OBJECTS_FF)
-	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS) $(OBJECTS_S) $(OBJECTS_FF) $(LINK_FLAGS)
-
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(FLAGS) -c $< -o $@
-
-$(OBJECTS_S): $(OBJDIR)/%.o : $(SRCDIR)/%.s
-	$(CC) $(ASFLAGS) -s $< -o $@
+$(PROG_NAME).elf : $(OBJECTS_FF) $(OBJECTS_S) $(OBJECTS)
+	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS_FF) $(OBJECTS_S) $(OBJECTS) $(LINK_FLAGS)
 
 $(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
+$(OBJECTS_S): $(OBJDIR)/%.o : $(SRCDIR)/%.s
+	$(CC) $(ASFLAGS) -s $< -o $@
+	
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+	$(CC) $(FLAGS) -c $< -o $@
 
 all: $(PROG_NAME).v64
 
