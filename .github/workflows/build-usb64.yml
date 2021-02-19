@@ -27,5 +27,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: usb64-binaries
+          name: usb64-${{ matrix.dotnet }}-app
           path: usb64\usb64\bin\Release\${{ matrix.dotnet }}\usb64.exe
