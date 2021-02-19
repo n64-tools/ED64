@@ -16,7 +16,7 @@ BINDIR = bin
 LDDIR :=ldscripts
 HDDIR :=headers
 #ROMFIX64 =	./tools/romfix64
-LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -T $(LDDIR)ed64.ld
+LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -T $(LDDIR)/ed64.ld
 PROG_NAME =	ED64-XIO-SAMPLE
 HEADERNAME = header
 HEADERTITLE = $(PROG_NAME)
@@ -30,9 +30,9 @@ LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
 
 SOURCES = $(wildcard $(SRCDIR)/*.c)
-SOURCES := $(wildcard $(FFDIR)/*.c)
+SOURCES_FF := $(wildcard $(FFDIR)/*.c)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-#OBJECTS := $(SOURCES:$(FFDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS_FF = $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(OBJCOPY) $(BINDIR)/$(PROG_NAME).elf $(BINDIR)/$(PROG_NAME).bin -O binary
@@ -52,7 +52,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.s
 	@mkdir -p $(OBJDIR)
 	$(CC) $(ASFLAGS) -s $< -o $@
 
-$(OBJECTS): $(OBJDIR)/%.o : $(FFDIR)/%.c
+$(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
 	@mkdir -p $(OBJDIR)
 	$(CC) $(FLAGS) -c $< -o $@
 
