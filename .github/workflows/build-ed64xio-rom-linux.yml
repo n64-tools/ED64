@@ -12,4 +12,4 @@ jobs:
       - run: sudo npm install -g libdragon
       - run: libdragon download
       - run: libdragon start
-      - run: cd ${{ github.workspace }}/ED64-XIO/ && ls && libdragon make -- -C ${{ github.workspace }}/ED64-XIO/makefile
+      - run: cd ${{ github.workspace }}/ED64-XIO/ && ls && libdragon make -- -C ${{ github.workspace }}/ED64-XIO/
