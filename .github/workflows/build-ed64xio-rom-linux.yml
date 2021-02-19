@@ -1,0 +1,6 @@
+name: Build ED64 XIO N64 test ROM
+ 
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
