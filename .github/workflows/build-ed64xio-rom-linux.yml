@@ -9,7 +9,7 @@ jobs:
         name: Checkout Code
 
       #docker for libdragon?
-      - run: npm install -g libdragon
+      - run: sudo npm install -g libdragon
       - run: libdragon download
       - run: cd ./ED64-XIO/
       - run: libdragon start
