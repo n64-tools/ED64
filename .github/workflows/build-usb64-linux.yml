@@ -1,4 +1,4 @@
-name: Build Usb64 App
+name: Build Linux Usb64 App
  
 on: [push, pull_request]
 jobs:
@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         dotnet: [ 'netcoreapp3.1' ]
-    name: Build ${{ matrix.dotnet }} usb64 Linux App
+    name: Build ${{ matrix.dotnet }} usb64 Linux
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code

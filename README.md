@@ -1,9 +1,9 @@
 # Everdrive-64 reference source
 ![krikzz logo](http://krikzz.com/pub/support/var/stickers/krikzz.png)
 
-[![Build Windows Usb64 App](https://github.com/N64-tools/ED64/actions/workflows/build-usb64.yml/badge.svg)](https://github.com/N64-tools/ED64/actions/workflows/build-usb64-windows.yml)
+[![Build Windows Usb64 App](https://github.com/N64-tools/ED64/actions/workflows/build-usb64-windows.yml/badge.svg)](https://github.com/N64-tools/ED64/actions/workflows/build-usb64-windows.yml)
 
-[![Build Linux Usb64 App](https://github.com/N64-tools/ED64/actions/workflows/build-usb64.yml/badge.svg)](https://github.com/N64-tools/ED64/actions/workflows/build-usb64-linux.yml)
+[![Build Linux Usb64 App](https://github.com/N64-tools/ED64/actions/workflows/build-usb64-linux.yml/badge.svg)](https://github.com/N64-tools/ED64/actions/workflows/build-usb64-linux.yml)
 
 [![Build Status](https://dev.azure.com/n64-tools/N64-Tools/_apis/build/status/N64-tools.ED64?branchName=develop)](https://dev.azure.com/n64-tools/N64-Tools/_build/latest?definitionId=8&branchName=develop)
 
