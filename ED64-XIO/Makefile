@@ -1,24 +1,26 @@
 
-#HEADERPATH = $(ROOTDIR)/mips64-elf/lib
-#HEADERNAME = header
-#LINK_FLAGS = -L$(ROOTDIR)/mips64-elf/lib -led64 -ldragon -lc -lm -ldragonsys -Tn64.ld
-#CFLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -I$(ROOTDIR)/mips64-elf/include
 
-
-ROOTDIR = $(N64_INST) #ROOTDIR = E:/devtools/mips64
+ROOTDIR = $(N64_INST)
 GCCN64PREFIX = $(ROOTDIR)/bin/mips64-elf-
 CHKSUM64PATH = $(ROOTDIR)/bin/chksum64
-MKDFSPATH =	$(ROOTDIR)/bin/mkdfs
+MKDFSPATH = $(ROOTDIR)/bin/mkdfs
 N64TOOL = $(ROOTDIR)/bin/n64tool
+
 FFDIR :=ff
 SRCDIR :=src
 INCDIR :=inc
 RESDIR :=res
+OBJDIR = obj
+BINDIR = bin
+
 LDDIR :=ldscripts
 HDDIR :=headers
 #ROMFIX64 =	./tools/romfix64
-LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -T $(LDDIR)/ed64.ld
+LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -T $(LDDIR)ed64.ld
 PROG_NAME =	ED64-XIO-SAMPLE
+HEADERNAME = header
+HEADERTITLE = $(PROG_NAME)
+
 FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR) -G0 
 FLAGS_VT = -std=gnu99 -march=vr4300 -mtune=vr4300 -O0 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR)
 ASFLAGS = -mtune=vr4300 -march=vr4300
@@ -27,43 +29,39 @@ AS = $(GCCN64PREFIX)as
 LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
 
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+SOURCES := $(wildcard $(FFDIR)/*.c)
+OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS := $(SOURCES:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 
-BDIR		:=bin
-ODIR		:=obj
-#VPATH		:= $(BDIR)
+$(PROG_NAME).v64: $ $(PROG_NAME).elf
+	$(OBJCOPY) $(BINDIR)/$(PROG_NAME).elf $(BINDIR)/$(PROG_NAME).bin -O binary
+	rm -f $(BINDIR)/$(PROG_NAME).v64
+	$(N64TOOL) -l 256K -t $(HEADERTITLE) -h $(HDDIR)/$(HEADERNAME) -o $(BINDIR)/$(PROG_NAME).v64 $(BINDIR)/$(PROG_NAME).bin
+	$(CHKSUM64PATH) $(BINDIR)/$(PROG_NAME).v64
 
-MAKEFLAGS= -j8
+$(PROG_NAME).elf : $(OBJECTS)
+	@mkdir -p $(BINDIR)
+	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS) $(LINK_FLAGS)
 
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(FLAGS) -c $< -o $@
 
-SRC = $(wildcard $(SRCDIR)/*.c) $(wildcard $(FFDIR)/*.c)
-SRCS = $(wildcard $(SRCDIR)/*.s) 
-OBJ = $(SRC:.c=.o)
-OBJ += $(SRCS:.s=.o)
-OFILES = $(OBJ:%.o=obj/%.o)
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.s
+	@mkdir -p $(OBJDIR)
+	$(CC) $(ASFLAGS) -s $< -o $@
+
+$(OBJECTS): $(OBJDIR)/%.o : $(FFDIR)/%.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(FLAGS) -c $< -o $@
 
 
 all: $(PROG_NAME).v64
 
-
-$(PROG_NAME).v64: $(PROG_NAME).elf
-	$(OBJCOPY) $(BDIR)/$(PROG_NAME).elf $(BDIR)/$(PROG_NAME).bin -O binary
-	$(RM) -f $(PROG_NAME).v64
-	$(N64TOOL) -l 256K -t $(PROG_NAME) -h $(HDDIR)/header -o $(PROG_NAME).v64 $(BDIR)/$(PROG_NAME).bin -s
-	$(ROMFIX64) $(PROG_NAME).v64
-
-$(PROG_NAME).elf : $(OBJ)
-	$(LD) -o $(BDIR)/$(PROG_NAME).elf $(OFILES) $(LINK_FLAGS)
-
-%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $(ODIR)/$@
-
-%.o: %.s
-	$(AS) $(ASFLAGS) $< -o $(ODIR)/$@
-
 clean:
-	$(RM) -f *.v64 *.elf *.o
-	$(RM) $(ODIR)/*.o
-	$(RM) $(BDIR)/*.elf
-	$(RM) $(BDIR)/*.bin
-	$(RM) $(ODIR)/$(FFDIR)/*.o
-	
+	$(RM) -f $(BINDIR)/*.v64 
+	$(RM) $(BINDIR)/*.elf 
+	$(RM) $(OBJDIR)/*.o 
+	$(RM)$(BINDIR)/*.bin 
+	$(RM)$(BINDIR)/*.dfs
