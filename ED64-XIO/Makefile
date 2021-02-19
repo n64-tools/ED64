@@ -50,8 +50,8 @@ $(PROG_NAME).elf : $(OBJECTS_FF) $(OBJECTS_S) $(OBJECTS)
 $(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
-# $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.s
-# 	$(CC) $(ASFLAGS) -c $< -o $@
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.s
+	$(AS) $(ASFLAGS) -c $< -o $@
 	
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
