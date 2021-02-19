@@ -32,7 +32,7 @@ OBJCOPY = $(GCCN64PREFIX)objcopy
 SOURCES = $(wildcard $(SRCDIR)/*.c)
 SOURCES := $(wildcard $(FFDIR)/*.c)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-OBJECTS := $(SOURCES:$(FFDIR)/%.c=$(OBJDIR)/%.o)
+#OBJECTS := $(SOURCES:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(OBJCOPY) $(BINDIR)/$(PROG_NAME).elf $(BINDIR)/$(PROG_NAME).bin -O binary
