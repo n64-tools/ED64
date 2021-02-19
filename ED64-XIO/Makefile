@@ -30,11 +30,11 @@ LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
 
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
-#SOURCES_S := $(wildcard $(SRCDIR)/*.s)
+SOURCES := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
 
 OBJECTS_FF := $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
-#OBJECTS_S := $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
+OBJECTS := $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 
@@ -50,7 +50,7 @@ $(PROG_NAME).elf : $(OBJECTS_FF) $(OBJECTS_S) $(OBJECTS)
 $(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
-# $(OBJECTS_S): $(OBJDIR)/%.o : $(SRCDIR)/%.s
+# $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.s
 # 	$(CC) $(ASFLAGS) -c $< -o $@
 	
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
