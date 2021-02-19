@@ -22,7 +22,7 @@ HEADERNAME = header
 HEADERTITLE = $(PROG_NAME)
 
 FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR) -G0 
-FLAGS_VT = -std=gnu99 -march=vr4300 -mtune=vr4300 -O0 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR)
+#FLAGS_VT = -std=gnu99 -march=vr4300 -mtune=vr4300 -O0 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR)
 ASFLAGS = -mtune=vr4300 -march=vr4300
 CC = $(GCCN64PREFIX)gcc
 AS = $(GCCN64PREFIX)as
@@ -30,12 +30,12 @@ LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
 
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
-SOURCES_S = $(wildcard $(SRCDIR)/*.s)
-SOURCES = $(wildcard $(SRCDIR)/*.c)
+SOURCES_S := $(wildcard $(SRCDIR)/*.s)
+SOURCES := $(wildcard $(SRCDIR)/*.c)
 
-OBJECTS_FF = $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
-OBJECTS_S = $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
-OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS_FF := $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS_S := $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
+OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
