@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: usb64-${{ matrix.dotnet }}-app-windows
-          path: ${{ github.workspace }}\usb64\usb64\bin\Release\${{ matrix.dotnet }}\*
+          path: ${{ github.workspace }}\usb64\usb64\bin\Release\${{ matrix.dotnet }}\usb64.exe
