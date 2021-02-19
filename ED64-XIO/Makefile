@@ -30,8 +30,10 @@ LD = $(GCCN64PREFIX)ld
 OBJCOPY = $(GCCN64PREFIX)objcopy
 
 SOURCES = $(wildcard $(SRCDIR)/*.c)
+SOURCES_S = $(wildcard $(SRCDIR)/*.s)
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS_S = $(SOURCES:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
 OBJECTS_FF = $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
@@ -41,19 +43,15 @@ $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(CHKSUM64PATH) $(BINDIR)/$(PROG_NAME).v64
 
 $(PROG_NAME).elf : $(OBJECTS)
-	@mkdir -p $(BINDIR)
 	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS) $(LINK_FLAGS)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
 	$(CC) $(FLAGS) -c $< -o $@
 
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.s
-	@mkdir -p $(OBJDIR)
+$(OBJECTS_S): $(OBJDIR)/%.o : $(SRCDIR)/%.s
 	$(CC) $(ASFLAGS) -s $< -o $@
 
 $(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
-	@mkdir -p $(OBJDIR)
 	$(CC) $(FLAGS) -c $< -o $@
 
 
