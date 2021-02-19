@@ -51,7 +51,7 @@ $(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(OBJECTS_S): $(OBJDIR)/%.o : $(SRCDIR)/%.s
-	$(CC) $(ASFLAGS) -s $< -o $@
+	$(CC) $(ASFLAGS) -c $< -o $@
 	
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
