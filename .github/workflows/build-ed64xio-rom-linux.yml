@@ -8,4 +8,9 @@ jobs:
       - uses: actions/checkout@v2
         name: Checkout Code
 
-      #todo: docker for libdragon?
+      #docker for libdragon?
+      - run: npm install -g libdragon
+      - run: libdragon download
+      - run: cd ./ED64-XIO/
+      - run: libdragon start
+      - run: libdragon make
