@@ -10,7 +10,7 @@ jobs:
 
       #docker for libdragon?
       - run: sudo npm install -g libdragon
-      - run: libdragon download
-      - run: libdragon start
+      - run: sudo libdragon download
+      - run: sudo libdragon start
       # # -- -C ${{ github.workspace }}/ED64-XIO/
-      - run: cd ${{ github.workspace }}/ED64-XIO/ && libdragon make
+      - run: sudo cd ${{ github.workspace }}/ED64-XIO/ && sudo libdragon make
