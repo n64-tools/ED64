@@ -1,4 +1,11 @@
-ROOTDIR = E:/devtools/mips64
+
+#HEADERPATH = $(ROOTDIR)/mips64-elf/lib
+#HEADERNAME = header
+#LINK_FLAGS = -L$(ROOTDIR)/mips64-elf/lib -led64 -ldragon -lc -lm -ldragonsys -Tn64.ld
+#CFLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -I$(ROOTDIR)/mips64-elf/include
+
+
+ROOTDIR = $(N64_INST) #ROOTDIR = E:/devtools/mips64
 GCCN64PREFIX =	$(ROOTDIR)/bin/mips64-elf-
 CHKSUM64PATH =	$(ROOTDIR)/bin/chksum64
 MKDFSPATH =	$(ROOTDIR)/bin/mkdfs
