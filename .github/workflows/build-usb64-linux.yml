@@ -3,11 +3,11 @@ name: Build Usb64 App
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net5.0' ]
-    name: Build ${{ matrix.dotnet }} usb64 App
+        dotnet: [ 'netcoreapp3.1', 'net5.0' ]
+    name: Build ${{ matrix.dotnet }} usb64 Linux App
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
@@ -27,5 +27,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: usb64-${{ matrix.dotnet }}-app
-          path: usb64\usb64\bin\Release\${{ matrix.dotnet }}\usb64.exe
+          name: usb64-${{ matrix.dotnet }}-app-linux
+          path: usb64\usb64\bin\Release\${{ matrix.dotnet }}\**
