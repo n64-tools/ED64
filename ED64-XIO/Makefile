@@ -23,7 +23,7 @@ HEADERTITLE = $(PROG_NAME)
 
 FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR) -G0 
 #FLAGS_VT = -std=gnu99 -march=vr4300 -mtune=vr4300 -O0 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR)
-ASFLAGS = -mtune=vr4300 -march=vr4300
+ASFLAGS = -mtune=vr4300 -march=vr4300 -G0
 CC = $(GCCN64PREFIX)gcc
 AS = $(GCCN64PREFIX)as
 LD = $(GCCN64PREFIX)ld
