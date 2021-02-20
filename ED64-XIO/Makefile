@@ -16,14 +16,14 @@ BINDIR = bin
 #LDDIR :=ldscripts
 HDDIR :=$(ROOTDIR)/mips64-elf/lib
 #ROMFIX64 =	./tools/romfix64
-LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -Tn64.ld
+LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -ldragonsys -Tn64.ld
 PROG_NAME =	ED64-XIO-SAMPLE
 HEADERNAME = header
 HEADERTITLE = $(PROG_NAME)
 
 FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR) -G0 
 #FLAGS_VT = -std=gnu99 -march=vr4300 -mtune=vr4300 -O0 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(FFDIR) -I$(INCDIR)
-ASFLAGS = -mtune=vr4300 -march=vr4300 -G0
+ASFLAGS = -mtune=vr4300 -march=vr4300
 CC = $(GCCN64PREFIX)gcc
 AS = $(GCCN64PREFIX)as
 LD = $(GCCN64PREFIX)ld
