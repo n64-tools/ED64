@@ -13,10 +13,10 @@ RESDIR :=res
 OBJDIR = obj
 BINDIR = bin
 
-LDDIR :=ldscripts
-HDDIR :=headers
+#LDDIR :=ldscripts
+HDDIR :=$(ROOTDIR)/mips64-elf/lib
 #ROMFIX64 =	./tools/romfix64
-LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -T $(LDDIR)/ed64.ld
+LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -lnosys -Tn64.ld
 PROG_NAME =	ED64-XIO-SAMPLE
 HEADERNAME = header
 HEADERTITLE = $(PROG_NAME)
