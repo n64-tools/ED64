@@ -34,24 +34,25 @@ extern "C" {
 #define BI_BCFG_GAMEMOD 0x08
 #define BI_BCFG_CICLOCK 0x8000
 
-//dd table to know data areas which should be saved
-#define BI_DD_TBL_SIZE  2048
-#define BI_DD_PGE_SIZE  0x8000
+//64dd disk save table - to know which data areas should be saved
+// #define BI_DD_TBL_SIZE  2048
+// #define BI_DD_PGE_SIZE  0x8000
 
+//cartridge hardware ID flags - used for identification
 #define CART_ID_V2      0xED640007
 #define CART_ID_V3      0xED640008
 #define CART_ID_X7      0xED640013
 #define CART_ID_X5      0xED640014
 
-//game cfg register flags
+//game save config register flags
 #define SAVE_OFF        0x0000
-#define SAVE_EEP4K      0x0001
-#define SAVE_EEP16K     0x0002
-#define SAVE_SRM32K     0x0003
-#define SAVE_SRM96K     0x0004
-#define SAVE_FLASH      0x0005
-#define SAVE_SRM128K    0x0006
-#define SAVE_DD64       0x0010
+// #define SAVE_EEP4K      0x0001
+// #define SAVE_EEP16K     0x0002
+// #define SAVE_SRM32K     0x0003
+// #define SAVE_SRM96K     0x0004
+// #define SAVE_FLASH      0x0005
+// #define SAVE_SRM128K    0x0006
+// #define SAVE_DD64       0x0010
 
 
 

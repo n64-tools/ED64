@@ -56,7 +56,7 @@ extern "C" {
 #define PI_BSD_DOM2_PGS_REG	(PI_BASE_REG+0x2C)  /* Domain 2 page size */
 #define PI_BSD_DOM2_RLS_REG	(PI_BASE_REG+0x30)  /* Domain 2 release duration */
 
-#define	PHYS_TO_K1(x)           ((u32)(x)|KSEG1)        /* physical to kseg1 */
+#define	PHYS_TO_K1(x)       ((u32)(x)|KSEG1)    /* physical to kseg1 */
 #define	IO_WRITE(addr,data)	(*(vu32 *)PHYS_TO_K1(addr)=(u32)(data))
 #define	IO_READ(addr)		(*(vu32 *)PHYS_TO_K1(addr))
 
