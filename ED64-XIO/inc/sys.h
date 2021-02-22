@@ -31,7 +31,7 @@
 
 
 // #define CIC_6101 1
-// #define CIC_6102 2
+#define CIC_6102 2
 // #define CIC_6103 3
 // #define CIC_5101 4
 // #define CIC_6105 5
