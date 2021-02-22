@@ -8,6 +8,9 @@
 #ifndef DISK_H
 #define	DISK_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define DISK_ERR_INIT   0xD0
 #define DISK_ERR_CTO    0xD1
@@ -24,5 +27,8 @@ u8 diskWrite(void *src, u32 saddr, u32 slen);
 u8 diskCloseRW();
 u8 diskStop();
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif	/* DISK_H */
