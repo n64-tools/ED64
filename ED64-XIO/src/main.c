@@ -15,7 +15,7 @@ int main(void) {
     FATFS fs;
 
     sysInit();
-    bi_init();
+    ed64_init();
 
     gCleanScreen();
     gConsPrint("FAT init...");
@@ -128,7 +128,7 @@ u8 demoMenu() {
 void edid() {
 
     struct controller_data cd;
-    u32 id = bi_get_cart_id();
+    u32 id = ed64_get_cart_id();
 
     gCleanScreen();
     gConsPrint("Device ID     ");

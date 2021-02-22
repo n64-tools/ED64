@@ -65,14 +65,14 @@ u8 diskInit() {
     disk_card_type = 0;
     disk_mode = DISK_MODE_NOP;
 
-    bi_sd_speed(BI_DISK_SPD_LO);
+    ed64_sd_speed(BI_DISK_SPD_LO);
 
-    bi_sd_bitlen(8);
-    for (i = 0; i < 40; i++)bi_sd_cmd_wr(0xff);
+    ed64_sd_bitlen(8);
+    for (i = 0; i < 40; i++)ed64_sd_cmd_wr(0xff);
     diskCmdSD(CMD0, 0x1aa);
 
 
-    for (i = 0; i < 40; i++)bi_sd_cmd_wr(0xff);
+    for (i = 0; i < 40; i++)ed64_sd_cmd_wr(0xff);
 
     resp = diskCmdSD(CMD8, 0x1aa);
 
@@ -144,7 +144,7 @@ u8 diskInit() {
     if (resp)return DISK_ERR_INIT;
 
 
-    bi_sd_speed(BI_DISK_SPD_HI);
+    ed64_sd_speed(BI_DISK_SPD_HI);
 
     return 0;
 }
@@ -163,15 +163,15 @@ u8 diskCmdSD(u8 cmd, u32 arg) {
     buff[p++] = (arg >> 0);
     crc = crc7(buff, 5) | 1;
 
-    bi_sd_bitlen(8);
+    ed64_sd_bitlen(8);
 
-    bi_sd_cmd_wr(0xff);
-    bi_sd_cmd_wr(cmd);
-    bi_sd_cmd_wr(arg >> 24);
-    bi_sd_cmd_wr(arg >> 16);
-    bi_sd_cmd_wr(arg >> 8);
-    bi_sd_cmd_wr(arg);
-    bi_sd_cmd_wr(crc);
+    ed64_sd_cmd_wr(0xff);
+    ed64_sd_cmd_wr(cmd);
+    ed64_sd_cmd_wr(arg >> 24);
+    ed64_sd_cmd_wr(arg >> 16);
+    ed64_sd_cmd_wr(arg >> 8);
+    ed64_sd_cmd_wr(arg);
+    ed64_sd_cmd_wr(crc);
 
 
     if (cmd == CMD18)return 0;
@@ -186,21 +186,21 @@ u8 diskReadResp(u8 cmd) {
     u8 resp_len = cmd == CMD2 || cmd == CMD9 ? 17 : 6;
 
     i = 0;
-    sd_resp_buff[0] = bi_sd_cmd_rd();
-    bi_sd_bitlen(1);
+    sd_resp_buff[0] = ed64_sd_cmd_rd();
+    ed64_sd_bitlen(1);
 
 
     while ((sd_resp_buff[0] & 0xC0) != 0) {//wait for resp begin. first two bits should be zeros
-        sd_resp_buff[0] = bi_sd_cmd_rd();
+        sd_resp_buff[0] = ed64_sd_cmd_rd();
 
         if (i++ == DISK_CMD_TOUT)return DISK_ERR_CTO;
     }
 
-    bi_sd_bitlen(8);
+    ed64_sd_bitlen(8);
 
     for (i = 1; i < resp_len; i++) {
 
-        sd_resp_buff[i] = bi_sd_cmd_rd(); //8
+        sd_resp_buff[i] = ed64_sd_cmd_rd(); //8
     }
 
     return 0;
@@ -247,7 +247,7 @@ u8 diskReadToRam(u32 sd_addr, void *dst, u16 slen) {
     if (resp)return DISK_ERR_RD1;
     disk_cur_addr += slen;
 
-    resp = bi_sd_to_ram(dst, slen);
+    resp = ed64_sd_to_ram(dst, slen);
     if (resp)return DISK_ERR_RD2;
 
     return 0;
@@ -261,7 +261,7 @@ u8 diskReadToRom(u32 sd_addr, u32 dst, u16 slen) {
     if (resp)return DISK_ERR_RD1;
     disk_cur_addr += slen;
 
-    resp = bi_sd_to_rom(dst, slen);
+    resp = ed64_sd_to_rom(dst, slen);
     if (resp)return DISK_ERR_RD2;
 
     return 0;
@@ -288,16 +288,16 @@ u8 diskCloseRW() {
     disk_mode = DISK_MODE_NOP;
     if (resp)return resp;
 
-    bi_sd_bitlen(1);
-    bi_sd_dat_rd();
-    bi_sd_dat_rd();
-    bi_sd_dat_rd();
-    bi_sd_bitlen(2);
+    ed64_sd_bitlen(1);
+    ed64_sd_dat_rd();
+    ed64_sd_dat_rd();
+    ed64_sd_dat_rd();
+    ed64_sd_bitlen(2);
 
     i = 65535;
     while (--i) {
 
-        if (bi_sd_dat_rd() == 0xff)break;
+        if (ed64_sd_dat_rd() == 0xff)break;
     }
 
     return 0;
@@ -329,7 +329,7 @@ u8 diskWrite(void *src, u32 saddr, u32 slen) {
     if (resp)return DISK_ERR_WR1;
     disk_cur_addr += slen;
 
-    resp = bi_ram_to_sd(src, slen);
+    resp = ed64_ram_to_sd(src, slen);
     if (resp)return DISK_ERR_WR2;
 
     return 0;

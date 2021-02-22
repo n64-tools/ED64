@@ -56,28 +56,28 @@ extern "C" {
 
 
 
-void bi_init();
-u8 bi_usb_can_rd();
-u8 bi_usb_can_wr();
-u8 bi_usb_rd(void *dst, u32 len);
-u8 bi_usb_wr(void *src, u32 len);
-void bi_usb_rd_start();
-u8 bi_usb_rd_end(void *dst);
+void ed64_init();
+u8 ed64_usb_can_rd();
+u8 ed64_usb_can_wr();
+u8 ed64_usb_rd(void *dst, u32 len);
+u8 ed64_usb_wr(void *src, u32 len);
+void ed64_usb_rd_start();
+u8 ed64_usb_rd_end(void *dst);
 
 
-void bi_sd_speed(u8 speed);
-void bi_sd_bitlen(u8 val);
-u8 bi_sd_cmd_rd();
-void bi_sd_cmd_wr(u8 val);
-u8 bi_sd_dat_rd();
-void bi_sd_dat_wr(u8 val);
-u8 bi_sd_to_ram(void *dst, u16 slen);
-u8 bi_sd_to_rom(u32 dst, u16 slen);
-u8 bi_ram_to_sd(void *src, u16 slen);
+void ed64_sd_speed(u8 speed);
+void ed64_sd_bitlen(u8 val);
+u8 ed64_sd_cmd_rd();
+void ed64_sd_cmd_wr(u8 val);
+u8 ed64_sd_dat_rd();
+void ed64_sd_dat_wr(u8 val);
+u8 ed64_sd_to_ram(void *dst, u16 slen);
+u8 ed64_sd_to_rom(u32 dst, u16 slen);
+u8 ed64_ram_to_sd(void *src, u16 slen);
 
 void biosGameSaveConfigSet(u8 type); //set save type
-void bi_wr_swap(u8 swap_on);
-u32 bi_get_cart_id();
+void ed64_wr_swap(u8 swap_on);
+u32 ed64_get_cart_id();
 
 #ifdef __cplusplus
 }

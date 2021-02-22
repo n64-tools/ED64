@@ -29,15 +29,15 @@ void usbTerminal() {
         cd = get_keys_down();
         if (cd.c[0].B)return;
 
-        if (!bi_usb_can_rd())continue;
+        if (!ed64_usb_can_rd())continue;
 
         //read from virtual serial port.
         //size must be a multiple of 4. use 512B blocks for best performance 
-        tout = bi_usb_rd(data, 4);
+        tout = ed64_usb_rd(data, 4);
         if (tout)continue;
 
         //send echo string back to the serial port
-        bi_usb_wr(data, 4);
+        ed64_usb_wr(data, 4);
 
         gConsPrint(data);
         gRepaint();
@@ -62,11 +62,11 @@ void usbLoadGame() {
         cd = get_keys_down();
         if (cd.c[0].B)return;
 
-        if (!bi_usb_can_rd())continue;
+        if (!ed64_usb_can_rd())continue;
 
-        resp = bi_usb_rd(cmd, 16);
+        resp = ed64_usb_rd(cmd, 16);
         if (resp)continue;
-        //resp = bi_usb_rd(cmd + 16, 512 - 16);
+        //resp = ed64_usb_rd(cmd + 16, 512 - 16);
         //if (resp)return resp;
 
         if (cmd[0] != 'c')continue;
@@ -107,7 +107,7 @@ u8 usbResp(u8 resp) {
     buff[2] = 'd';
     buff[3] = 'r';
     buff[4] = resp;
-    return bi_usb_wr(buff, sizeof (buff));
+    return ed64_usb_wr(buff, sizeof (buff));
 }
 
 void usbCmdCmemFill(u8 *cmd) {
@@ -137,12 +137,12 @@ u8 usbCmdRomWR(u8 *cmd) {
 
     if (slen == 0)return 0;
 
-    bi_usb_rd_start(); //begin first block receiving (512B)
+    ed64_usb_rd_start(); //begin first block receiving (512B)
 
     while (slen--) {
 
-        resp = bi_usb_rd_end(buff); //wait for block receiving completion and read it to the buffer
-        if (slen != 0)bi_usb_rd_start(); //begin next block receiving while previous block transfers to the ROM
+        resp = ed64_usb_rd_end(buff); //wait for block receiving completion and read it to the buffer
+        if (slen != 0)ed64_usb_rd_start(); //begin next block receiving while previous block transfers to the ROM
         if (resp)return resp;
         sysPI_wr(buff, addr, 512); //copy received block to the rom memory
         addr += 512;
