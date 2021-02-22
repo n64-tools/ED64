@@ -10,13 +10,10 @@
 extern "C" {
 #endif
 
-#include "types.h"
-#include "sysregion.h"
+#include "sys.h"
 #include "bios.h"
 #include "disk.h"
 #include "ff.h"
-#include "graphics.h"
-#include "libdragon.h"
 
 void boot_simulator(u8 cic);
 u8 fmanager();
