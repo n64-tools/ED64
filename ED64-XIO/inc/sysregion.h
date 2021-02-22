@@ -10,7 +10,11 @@
 extern "C" {
 #endif
 
-#include "everdrive.h"
+#include "types.h"
+#include "libdragon.h"
+#include "string.h"
+#include "stdlib.h"
+
 
 // #define CIC_6101 1
 #define CIC_6102 2
