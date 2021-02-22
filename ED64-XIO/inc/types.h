@@ -1,6 +1,10 @@
+//
+// Copyright (c) Krikzz and Contributors.
+// See LICENSE file in the project root for full license information.
+//
 
-#ifndef TYPES_H
-#define	TYPES_H
+#ifndef __ED64_TYPES_H
+#define	__ED64_TYPES_H
 
 #ifdef __cplusplus
 extern "C" {

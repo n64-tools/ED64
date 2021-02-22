@@ -1,12 +1,10 @@
-/* 
- * File:   disk.h
- * Author: igor
- *
- * Created on September 11, 2020, 7:00 PM
- */
+//
+// Copyright (c) Krikzz and Contributors.
+// See LICENSE file in the project root for full license information.
+//
 
-#ifndef DISK_H
-#define	DISK_H
+#ifndef __ED64_DISK_H
+#define	__ED64_DISK_H
 
 #ifdef __cplusplus
 extern "C" {
