@@ -20,7 +20,7 @@ extern "C" {
 
 // #define BI_ERR_I2C_CMD          0xB0
 // #define BI_ERR_I2C_TOUT         0xB1
-// #define BI_ERR_USB_TOUT         0xB2
+#define BI_ERR_USB_TOUT         0xB2
 // #define BI_ERR_FPG_CFG          0xB3
 
 //sd controller speed select. LO speed only for init procedure
@@ -29,10 +29,10 @@ extern "C" {
 
 //bootloader flags
 //#define BI_BCFG_BOOTMOD 0x01   
-#define BI_BCFG_SD_INIT 0x02
-#define BI_BCFG_SD_TYPE 0x04
-#define BI_BCFG_GAMEMOD 0x08
-#define BI_BCFG_CICLOCK 0x8000
+//#define BI_BCFG_SD_INIT 0x02
+//#define BI_BCFG_SD_TYPE 0x04
+//#define BI_BCFG_GAMEMOD 0x08
+//#define BI_BCFG_CICLOCK 0x8000
 
 //64dd disk save table - to know which data areas should be saved
 // #define BI_DD_TBL_SIZE  2048
