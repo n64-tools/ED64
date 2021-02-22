@@ -18,8 +18,8 @@ extern "C" {
 #define BI_ADDR_ROM    (KSEG1 | 0x10000000)
 #define BI_ADDR_BRM    (KSEG1 | 0x08000000)
 
-#define BI_ERR_I2C_CMD          0xB0
-#define BI_ERR_I2C_TOUT         0xB1
+// #define BI_ERR_I2C_CMD          0xB0
+// #define BI_ERR_I2C_TOUT         0xB1
 #define BI_ERR_USB_TOUT         0xB2
 #define BI_ERR_FPG_CFG          0xB3
 
@@ -47,7 +47,7 @@ extern "C" {
 //game save config register flags
 #define SAVE_OFF        0x0000
 // #define SAVE_EEP4K      0x0001
-// #define SAVE_EEP16K     0x0002
+#define SAVE_EEP16K     0x0002
 // #define SAVE_SRM32K     0x0003
 // #define SAVE_SRM96K     0x0004
 // #define SAVE_FLASH      0x0005
