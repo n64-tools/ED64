@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------*/
-/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2016        */
+/* Low level disk I/O module SKELETON for FatFs     (C)ChaN, 2019        */
 /*-----------------------------------------------------------------------*/
 /* If a working storage control module is available, it should be        */
 /* attached to the FatFs via a glue function rather than modifying it.   */
@@ -13,14 +13,13 @@
 
 
 /* Definitions of physical drive number for each drive */
-#define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
-#define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
-#define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
+// #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
+// #define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
+// #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
-//extern SD_HandleTypeDef hsd;
+
 /*-----------------------------------------------------------------------*/
 /* Get Drive Status                                                      */
-
 /*-----------------------------------------------------------------------*/
 DSTATUS dstat;
 BYTE dresp;
@@ -33,7 +32,7 @@ DSTATUS disk_status(
 }
 
 /*-----------------------------------------------------------------------*/
-/* Inidialize a Drive                                                    */
+/* Initialize a Drive                                                    */
 
 /*-----------------------------------------------------------------------*/
 
@@ -52,7 +51,6 @@ DSTATUS disk_initialize(
 
 /*-----------------------------------------------------------------------*/
 /* Read Sector(s)                                                        */
-
 /*-----------------------------------------------------------------------*/
 
 DRESULT disk_read(
@@ -93,7 +91,6 @@ DRESULT disk_write(
 
 /*-----------------------------------------------------------------------*/
 /* Miscellaneous Functions                                               */
-
 /*-----------------------------------------------------------------------*/
 
 DRESULT disk_ioctl(
@@ -129,3 +126,8 @@ DRESULT disk_ioctl(
     return res;
 }
 
+DWORD get_fattime (void)
+{
+	//TODO: can we use the X7 or V3 RTC?
+	return ((DWORD)(FF_NORTC_YEAR - 1980) << 25 | (DWORD)FF_NORTC_MON << 21 | (DWORD)FF_NORTC_MDAY << 16);
+}
