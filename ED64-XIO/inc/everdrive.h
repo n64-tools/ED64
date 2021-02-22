@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#include "sys.h"
+#include "sysregion.h"
 #include "bios.h"
 #include "disk.h"
 #include "ff.h"

@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#include "sys.h"
+#include "sysregion.h"
 
 #define BI_SIZE_ROM     0x4000000       //rom size
 #define BI_SIZE_BRM     0x20000         //backup ram size
