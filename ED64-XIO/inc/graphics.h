@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#include "types.h"
+#include "everdrive.h"
 
 #define G_SCREEN_W      40 //screen.w
 #define G_SCREEN_H      30 //screen.h

@@ -14,6 +14,9 @@ extern "C" {
 #include "bios.h"
 #include "disk.h"
 #include "ff.h"
+#include "graphics.h"
+#include "libdragon.h"
+#include "types.h"
 
 void boot_simulator(u8 cic);
 u8 fmanager();

@@ -10,8 +10,7 @@
 extern "C" {
 #endif
 
-#include "types.h"
-//#include "libdragon.h"
+#include "everdrive.h"
 #include "string.h"
 #include "stdlib.h"
 
