@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#include "maine.h"
+#include "main.h"
 
 u8 fmLoadDir(u8 *path, FILINFO *inf, u32 max_items);
 u8 fmLoadGame(u8 *path);

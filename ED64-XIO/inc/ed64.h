@@ -3,8 +3,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#ifndef __ED64_BIOS_H
-#define	__ED64_BIOS_H
+#ifndef __ED64_H
+#define	__ED64_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -83,4 +83,4 @@ u32 bi_get_cart_id();
 }
 #endif
 
-#endif	/* BIOS_H */
+#endif	/* ED64_H */

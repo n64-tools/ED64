@@ -11,7 +11,7 @@ extern "C" {
 #endif
 
 #include "sys.h"
-#include "bios.h"
+#include "ed64.h"
 #include "disk.h"
 #include "ff.h"
 
