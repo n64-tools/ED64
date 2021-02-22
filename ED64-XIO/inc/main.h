@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#include "sys.h"
+#include "screen.h"
 #include "ed64.h"
 #include "disk.h"
 #include "ff.h"

@@ -3,8 +3,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#ifndef __ED64_SYS_H
-#define	__ED64_SYS_H
+#ifndef __ED64_SCREEN_H
+#define	__ED64_SCREEN_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -139,4 +139,4 @@ void gVsync();
 }
 #endif
 
-#endif	/* SYS_H */
+#endif	/* SCREEN_H */

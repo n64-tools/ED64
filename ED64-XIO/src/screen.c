@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#include "sys.h"
+#include "screen.h"
 
 typedef struct PI_regs_s {
     /** @brief Uncached address in RAM where data should be found */
