@@ -25,7 +25,7 @@ u8 fileRead() {
 
 
     gCleanScreen();
-    gConsPrint("Data readed from: ");
+    gConsPrint("Data read from: ");
     gAppendString(path);
     gConsPrint("Press B to exit");
 
@@ -78,7 +78,7 @@ u8 fileWrite() {
     gCleanScreen();
     gConsPrint(msg);
     gConsPrint("");
-    gConsPrint("String above was written to the ");
+    gConsPrint("String above was written to: ");
     gConsPrint(path);
     gConsPrint("Press B to exit");
 

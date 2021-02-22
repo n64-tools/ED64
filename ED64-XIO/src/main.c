@@ -53,7 +53,7 @@ u8 demoMenu() {
     menu[MENU_FILE_WRITE] = "File Write";
     menu[MENU_USB_TERMINAL] = "USB Terminal";
     menu[MENU_USB_LOADER] = "USB Loader";
-    menu[MENU_EDID] = "EverDrive ID";
+    menu[MENU_EDID] = "EverDrive hardware ID";
 
     while (1) {
 
