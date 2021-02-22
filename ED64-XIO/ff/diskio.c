@@ -9,6 +9,8 @@
 
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
+#include "everdrive.h"
+
 
 /* Definitions of physical drive number for each drive */
 #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
@@ -19,75 +21,30 @@
 /*-----------------------------------------------------------------------*/
 /* Get Drive Status                                                      */
 /*-----------------------------------------------------------------------*/
+DSTATUS dstat;
+BYTE dresp;
 
-DSTATUS disk_status (
-	BYTE pdrv		/* Physical drive nmuber to identify the drive */
-)
-{
-	DSTATUS stat;
-	int result;
+DSTATUS disk_status(
+        BYTE pdrv /* Physical drive nmuber to identify the drive */
+        ) {
 
-	switch (pdrv) {
-	case DEV_RAM :
-		result = RAM_disk_status();
-
-		// translate the reslut code here
-
-		return stat;
-
-	case DEV_MMC :
-		result = MMC_disk_status();
-
-		// translate the reslut code here
-
-		return stat;
-
-	case DEV_USB :
-		result = USB_disk_status();
-
-		// translate the reslut code here
-
-		return stat;
-	}
-	return STA_NOINIT;
+    return dstat;
 }
-
-
 
 /*-----------------------------------------------------------------------*/
 /* Inidialize a Drive                                                    */
+
 /*-----------------------------------------------------------------------*/
 
-DSTATUS disk_initialize (
-	BYTE pdrv				/* Physical drive nmuber to identify the drive */
-)
-{
-	DSTATUS stat;
-	int result;
+DSTATUS disk_initialize(
+        BYTE pdrv /* Physical drive nmuber to identify the drive */
+        ) {
 
-	switch (pdrv) {
-	case DEV_RAM :
-		result = RAM_disk_initialize();
+    dresp = diskInit();
+    dstat = 0;
+    if (dresp)dstat = STA_NOINIT;
 
-		// translate the reslut code here
-
-		return stat;
-
-	case DEV_MMC :
-		result = MMC_disk_initialize();
-
-		// translate the reslut code here
-
-		return stat;
-
-	case DEV_USB :
-		result = USB_disk_initialize();
-
-		// translate the reslut code here
-
-		return stat;
-	}
-	return STA_NOINIT;
+    return dstat;
 }
 
 
@@ -96,46 +53,16 @@ DSTATUS disk_initialize (
 /* Read Sector(s)                                                        */
 /*-----------------------------------------------------------------------*/
 
-DRESULT disk_read (
-	BYTE pdrv,		/* Physical drive nmuber to identify the drive */
-	BYTE *buff,		/* Data buffer to store read data */
-	LBA_t sector,	/* Start sector in LBA */
-	UINT count		/* Number of sectors to read */
-)
-{
-	DRESULT res;
-	int result;
+DRESULT disk_read(
+        BYTE pdrv, /* Physical drive nmuber to identify the drive */
+        BYTE *buff, /* Data buffer to store read data */
+        DWORD sector, /* Start sector in LBA */
+        UINT count /* Number of sectors to read */
+        ) {
 
-	switch (pdrv) {
-	case DEV_RAM :
-		// translate the arguments here
-
-		result = RAM_disk_read(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_MMC :
-		// translate the arguments here
-
-		result = MMC_disk_read(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_USB :
-		// translate the arguments here
-
-		result = USB_disk_read(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-	}
-
-	return RES_PARERR;
+    dresp = diskRead(buff, sector, count);
+    if (dresp)return RES_ERROR;
+    return RES_OK;
 }
 
 
@@ -146,46 +73,17 @@ DRESULT disk_read (
 
 #if FF_FS_READONLY == 0
 
-DRESULT disk_write (
-	BYTE pdrv,			/* Physical drive nmuber to identify the drive */
-	const BYTE *buff,	/* Data to be written */
-	LBA_t sector,		/* Start sector in LBA */
-	UINT count			/* Number of sectors to write */
-)
-{
-	DRESULT res;
-	int result;
+DRESULT disk_write(
+        BYTE pdrv, /* Physical drive nmuber to identify the drive */
+        const BYTE *buff, /* Data to be written */
+        DWORD sector, /* Start sector in LBA */
+        UINT count /* Number of sectors to write */
+        ) {
 
-	switch (pdrv) {
-	case DEV_RAM :
-		// translate the arguments here
 
-		result = RAM_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_MMC :
-		// translate the arguments here
-
-		result = MMC_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-
-	case DEV_USB :
-		// translate the arguments here
-
-		result = USB_disk_write(buff, sector, count);
-
-		// translate the reslut code here
-
-		return res;
-	}
-
-	return RES_PARERR;
+    dresp = diskWrite((BYTE *) buff, sector, count);
+    if (dresp)return RES_ERROR;
+    return RES_OK;
 }
 
 #endif
@@ -195,35 +93,35 @@ DRESULT disk_write (
 /* Miscellaneous Functions                                               */
 /*-----------------------------------------------------------------------*/
 
-DRESULT disk_ioctl (
-	BYTE pdrv,		/* Physical drive nmuber (0..) */
-	BYTE cmd,		/* Control code */
-	void *buff		/* Buffer to send/receive control data */
-)
-{
-	DRESULT res;
-	int result;
+DRESULT disk_ioctl(
+        BYTE pdrv, /* Physical drive nmuber (0..) */
+        BYTE cmd, /* Control code */
+        void *buff /* Buffer to send/receive control data */
+        ) {
+    DRESULT res = RES_ERROR;
 
-	switch (pdrv) {
-	case DEV_RAM :
+    switch (cmd) {
+        case CTRL_SYNC:
+            res = diskCloseRW();
+            dresp = res;
+            res = res == 0 ? RES_OK : RES_ERROR;
+            break;
 
-		// Process of the command for the RAM drive
+        case GET_SECTOR_COUNT:
+            *(DWORD*) buff = 0;
+            res = RES_OK;
+            break;
 
-		return res;
+        case GET_SECTOR_SIZE:
+            *(DWORD*) buff = 512;
+            res = RES_OK;
+            break;
 
-	case DEV_MMC :
+        case GET_BLOCK_SIZE:
+            *(DWORD*) buff = 512;
+            res = RES_OK;
+            break;
+    }
 
-		// Process of the command for the MMC/SD card
-
-		return res;
-
-	case DEV_USB :
-
-		// Process of the command the USB drive
-
-		return res;
-	}
-
-	return RES_PARERR;
+    return res;
 }
-
