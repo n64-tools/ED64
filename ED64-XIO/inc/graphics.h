@@ -11,7 +11,10 @@ extern "C" {
 #endif
 
 #include "types.h"
+#include "sysregion.h"
 #include "everdrive.h"
+#include "string.h"
+#include "stdlib.h"
 
 #define G_SCREEN_W      40 //screen.w
 #define G_SCREEN_H      30 //screen.h
