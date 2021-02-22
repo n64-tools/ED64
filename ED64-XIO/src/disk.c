@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#include "everdrive.h"
+#include "main.h"
 
 
 #define CMD0  0x40    // software reset

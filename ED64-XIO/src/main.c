@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#include "everdrive.h"
+#include "main.h"
 
 void edid();
 void printError(u8 err);
@@ -181,7 +181,7 @@ void printError(u8 err) {
     while (1);
 }
 
-void boot_simulator(u8 cic) {
+void mainBootSimulator(u8 cic) {
 
 
     static u16 cheats_on; /* 0 = off, 1 = select, 2 = all */

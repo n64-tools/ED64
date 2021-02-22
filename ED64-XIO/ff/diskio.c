@@ -9,7 +9,7 @@
 
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
-#include "everdrive.h"
+#include "main.h"
 
 
 /* Definitions of physical drive number for each drive */

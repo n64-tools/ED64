@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#include "everdrive.h"
+#include "main.h"
 
 u8 usbResp(u8 resp);
 void usbCmdCmemFill(u8 *cmd);
@@ -81,8 +81,8 @@ void usbLoadGame() {
 
         //start the game
         if (usb_cmd == 's') {
-            bi_game_cfg_set(SAVE_EEP16K); //set save type
-            boot_simulator(CIC_6102); //run the game
+            biosGameSaveConfigSet(SAVE_EEP16K); //set save type
+            mainBootSimulator(CIC_6102); //run the game
         }
 
         //fill ro memory. used if rom size less than 2MB (required for correct crc values)

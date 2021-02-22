@@ -3,8 +3,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#ifndef __ED64_EVERDRIVE_H
-#define	__ED64_EVERDRIVE_H
+#ifndef __ED64_MAIN_H
+#define	__ED64_MAIN_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,7 +15,7 @@ extern "C" {
 #include "disk.h"
 #include "ff.h"
 
-void boot_simulator(u8 cic);
+void mainBootSimulator(u8 cic);
 u8 fmanager();
 void usbTerminal();
 void usbLoadGame();
@@ -26,4 +26,4 @@ u8 fileWrite();
 }
 #endif
 
-#endif	/* EVERDRIVE_H */
+#endif	/* MAIN_H */

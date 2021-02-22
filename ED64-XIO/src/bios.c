@@ -112,7 +112,7 @@ void bi_init() {
     bi_reg_wr(REG_SD_STATUS, bi_sd_cfg);
 
     //turn off backup ram
-    bi_game_cfg_set(SAVE_OFF);
+    biosGameSaveConfigSet(SAVE_OFF);
 }
 
 void bi_reg_wr(u16 reg, u32 val) {
@@ -536,7 +536,7 @@ void sdCrc16(void *src, u16 *crc_out) {
 
 //******************************************************************************
 
-void bi_game_cfg_set(u8 type) {
+void biosGameSaveConfigSet(u8 type) {
 
     bi_reg_wr(REG_GAM_CFG, type);
 }

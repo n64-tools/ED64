@@ -3,7 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#include "everdrive.h"
+#include "maine.h"
 
 u8 fmLoadDir(u8 *path, FILINFO *inf, u32 max_items);
 u8 fmLoadGame(u8 *path);
@@ -65,8 +65,8 @@ u8 fmanager() {
                 resp = fmLoadGame(inf[selector].fname);
                 if (resp)return resp;
 
-                bi_game_cfg_set(SAVE_EEP16K); //set save type
-                boot_simulator(CIC_6102); //run the game
+                biosGameSaveConfigSet(SAVE_EEP16K); //set save type
+                mainBootSimulator(CIC_6102); //run the game
             }
         }
     }

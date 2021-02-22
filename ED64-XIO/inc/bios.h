@@ -75,7 +75,7 @@ u8 bi_sd_to_ram(void *dst, u16 slen);
 u8 bi_sd_to_rom(u32 dst, u16 slen);
 u8 bi_ram_to_sd(void *src, u16 slen);
 
-void bi_game_cfg_set(u8 type); //set save type
+void biosGameSaveConfigSet(u8 type); //set save type
 void bi_wr_swap(u8 swap_on);
 u32 bi_get_cart_id();
 
