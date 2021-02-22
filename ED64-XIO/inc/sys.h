@@ -30,13 +30,13 @@
 #include "stdlib.h"
 
 
-#define CIC_6101 1
-#define CIC_6102 2
-#define CIC_6103 3
-#define CIC_5101 4
-#define CIC_6105 5
-#define CIC_6106 6
-#define CIC_5167 7
+// #define CIC_6101 1
+// #define CIC_6102 2
+// #define CIC_6103 3
+// #define CIC_5101 4
+// #define CIC_6105 5
+// #define CIC_6106 6
+// #define CIC_5167 7
 
 #define REGION_PAL      0
 #define REGION_NTSC     1
@@ -45,20 +45,20 @@
 #define KSEG0           0x80000000
 #define KSEG1           0xA0000000
 
-#define VI_BASE_REG     0x04400000
-#define	VI_CONTROL	(VI_BASE_REG + 0x00)
-#define	VI_FRAMEBUFFER	(VI_BASE_REG + 0x04)
-#define	VI_WIDTH	(VI_BASE_REG + 0x08)
-#define	VI_V_INT	(VI_BASE_REG + 0x0C)
-#define	VI_CUR_LINE	(VI_BASE_REG + 0x10)
-#define	VI_TIMING	(VI_BASE_REG + 0x14)
-#define	VI_V_SYNC	(VI_BASE_REG + 0x18)
-#define	VI_H_SYNC	(VI_BASE_REG + 0x1C)
-#define	VI_H_SYNC2	(VI_BASE_REG + 0x20)
-#define	VI_H_LIMITS	(VI_BASE_REG + 0x24)
-#define	VI_COLOR_BURST	(VI_BASE_REG + 0x28)
-#define	VI_H_SCALE	(VI_BASE_REG + 0x2C)
-#define	VI_VSCALE	(VI_BASE_REG + 0x30)
+// #define VI_BASE_REG     0x04400000
+// #define	VI_CONTROL	(VI_BASE_REG + 0x00)
+// #define	VI_FRAMEBUFFER	(VI_BASE_REG + 0x04)
+// #define	VI_WIDTH	(VI_BASE_REG + 0x08)
+// #define	VI_V_INT	(VI_BASE_REG + 0x0C)
+// #define	VI_CUR_LINE	(VI_BASE_REG + 0x10)
+// #define	VI_TIMING	(VI_BASE_REG + 0x14)
+// #define	VI_V_SYNC	(VI_BASE_REG + 0x18)
+// #define	VI_H_SYNC	(VI_BASE_REG + 0x1C)
+// #define	VI_H_SYNC2	(VI_BASE_REG + 0x20)
+// #define	VI_H_LIMITS	(VI_BASE_REG + 0x24)
+// #define	VI_COLOR_BURST	(VI_BASE_REG + 0x28)
+// #define	VI_H_SCALE	(VI_BASE_REG + 0x2C)
+// #define	VI_VSCALE	(VI_BASE_REG + 0x30)
 
 #define PI_BSD_DOM1_LAT_REG	(PI_BASE_REG+0x14)
 #define PI_BSD_DOM1_PWD_REG	(PI_BASE_REG+0x18)
@@ -122,19 +122,19 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
 #define G_SCREEN_H      30 //screen.h
 #define G_BORDER_X      2
 #define G_BORDER_Y      2
-#define G_MAX_STR_LEN   (G_SCREEN_W - G_BORDER_X*2)
+// #define G_MAX_STR_LEN   (G_SCREEN_W - G_BORDER_X*2)
 
 #define PAL_B1          0x1000
-#define PAL_B2          0x2000
+// #define PAL_B2          0x2000
 #define PAL_B3          0x3000
-#define PAL_G1          0x1400
-#define PAL_G2          0x2400
-#define PAL_G3          0x3400
+// #define PAL_G1          0x1400
+// #define PAL_G2          0x2400
+// #define PAL_G3          0x3400
 
-#define PAL_BR          0x5000
+// #define PAL_BR          0x5000
 #define PAL_BG          0x6000
-#define PAL_WG          0x1700
-#define PAL_RB          0x0500
+// #define PAL_WG          0x1700
+// #define PAL_RB          0x0500
 
 void gCleanScreen();
 void gConsPrint(u8 *str);
