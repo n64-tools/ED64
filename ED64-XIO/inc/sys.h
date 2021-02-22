@@ -46,15 +46,15 @@ extern "C" {
 // #define	VI_H_SCALE	(VI_BASE_REG + 0x2C)
 // #define	VI_VSCALE	(VI_BASE_REG + 0x30)
 
-#define PI_BSD_DOM1_LAT_REG	(PI_BASE_REG+0x14)
-#define PI_BSD_DOM1_PWD_REG	(PI_BASE_REG+0x18)
-#define PI_BSD_DOM1_PGS_REG	(PI_BASE_REG+0x1C)    /*   page size */
-#define PI_BSD_DOM1_RLS_REG	(PI_BASE_REG+0x20)
+#define PI_BSD_DOM1_LAT_REG	(PI_BASE_REG+0x14)  /* Domain 1 latency */
+#define PI_BSD_DOM1_PWD_REG	(PI_BASE_REG+0x18)  /* Domain 1 pulse width */
+#define PI_BSD_DOM1_PGS_REG	(PI_BASE_REG+0x1C)  /* Domain 1 page size */
+#define PI_BSD_DOM1_RLS_REG	(PI_BASE_REG+0x20)  /* Domain 1 release duration */
 
-#define PI_BSD_DOM2_LAT_REG	(PI_BASE_REG+0x24)    /* Domain 2 latency */
-#define PI_BSD_DOM2_PWD_REG	(PI_BASE_REG+0x28)    /*   pulse width */
-#define PI_BSD_DOM2_PGS_REG	(PI_BASE_REG+0x2C)    /*   page size */
-#define PI_BSD_DOM2_RLS_REG	(PI_BASE_REG+0x30)    /*   release duration */
+#define PI_BSD_DOM2_LAT_REG	(PI_BASE_REG+0x24)  /* Domain 2 latency */
+#define PI_BSD_DOM2_PWD_REG	(PI_BASE_REG+0x28)  /* Domain 2 pulse width */
+#define PI_BSD_DOM2_PGS_REG	(PI_BASE_REG+0x2C)  /* Domain 2 page size */
+#define PI_BSD_DOM2_RLS_REG	(PI_BASE_REG+0x30)  /* Domain 2 release duration */
 
 #define	PHYS_TO_K1(x)           ((u32)(x)|KSEG1)        /* physical to kseg1 */
 #define	IO_WRITE(addr,data)	(*(vu32 *)PHYS_TO_K1(addr)=(u32)(data))
