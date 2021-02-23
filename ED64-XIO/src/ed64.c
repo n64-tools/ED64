@@ -112,7 +112,7 @@ void ed64Init() {
     ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
 
     //turn off backup ram
-    ed64GameSaveConfigSet(SAVE_OFF);
+    ed64GameSaveConfigSet(SAVE_TYPE_OFF);
 }
 
 void ed64_reg_wr(u16 reg, u32 val) {

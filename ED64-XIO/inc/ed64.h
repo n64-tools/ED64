@@ -39,20 +39,20 @@ extern "C" {
 // #define BI_DD_PGE_SIZE  0x8000
 
 //cartridge hardware ID flags - used for identification
-#define CART_ID_V2      0xED640007
-#define CART_ID_V3      0xED640008
-#define CART_ID_X7      0xED640013
-#define CART_ID_X5      0xED640014
+#define ED64_CART_ID_V2      0xED640007
+#define ED64_CART_ID_V3      0xED640008
+#define ED64_CART_ID_X7      0xED640013
+#define ED64_CART_ID_X5      0xED640014
 
 //game save config register flags
-#define SAVE_OFF        0x0000
-// #define SAVE_EEP4K      0x0001
-#define SAVE_EEP16K     0x0002
-// #define SAVE_SRM32K     0x0003
-// #define SAVE_SRM96K     0x0004
-// #define SAVE_FLASH      0x0005
-// #define SAVE_SRM128K    0x0006
-// #define SAVE_DD64       0x0010
+#define SAVE_TYPE_OFF        0x0000
+// #define SAVE_TYPE_EEP4K      0x0001
+#define SAVE_TYPE_EEP16K     0x0002
+// #define SAVE_TYPE_SRM32K     0x0003
+// #define SAVE_TYPE_SRM96K     0x0004
+// #define SAVE_TYPE_FLASH      0x0005
+// #define SAVE_TYPE_SRM128K    0x0006
+// #define SAVE_TYPE_DD64       0x0010
 
 
 

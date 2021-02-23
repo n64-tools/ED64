@@ -137,16 +137,16 @@ void edid() {
     gConsPrint("Device Name   ");
 
     switch (id) {
-        case CART_ID_V2:
+        case ED64_CART_ID_V2:
             gAppendString("EverDrive 64 V2.5");
             break;
-        case CART_ID_V3:
+        case ED64_CART_ID_V3:
             gAppendString("EverDrive 64 V3");
             break;
-        case CART_ID_X7:
+        case ED64_CART_ID_X7:
             gAppendString("EverDrive 64 X7");
             break;
-        case CART_ID_X5:
+        case ED64_CART_ID_X5:
             gAppendString("EverDrive 64 X5");
             break;
         default:
