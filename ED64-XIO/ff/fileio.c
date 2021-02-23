@@ -10,8 +10,8 @@ u8 fileRead() {
     UINT br;
     u8 resp;
 
-    gCleanScreen();
-    gRepaint();
+    graphicsOutputCleanScreen();
+    graphicsOutputRepaint();
 
 
     resp = f_open(&f, path, FA_READ);
@@ -24,21 +24,21 @@ u8 fileRead() {
     if (resp)return resp;
 
 
-    gCleanScreen();
-    gConsPrint("Data read from: ");
-    gAppendString(path);
-    gConsPrint("Press B to exit");
+    graphicsOutputCleanScreen();
+    graphicsOutputPrint("Data read from: ");
+    graphicsOutputAppendString(path);
+    graphicsOutputPrint("Press B to exit");
 
-    gConsPrint("");
+    graphicsOutputPrint("");
     for (int i = 0; i < sizeof (buff); i++) {
-        if (i % 16 == 0)gConsPrint("");
-        gAppendHex8(buff[i]);
+        if (i % 16 == 0)graphicsOutputPrint("");
+        graphicsOutputAppendHex8(buff[i]);
     }
 
 
-    gRepaint();
+    graphicsOutputRepaint();
     for ( ;; ) { //forever
-        gVsync();
+        graphicsOutputVsync();
         controller_scan();
         cd = get_keys_down();
 
@@ -60,8 +60,8 @@ u8 fileWrite() {
     u8 resp;
     u32 str_len;
 
-    gCleanScreen();
-    gRepaint();
+    graphicsOutputCleanScreen();
+    graphicsOutputRepaint();
 
     for (str_len = 0; msg[str_len] != 0; str_len++);
 
@@ -75,16 +75,16 @@ u8 fileWrite() {
     if (resp)return resp;
 
 
-    gCleanScreen();
-    gConsPrint(msg);
-    gConsPrint("");
-    gConsPrint("String above was written to: ");
-    gConsPrint(path);
-    gConsPrint("Press B to exit");
+    graphicsOutputCleanScreen();
+    graphicsOutputPrint(msg);
+    graphicsOutputPrint("");
+    graphicsOutputPrint("String above was written to: ");
+    graphicsOutputPrint(path);
+    graphicsOutputPrint("Press B to exit");
 
-    gRepaint();
+    graphicsOutputRepaint();
     for ( ;; ) { //forever
-        gVsync();
+        graphicsOutputVsync();
         controller_scan();
         cd = get_keys_down();
 

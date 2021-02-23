@@ -26,21 +26,21 @@ u8 fmanager() {
     for ( ;; ) { //forever
 
         //print items
-        gCleanScreen();
+        graphicsOutputCleanScreen();
         for (int i = 0; i < MAX_DIRECTORY_COUNT && inf[i].fname[0]; i++) {
-            gConsPrint(selector == i ? ">" : " ");
+            graphicsOutputPrint(selector == i ? ">" : " ");
             u8 tmp = inf[i].fname[MAX_STRING_LENGTH];
             inf[i].fname[MAX_STRING_LENGTH] = 0; //make sure that the printed string doesn't exceed max len
-            gAppendString(inf[i].fname);
+            graphicsOutputAppendString(inf[i].fname);
             inf[i].fname[MAX_STRING_LENGTH] = tmp;
         }
 
-        gRepaint();
+        graphicsOutputRepaint();
 
         //controls
         for ( ;; ) { //forever
 
-            gVsync();
+            graphicsOutputVsync();
             controller_scan();
             cd = get_keys_down();
 
@@ -58,9 +58,9 @@ u8 fmanager() {
 
             if (cd.c[0].A && !(inf[selector].fattrib & AM_DIR)) {
 
-                gCleanScreen();
-                gConsPrint("loading...");
-                gRepaint();
+                graphicsOutputCleanScreen();
+                graphicsOutputPrint("loading...");
+                graphicsOutputRepaint();
 
                 resp = fmLoadGame(inf[selector].fname);
                 if (resp)return resp;

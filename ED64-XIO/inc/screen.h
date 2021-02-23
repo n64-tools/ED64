@@ -122,18 +122,18 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
 // #define PAL_WG          0x1700
 // #define PAL_RB          0x0500
 
-void gCleanScreen();
-void gConsPrint(u8 *str);
+void graphicsOutputCleanScreen();
+void graphicsOutputPrint(u8 *str);
 void gSetXY(u8 x, u8 y);
 void gSetPal(u16 pal);
-void gAppendString(u8 *str);
-void gAppendChar(u8 chr);
-void gAppendHex8(u8 val);
-void gAppendHex16(u16 val);
-void gAppendHex32(u32 val);
-void gAppendHex32(u32 val);
-void gRepaint();
-void gVsync();
+void graphicsOutputAppendString(u8 *str);
+void graphicsOutputAppendChar(u8 chr);
+void graphicsOutputAppendHex8(u8 val);
+void graphicsOutputAppendHex16(u16 val);
+void graphicsOutputAppendHex32(u32 val);
+void graphicsOutputAppendHex32(u32 val);
+void graphicsOutputRepaint();
+void graphicsOutputVsync();
 
 #ifdef __cplusplus
 }

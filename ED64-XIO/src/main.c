@@ -5,8 +5,8 @@
 
 #include "main.h"
 
-void edid();
-void printError(u8 err);
+void mainGetEdid();
+void mainPrintError(u8 err);
 u8 demoMenu();
 
 int main(void) {
@@ -17,19 +17,19 @@ int main(void) {
     screenInitialize();
     ed64Initialize();
 
-    gCleanScreen();
-    gConsPrint("FAT init...");
-    gRepaint();
+    graphicsOutputCleanScreen();
+    graphicsOutputPrint("FAT init...");
+    graphicsOutputRepaint();
 
     //mount disk
     memset(&fs, 0, sizeof (fs));
     resp = f_mount(&fs, "", 1);
-    if (resp)printError(resp);
+    if (resp)mainPrintError(resp);
 
 
     for ( ;; ) { //forever
         resp = demoMenu();
-        if (resp)printError(resp);
+        if (resp)mainPrintError(resp);
     }
 
 }
@@ -60,19 +60,19 @@ u8 demoMenu() {
 
     for ( ;; ) { //forever
 
-        gCleanScreen();
+        graphicsOutputCleanScreen();
 
         for (int i = 0; i < MENU_SIZE; i++) {
-            gConsPrint("          ");
+            graphicsOutputPrint("          ");
             if (i == selector) {
-                gAppendString(">");
+                graphicsOutputAppendString(">");
             } else {
-                gAppendString(" ");
+                graphicsOutputAppendString(" ");
             }
-            gAppendString(menu[i]);
+            graphicsOutputAppendString(menu[i]);
         }
 
-        gRepaint();
+        graphicsOutputRepaint();
         controller_scan();
         cd = get_keys_down();
 
@@ -119,47 +119,47 @@ u8 demoMenu() {
 
         //everdrive hardware identification
         if (selector == MENU_EDID) {
-            edid();
+            mainGetEdid();
         }
 
     }
 }
 
-void edid() {
+void mainGetEdid() {
 
     struct controller_data cd;
     u32 id = ed64GetCartridgeTypeId();
 
-    gCleanScreen();
-    gConsPrint("Device ID     ");
-    gAppendHex32(id);
-    gConsPrint("");
-    gConsPrint("Device Name   ");
+    graphicsOutputCleanScreen();
+    graphicsOutputPrint("Device ID     ");
+    graphicsOutputAppendHex32(id);
+    graphicsOutputPrint("");
+    graphicsOutputPrint("Device Name   ");
 
     switch (id) {
         case ED64_CART_ID_V2:
-            gAppendString("EverDrive 64 V2.5");
+            graphicsOutputAppendString("EverDrive 64 V2.5");
             break;
         case ED64_CART_ID_V3:
-            gAppendString("EverDrive 64 V3");
+            graphicsOutputAppendString("EverDrive 64 V3");
             break;
         case ED64_CART_ID_X7:
-            gAppendString("EverDrive 64 X7");
+            graphicsOutputAppendString("EverDrive 64 X7");
             break;
         case ED64_CART_ID_X5:
-            gAppendString("EverDrive 64 X5");
+            graphicsOutputAppendString("EverDrive 64 X5");
             break;
         default:
-            gAppendString("Unknown");
+            graphicsOutputAppendString("Unknown");
             break;
     }
 
 
-    gConsPrint("");
-    gConsPrint("Press B to exit");
-    gRepaint();
+    graphicsOutputPrint("");
+    graphicsOutputPrint("Press B to exit");
+    graphicsOutputRepaint();
     for ( ;; ) { //forever
-        gVsync();
+        graphicsOutputVsync();
         controller_scan();
         cd = get_keys_down();
 
@@ -171,12 +171,12 @@ void edid() {
 
 }
 
-void printError(u8 err) {
+void mainPrintError(u8 err) {
 
-    gCleanScreen();
-    gConsPrint("error: ");
-    gAppendHex8(err);
-    gRepaint();
+    graphicsOutputCleanScreen();
+    graphicsOutputPrint("error: ");
+    graphicsOutputAppendHex8(err);
+    graphicsOutputRepaint();
 
     for ( ;; ) ; //forever
 }

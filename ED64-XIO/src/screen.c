@@ -236,7 +236,7 @@ void gDrawChar8X8(u32 val, u32 x, u32 y) {
     }
 }
 
-void gRepaint() {
+void graphicsOutputRepaint() {
 
     u16 *chr_ptr = gfx_buff;
 
@@ -252,21 +252,21 @@ void gRepaint() {
     }
 
     data_cache_hit_writeback(screen.current, screen.buff_len * 2);
-    gVsync();
+    graphicsOutputVsync();
     vregs[1] = (vu32) screen.current;
 
 }
 
-void gVsync() {
+void graphicsOutputVsync() {
 
     while (vregs[4] == 0x200);
     while (vregs[4] != 0x200);
 }
 
 
-void gAppendHex4(u8 val);
+void graphicsOutputAppendHex4(u8 val);
 
-void gCleanScreen() {
+void graphicsOutputCleanScreen() {
 
     g_cur_pal = 0;
     gSetXY(G_BORDER_X, G_BORDER_Y);
@@ -278,37 +278,37 @@ void gSetPal(u16 pal) {
     g_cur_pal = pal;
 }
 
-void gAppendString(u8 *str) {
+void graphicsOutputAppendString(u8 *str) {
     while (*str != 0)*g_disp_ptr++ = *str++ + g_cur_pal;
 }
 
-void gAppendChar(u8 chr) {
+void graphicsOutputAppendChar(u8 chr) {
 
     *g_disp_ptr++ = chr + g_cur_pal;
 }
 
-void gAppendHex4(u8 val) {
+void graphicsOutputAppendHex4(u8 val) {
 
     val += (val < 10 ? '0' : '7');
     *g_disp_ptr++ = val + g_cur_pal;
 }
 
-void gAppendHex8(u8 val) {
+void graphicsOutputAppendHex8(u8 val) {
 
-    gAppendHex4(val >> 4);
-    gAppendHex4(val & 15);
+    graphicsOutputAppendHex4(val >> 4);
+    graphicsOutputAppendHex4(val & 15);
 }
 
-void gAppendHex16(u16 val) {
+void graphicsOutputAppendHex16(u16 val) {
 
-    gAppendHex8(val >> 8);
-    gAppendHex8(val);
+    graphicsOutputAppendHex8(val >> 8);
+    graphicsOutputAppendHex8(val);
 }
 
-void gAppendHex32(u32 val) {
+void graphicsOutputAppendHex32(u32 val) {
 
-    gAppendHex16(val >> 16);
-    gAppendHex16(val);
+    graphicsOutputAppendHex16(val >> 16);
+    graphicsOutputAppendHex16(val);
 
 }
 
@@ -320,10 +320,10 @@ void gSetXY(u8 x, u8 y) {
     g_last_y = y;
 }
 
-void gConsPrint(u8 *str) {
+void graphicsOutputPrint(u8 *str) {
 
     g_disp_ptr = &gfx_buff[g_cons_ptr];
     g_cons_ptr += G_SCREEN_W;
     g_last_y++;
-    gAppendString(str);
+    graphicsOutputAppendString(str);
 }
