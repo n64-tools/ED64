@@ -65,7 +65,7 @@ u8 diskInit() {
     disk_card_type = 0;
     disk_mode = DISK_MODE_NOP;
 
-    ed64SdCardSpeed(ED64_SD_CARD_SPEED_SLOW);
+    ed64SdCardSpeed(ED64_SD_CONTROLLER_SPEED_SLOW);
 
     ed64_sd_bitlen(8);
     for (i = 0; i < 40; i++)ed64_sd_cmd_wr(0xff);
@@ -144,7 +144,7 @@ u8 diskInit() {
     if (resp)return DISK_ERR_INIT;
 
 
-    ed64SdCardSpeed(ED64_SD_CARD_SPEED_FAST);
+    ed64SdCardSpeed(ED64_SD_CONTROLLER_SPEED_FAST);
 
     return 0;
 }

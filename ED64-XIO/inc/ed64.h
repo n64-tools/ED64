@@ -23,9 +23,9 @@ extern "C" {
 #define ED64_ERR_USB_TOUT         0xB2
 // #define ED64_ERR_FPG_CFG          0xB3
 
-//sd controller speed select. LO speed only for init procedure
-#define ED64_SD_CARD_SPEED_SLOW  0x00
-#define ED64_SD_CARD_SPEED_FAST  0x01
+//sd controller speed select. SLOW speed only required for initilization procedure.
+#define ED64_SD_CONTROLLER_SPEED_SLOW  0x00
+#define ED64_SD_CONTROLLER_SPEED_FAST  0x01
 
 //bootloader flags
 //#define ED64_BCFG_BOOTMOD 0x01   

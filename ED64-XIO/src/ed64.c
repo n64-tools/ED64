@@ -242,7 +242,7 @@ void sdCrc16(void *src, u16 *crc_out);
 
 void ed64SdCardSpeed(u8 speed) {
 
-    if (speed == ED64_SD_CARD_SPEED_SLOW) {
+    if (speed == ED64_SD_CONTROLLER_SPEED_SLOW) {
         ed64_sd_cfg &= ~SD_CFG_SPD;
     } else {
         ed64_sd_cfg |= SD_CFG_SPD;
