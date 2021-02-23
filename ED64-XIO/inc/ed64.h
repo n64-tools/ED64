@@ -12,31 +12,31 @@ extern "C" {
 
 #include "screen.h"
 
-#define BI_SIZE_ROM     0x4000000       //rom size
-#define BI_SIZE_BRM     0x20000         //backup ram size
+#define ED64_SIZE_ROM     0x4000000       //rom size
+#define ED64_SIZE_BRM     0x20000         //backup ram size
 
-#define BI_ADDR_ROM    (KSEG1 | 0x10000000)
-#define BI_ADDR_BRM    (KSEG1 | 0x08000000)
+#define ED64_ADDR_ROM    (KSEG1 | 0x10000000)
+#define ED64_ADDR_BRM    (KSEG1 | 0x08000000)
 
-// #define BI_ERR_I2C_CMD          0xB0
-// #define BI_ERR_I2C_TOUT         0xB1
-#define BI_ERR_USB_TOUT         0xB2
-// #define BI_ERR_FPG_CFG          0xB3
+// #define ED64_ERR_I2C_CMD          0xB0
+// #define ED64_ERR_I2C_TOUT         0xB1
+#define ED64_ERR_USB_TOUT         0xB2
+// #define ED64_ERR_FPG_CFG          0xB3
 
 //sd controller speed select. LO speed only for init procedure
-#define BI_DISK_SPD_LO  0x00
-#define BI_DISK_SPD_HI  0x01
+#define ED64_DISK_SPD_LO  0x00
+#define ED64_DISK_SPD_HI  0x01
 
 //bootloader flags
-//#define BI_BCFG_BOOTMOD 0x01   
-//#define BI_BCFG_SD_INIT 0x02
-//#define BI_BCFG_SD_TYPE 0x04
-//#define BI_BCFG_GAMEMOD 0x08
-//#define BI_BCFG_CICLOCK 0x8000
+//#define ED64_BCFG_BOOTMOD 0x01   
+//#define ED64_BCFG_SD_INIT 0x02
+//#define ED64_BCFG_SD_TYPE 0x04
+//#define ED64_BCFG_GAMEMOD 0x08
+//#define ED64_BCFG_CICLOCK 0x8000
 
 //64dd disk save table - to know which data areas should be saved
-// #define BI_DD_TBL_SIZE  2048
-// #define BI_DD_PGE_SIZE  0x8000
+// #define ED64_DD_TBL_SIZE  2048
+// #define ED64_DD_PGE_SIZE  0x8000
 
 //cartridge hardware ID flags - used for identification
 #define ED64_CART_ID_V2      0xED640007

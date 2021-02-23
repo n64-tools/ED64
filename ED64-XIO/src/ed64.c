@@ -162,7 +162,7 @@ u8 ed64_usb_busy() {
 
         if (tout++ != 8192)continue;
         ed64_reg_wr(REG_USB_CFG, USB_CMD_RD_NOP);
-        return BI_ERR_USB_TOUT;
+        return ED64_ERR_USB_TOUT;
     }
 
     return 0;
@@ -242,7 +242,7 @@ void sdCrc16(void *src, u16 *crc_out);
 
 void ed64_sd_speed(u8 speed) {
 
-    if (speed == BI_DISK_SPD_LO) {
+    if (speed == ED64_DISK_SPD_LO) {
         ed64_sd_cfg &= ~SD_CFG_SPD;
     } else {
         ed64_sd_cfg |= SD_CFG_SPD;

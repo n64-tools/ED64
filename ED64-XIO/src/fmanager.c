@@ -124,7 +124,7 @@ u8 fmLoadGame(u8 *path) {
     }
 
     //warning! file can be read directly to rom but not to bram
-    resp = f_read(&f, (void *) BI_ADDR_ROM, fsize, &br);
+    resp = f_read(&f, (void *) ED64_ADDR_ROM, fsize, &br);
     if (resp)return resp;
 
     ed64_wr_swap(0);
