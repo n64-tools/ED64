@@ -112,7 +112,7 @@ void ed64Init() {
     ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
 
     //turn off backup ram
-    ed64GameSaveConfigSet(SAVE_TYPE_OFF);
+    ed64SetGameSaveType(SAVE_TYPE_OFF);
 }
 
 void ed64_reg_wr(u16 reg, u32 val) {
@@ -536,7 +536,7 @@ void sdCrc16(void *src, u16 *crc_out) {
 
 //******************************************************************************
 
-void ed64GameSaveConfigSet(u8 type) {
+void ed64SetGameSaveType(u8 type) {
 
     ed64_reg_wr(REG_GAM_CFG, type);
 }
@@ -551,7 +551,7 @@ void ed64_wr_swap(u8 swap_on) {
     }
 }
 
-u32 ed64_get_cart_id() {
+u32 ed64GetCartridgeTypeId() {
 
     return ed64_reg_rd(REG_EDID);
 }

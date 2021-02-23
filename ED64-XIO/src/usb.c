@@ -81,7 +81,7 @@ void usbLoadGame() {
 
         //start the game
         if (usb_cmd == 's') {
-            ed64GameSaveConfigSet(SAVE_TYPE_EEP16K); //set save type
+            ed64SetGameSaveType(SAVE_TYPE_EEP16K); //set save type
             mainBootSimulator(CIC_6102); //run the game
         }
 

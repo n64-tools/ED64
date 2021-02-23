@@ -57,6 +57,8 @@ extern "C" {
 
 
 void ed64Init();
+
+// USB functions
 u8 ed64_usb_can_rd();
 u8 ed64_usb_can_wr();
 u8 ed64_usb_rd(void *dst, u32 len);
@@ -64,7 +66,7 @@ u8 ed64_usb_wr(void *src, u32 len);
 void ed64UsbReadStart();
 u8 ed64UsbReadEnd(void *dst);
 
-
+// SD card functions
 void ed64_sd_speed(u8 speed);
 void ed64_sd_bitlen(u8 val);
 u8 ed64_sd_cmd_rd();
@@ -75,9 +77,10 @@ u8 ed64_sd_to_ram(void *dst, u16 slen);
 u8 ed64_sd_to_rom(u32 dst, u16 slen);
 u8 ed64_ram_to_sd(void *src, u16 slen);
 
-void ed64GameSaveConfigSet(u8 type); //set save type
+// Menu functions
+void ed64SetGameSaveType(u8 type); //set save type
 void ed64_wr_swap(u8 swap_on);
-u32 ed64_get_cart_id();
+u32 ed64GetCartridgeTypeId();
 
 #ifdef __cplusplus
 }
