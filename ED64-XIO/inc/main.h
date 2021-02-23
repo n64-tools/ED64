@@ -3,8 +3,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
-#ifndef __ED64_MAIN_H
-#define	__ED64_MAIN_H
+#ifndef __MAIN_H
+#define	__MAIN_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,7 +15,7 @@ extern "C" {
 #include "disk.h"
 #include "ff.h"
 
-void mainBootSimulator(u8 cic);
+void mainSimulatedRomBoot(u8 cic);
 u8 fmanager();
 void usbTerminal();
 void usbLoadRom();

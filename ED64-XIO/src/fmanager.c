@@ -66,7 +66,7 @@ u8 fmanager() {
                 if (resp)return resp;
 
                 ed64SetRomSaveType(SAVE_TYPE_EEP16K); //set save type
-                mainBootSimulator(CIC_6102); //run the rom
+                mainSimulatedRomBoot(CIC_6102); //run the rom
             }
         }
     }

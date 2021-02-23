@@ -82,7 +82,7 @@ void usbLoadRom() {
         //start the ROM
         if (usb_cmd == 's') {
             ed64SetRomSaveType(SAVE_TYPE_EEP16K); //set save type
-            mainBootSimulator(CIC_6102); //run the ROM
+            mainSimulatedRomBoot(CIC_6102); //run the ROM
         }
 
         //fill ro memory. used if rom size less than 2MB (required for correct crc values)

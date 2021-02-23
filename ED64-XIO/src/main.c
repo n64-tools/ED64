@@ -181,7 +181,7 @@ void printError(u8 err) {
     while (1);
 }
 
-void mainBootSimulator(u8 cic) {
+void mainSimulatedRomBoot(u8 cic) {
 
 
     static u16 cheats_on; /* 0 = off, 1 = select, 2 = all */
