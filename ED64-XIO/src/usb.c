@@ -81,7 +81,7 @@ void usbLoadGame() {
 
         //start the game
         if (usb_cmd == 's') {
-            biosGameSaveConfigSet(SAVE_EEP16K); //set save type
+            ed64GameSaveConfigSet(SAVE_EEP16K); //set save type
             mainBootSimulator(CIC_6102); //run the game
         }
 
@@ -137,12 +137,12 @@ u8 usbCmdRomWR(u8 *cmd) {
 
     if (slen == 0)return 0;
 
-    ed64_usb_rd_start(); //begin first block receiving (512B)
+    ed64UsbReadStart(); //begin first block receiving (512B)
 
     while (slen--) {
 
-        resp = ed64_usb_rd_end(buff); //wait for block receiving completion and read it to the buffer
-        if (slen != 0)ed64_usb_rd_start(); //begin next block receiving while previous block transfers to the ROM
+        resp = ed64UsbReadEnd(buff); //wait for block receiving completion and read it to the buffer
+        if (slen != 0)ed64UsbReadStart(); //begin next block receiving while previous block transfers to the ROM
         if (resp)return resp;
         sysPI_wr(buff, addr, 512); //copy received block to the rom memory
         addr += 512;

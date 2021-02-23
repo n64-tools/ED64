@@ -94,7 +94,7 @@ u8 ed64_usb_busy();
 
 u16 ed64_sd_cfg;
 
-void ed64_init() {
+void ed64Init() {
 
     //setup n64 bus timings for better performance
     IO_WRITE(PI_BSD_DOM1_LAT_REG, 0x04);
@@ -112,7 +112,7 @@ void ed64_init() {
     ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
 
     //turn off backup ram
-    biosGameSaveConfigSet(SAVE_OFF);
+    ed64GameSaveConfigSet(SAVE_OFF);
 }
 
 void ed64_reg_wr(u16 reg, u32 val) {
@@ -221,12 +221,12 @@ u8 ed64_usb_wr(void *src, u32 len) {
     return resp;
 }
 
-void ed64_usb_rd_start() {
+void ed64UsbReadStart() {
 
     ed64_reg_wr(REG_USB_CFG, USB_CMD_RD | 512);
 }
 
-u8 ed64_usb_rd_end(void *dst) {
+u8 ed64UsbReadEnd(void *dst) {
 
     u8 resp = ed64_usb_busy();
     if (resp)return resp;
@@ -536,7 +536,7 @@ void sdCrc16(void *src, u16 *crc_out) {
 
 //******************************************************************************
 
-void biosGameSaveConfigSet(u8 type) {
+void ed64GameSaveConfigSet(u8 type) {
 
     ed64_reg_wr(REG_GAM_CFG, type);
 }

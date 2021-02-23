@@ -56,13 +56,13 @@ extern "C" {
 
 
 
-void ed64_init();
+void ed64Init();
 u8 ed64_usb_can_rd();
 u8 ed64_usb_can_wr();
 u8 ed64_usb_rd(void *dst, u32 len);
 u8 ed64_usb_wr(void *src, u32 len);
-void ed64_usb_rd_start();
-u8 ed64_usb_rd_end(void *dst);
+void ed64UsbReadStart();
+u8 ed64UsbReadEnd(void *dst);
 
 
 void ed64_sd_speed(u8 speed);
@@ -75,7 +75,7 @@ u8 ed64_sd_to_ram(void *dst, u16 slen);
 u8 ed64_sd_to_rom(u32 dst, u16 slen);
 u8 ed64_ram_to_sd(void *src, u16 slen);
 
-void biosGameSaveConfigSet(u8 type); //set save type
+void ed64GameSaveConfigSet(u8 type); //set save type
 void ed64_wr_swap(u8 swap_on);
 u32 ed64_get_cart_id();
 

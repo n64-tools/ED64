@@ -65,7 +65,7 @@ u8 fmanager() {
                 resp = fmLoadGame(inf[selector].fname);
                 if (resp)return resp;
 
-                biosGameSaveConfigSet(SAVE_EEP16K); //set save type
+                ed64GameSaveConfigSet(SAVE_EEP16K); //set save type
                 mainBootSimulator(CIC_6102); //run the game
             }
         }

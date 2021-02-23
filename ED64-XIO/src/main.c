@@ -15,7 +15,7 @@ int main(void) {
     FATFS fs;
 
     sysInit();
-    ed64_init();
+    ed64Init();
 
     gCleanScreen();
     gConsPrint("FAT init...");
