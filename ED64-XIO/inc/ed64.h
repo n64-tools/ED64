@@ -24,8 +24,8 @@ extern "C" {
 // #define ED64_ERR_FPG_CFG          0xB3
 
 //sd controller speed select. LO speed only for init procedure
-#define ED64_DISK_SPD_LO  0x00
-#define ED64_DISK_SPD_HI  0x01
+#define ED64_SD_CARD_SPEED_SLOW  0x00
+#define ED64_SD_CARD_SPEED_FAST  0x01
 
 //bootloader flags
 //#define ED64_BCFG_BOOTMOD 0x01   
@@ -59,15 +59,15 @@ extern "C" {
 void ed64Init();
 
 // USB functions
-u8 ed64_usb_can_rd();
-u8 ed64_usb_can_wr();
-u8 ed64_usb_rd(void *dst, u32 len);
-u8 ed64_usb_wr(void *src, u32 len);
+u8 ed64UsbCanRead();
+u8 ed64UsbCanWrite();
+u8 ed64UsbRead(void *dst, u32 len);
+u8 ed64UsbWrite(void *src, u32 len);
 void ed64UsbReadStart();
 u8 ed64UsbReadEnd(void *dst);
 
 // SD card functions
-void ed64_sd_speed(u8 speed);
+void ed64SdCardSpeed(u8 speed);
 void ed64_sd_bitlen(u8 val);
 u8 ed64_sd_cmd_rd();
 void ed64_sd_cmd_wr(u8 val);
@@ -79,7 +79,7 @@ u8 ed64_ram_to_sd(void *src, u16 slen);
 
 // Menu functions
 void ed64SetRomSaveType(u8 type); //set save type
-void ed64_wr_swap(u8 swap_on);
+void ed64RomWriteByteswap(u8 swap_on);
 u32 ed64GetCartridgeTypeId();
 
 #ifdef __cplusplus

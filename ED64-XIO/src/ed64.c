@@ -134,20 +134,20 @@ void ed64_usb_init() {
     ed64_reg_wr(REG_USB_CFG, USB_CMD_RD_NOP); //turn off usb r/w activity
 
     //flush fifo buffer
-    while (ed64_usb_can_rd()) {
-        resp = ed64_usb_rd(buff, 512);
+    while (ed64UsbCanRead()) {
+        resp = ed64UsbRead(buff, 512);
         if (resp)break;
     }
 }
 
-u8 ed64_usb_can_rd() {
+u8 ed64UsbCanRead() {
 
     u32 status = ed64_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
 
-u8 ed64_usb_can_wr() {
+u8 ed64UsbCanWrite() {
 
     u32 status = ed64_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
     if (status == USB_STA_PWR)return 1;
@@ -168,7 +168,7 @@ u8 ed64_usb_busy() {
     return 0;
 }
 
-u8 ed64_usb_rd(void *dst, u32 len) {
+u8 ed64UsbRead(void *dst, u32 len) {
 
     u8 resp = 0;
     u16 blen, baddr;
@@ -194,7 +194,7 @@ u8 ed64_usb_rd(void *dst, u32 len) {
     return resp;
 }
 
-u8 ed64_usb_wr(void *src, u32 len) {
+u8 ed64UsbWrite(void *src, u32 len) {
 
     u8 resp = 0;
     u16 blen, baddr;
@@ -240,9 +240,9 @@ u8 ed64UsbReadEnd(void *dst) {
 //******************************************************************************
 void sdCrc16(void *src, u16 *crc_out);
 
-void ed64_sd_speed(u8 speed) {
+void ed64SdCardSpeed(u8 speed) {
 
-    if (speed == ED64_DISK_SPD_LO) {
+    if (speed == ED64_SD_CARD_SPEED_SLOW) {
         ed64_sd_cfg &= ~SD_CFG_SPD;
     } else {
         ed64_sd_cfg |= SD_CFG_SPD;
@@ -542,7 +542,7 @@ void ed64SetRomSaveType(u8 type) {
 }
 
 //swaps bytes copied from SD card. only affects reads to ROM area
-void ed64_wr_swap(u8 swap_on) {
+void ed64RomWriteByteswap(u8 swap_on) {
 
     if (swap_on) {
         ed64_reg_wr(REG_SYS_CFG, CFG_SWAP_ON);

@@ -120,14 +120,14 @@ u8 fmLoadGame(u8 *path) {
     if (header[1] == 0x80) {
         //enable byte swapping for disk operations if rom image has swapped byte order
         //affects only reading to ROM address space
-        ed64_wr_swap(1);
+        ed64RomWriteByteswap(1);
     }
 
     //warning! file can be read directly to rom but not to bram
     resp = f_read(&f, (void *) ED64_ADDR_ROM, fsize, &br);
     if (resp)return resp;
 
-    ed64_wr_swap(0);
+    ed64RomWriteByteswap(0);
     if (resp)return resp;
 
     resp = f_close(&f);

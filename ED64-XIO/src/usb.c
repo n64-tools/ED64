@@ -29,15 +29,15 @@ void usbTerminal() {
         cd = get_keys_down();
         if (cd.c[0].B)return;
 
-        if (!ed64_usb_can_rd())continue;
+        if (!ed64UsbCanRead())continue;
 
         //read from virtual serial port.
         //size must be a multiple of 4. use 512B blocks for best performance 
-        tout = ed64_usb_rd(data, 4);
+        tout = ed64UsbRead(data, 4);
         if (tout)continue;
 
         //send echo string back to the serial port
-        ed64_usb_wr(data, 4);
+        ed64UsbWrite(data, 4);
 
         gConsPrint(data);
         gRepaint();
@@ -62,11 +62,11 @@ void usbLoadRom() {
         cd = get_keys_down();
         if (cd.c[0].B)return;
 
-        if (!ed64_usb_can_rd())continue;
+        if (!ed64UsbCanRead())continue;
 
-        resp = ed64_usb_rd(cmd, 16);
+        resp = ed64UsbRead(cmd, 16);
         if (resp)continue;
-        //resp = ed64_usb_rd(cmd + 16, 512 - 16);
+        //resp = ed64UsbRead(cmd + 16, 512 - 16);
         //if (resp)return resp;
 
         if (cmd[0] != 'c')continue;
@@ -107,7 +107,7 @@ u8 usbResp(u8 resp) {
     buff[2] = 'd';
     buff[3] = 'r';
     buff[4] = resp;
-    return ed64_usb_wr(buff, sizeof (buff));
+    return ed64UsbWrite(buff, sizeof (buff));
 }
 
 void usbCmdCmemFill(u8 *cmd) {
