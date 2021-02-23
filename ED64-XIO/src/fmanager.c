@@ -8,18 +8,18 @@
 u8 fmLoadDir(u8 *path, FILINFO *inf, u32 max_items);
 u8 fmLoadGame(u8 *path);
 
-#define MAX_DIR_SIZE    20
-#define MAX_STR_LEN     36
+#define MAX_DIRECTORY_COUNT   20
+#define MAX_STRING_LENGTH     36
 
 u8 fmanager() {
 
-    FILINFO inf[MAX_DIR_SIZE];
+    FILINFO inf[MAX_DIRECTORY_COUNT];
     u32 selector = 0;
     struct controller_data cd;
     u8 resp;
 
     //open root dir
-    resp = fmLoadDir("", inf, MAX_DIR_SIZE);
+    resp = fmLoadDir("", inf, MAX_DIRECTORY_COUNT);
     if (resp)return resp;
 
 
@@ -27,12 +27,12 @@ u8 fmanager() {
 
         //print items
         gCleanScreen();
-        for (int i = 0; i < MAX_DIR_SIZE && inf[i].fname[0]; i++) {
+        for (int i = 0; i < MAX_DIRECTORY_COUNT && inf[i].fname[0]; i++) {
             gConsPrint(selector == i ? ">" : " ");
-            u8 tmp = inf[i].fname[MAX_STR_LEN];
-            inf[i].fname[MAX_STR_LEN] = 0; //make sure that the printed string doesn't exceed max len
+            u8 tmp = inf[i].fname[MAX_STRING_LENGTH];
+            inf[i].fname[MAX_STRING_LENGTH] = 0; //make sure that the printed string doesn't exceed max len
             gAppendString(inf[i].fname);
-            inf[i].fname[MAX_STR_LEN] = tmp;
+            inf[i].fname[MAX_STRING_LENGTH] = tmp;
         }
 
         gRepaint();
@@ -52,7 +52,7 @@ u8 fmanager() {
             }
 
             if (cd.c[0].down) {
-                if ((selector + 1) < MAX_DIR_SIZE && inf[selector + 1].fname[0])selector++;
+                if ((selector + 1) < MAX_DIRECTORY_COUNT && inf[selector + 1].fname[0])selector++;
                 break;
             }
 

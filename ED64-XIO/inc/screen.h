@@ -108,7 +108,7 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
 #define G_SCREEN_H      30 //screen.h
 #define G_BORDER_X      2
 #define G_BORDER_Y      2
-// #define G_MAX_STR_LEN   (G_SCREEN_W - G_BORDER_X*2)
+// #define G_MAX_STRING_LENGTH   (G_SCREEN_W - G_BORDER_X*2)
 
 #define PAL_B1          0x1000
 // #define PAL_B2          0x2000
