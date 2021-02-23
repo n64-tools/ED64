@@ -37,7 +37,7 @@ u8 fileRead() {
 
 
     gRepaint();
-    while (1) {
+    for ( ;; ) { //forever
         gVsync();
         controller_scan();
         cd = get_keys_down();
@@ -83,7 +83,7 @@ u8 fileWrite() {
     gConsPrint("Press B to exit");
 
     gRepaint();
-    while (1) {
+    for ( ;; ) { //forever
         gVsync();
         controller_scan();
         cd = get_keys_down();

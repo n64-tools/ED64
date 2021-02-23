@@ -14,8 +14,8 @@ int main(void) {
     u8 resp;
     FATFS fs;
 
-    sysInit();
-    ed64Init();
+    screenInitialize();
+    ed64Initialize();
 
     gCleanScreen();
     gConsPrint("FAT init...");
@@ -27,7 +27,7 @@ int main(void) {
     if (resp)printError(resp);
 
 
-    while (1) {
+    for ( ;; ) { //forever
         resp = demoMenu();
         if (resp)printError(resp);
     }
@@ -58,7 +58,7 @@ u8 demoMenu() {
     menu[MENU_USB_LOADER] = "USB Loader";
     menu[MENU_EDID] = "ED64 Cart ID";
 
-    while (1) {
+    for ( ;; ) { //forever
 
         gCleanScreen();
 
@@ -158,7 +158,7 @@ void edid() {
     gConsPrint("");
     gConsPrint("Press B to exit");
     gRepaint();
-    while (1) {
+    for ( ;; ) { //forever
         gVsync();
         controller_scan();
         cd = get_keys_down();
@@ -178,7 +178,7 @@ void printError(u8 err) {
     gAppendHex8(err);
     gRepaint();
 
-    while (1);
+    for ( ;; ) ; //forever
 }
 
 void mainSimulatedRomBoot(u8 cic) {

@@ -94,7 +94,7 @@ u8 ed64_usb_busy();
 
 u16 ed64_sd_cfg;
 
-void ed64Init() {
+void ed64Initialize() {
 
     //setup n64 bus timings for better performance
     IO_WRITE(PI_BSD_DOM1_LAT_REG, 0x04);

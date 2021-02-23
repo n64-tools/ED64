@@ -23,7 +23,7 @@ u8 fmanager() {
     if (resp)return resp;
 
 
-    while (1) {
+    for ( ;; ) { //forever
 
         //print items
         gCleanScreen();
@@ -38,7 +38,7 @@ u8 fmanager() {
         gRepaint();
 
         //controls
-        while (1) {
+        for ( ;; ) { //forever
 
             gVsync();
             controller_scan();

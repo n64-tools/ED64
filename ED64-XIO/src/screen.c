@@ -84,7 +84,7 @@ u16 pal[16] = {
     0x0000, 0x0000, 0x0000, 0x0aa0
 };
 
-void sysInit() {
+void screenInitialize() {
 
     disable_interrupts();
     set_AI_interrupt(0);

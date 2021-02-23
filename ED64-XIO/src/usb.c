@@ -22,7 +22,7 @@ void usbTerminal() {
 
     data[4] = 1;
 
-    while (1) {
+    for ( ;; ) { //forever
 
         gVsync();
         controller_scan();
@@ -55,7 +55,7 @@ void usbLoadRom() {
     gConsPrint("Press B to exit");
     gRepaint();
 
-    while (1) {
+    for ( ;; ) { //forever
 
         gVsync();
         controller_scan();

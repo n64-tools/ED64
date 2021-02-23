@@ -98,7 +98,7 @@ typedef struct {
 #define G_SCREEN_H      30 //screen.h
 
 
-void sysInit();
+void screenInitialize();
 void sysPI_rd(void *ram, unsigned long pi_address, unsigned long len);
 void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
 

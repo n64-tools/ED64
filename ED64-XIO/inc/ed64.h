@@ -56,7 +56,7 @@ extern "C" {
 
 
 
-void ed64Init();
+void ed64Initialize();
 
 // USB functions
 u8 ed64UsbCanRead();
