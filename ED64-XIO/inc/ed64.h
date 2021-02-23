@@ -44,7 +44,7 @@ extern "C" {
 #define ED64_CART_ID_X7      0xED640013
 #define ED64_CART_ID_X5      0xED640014
 
-//game save config register flags
+//rom save config register flags
 #define SAVE_TYPE_OFF        0x0000
 // #define SAVE_TYPE_EEP4K      0x0001
 #define SAVE_TYPE_EEP16K     0x0002

@@ -44,14 +44,14 @@ void usbTerminal() {
     }
 }
 
-void usbLoadGame() {
+void usbLoadRom() {
 
     u8 resp, usb_cmd;
     u8 cmd[16];
     struct controller_data cd;
 
     gCleanScreen();
-    gConsPrint("Waiting for game data...");
+    gConsPrint("Waiting for ROM data...");
     gConsPrint("Press B to exit");
     gRepaint();
 
@@ -79,10 +79,10 @@ void usbLoadGame() {
             usbResp(0);
         }
 
-        //start the game
+        //start the ROM
         if (usb_cmd == 's') {
             ed64SetRomSaveType(SAVE_TYPE_EEP16K); //set save type
-            mainBootSimulator(CIC_6102); //run the game
+            mainBootSimulator(CIC_6102); //run the ROM
         }
 
         //fill ro memory. used if rom size less than 2MB (required for correct crc values)

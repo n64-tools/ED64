@@ -86,7 +86,7 @@ u8 demoMenu() {
 
         if (!cd.c[0].A)continue;
 
-        //browse files in root dir and launch the game
+        //browse files in root dir and launch the rom
         if (selector == MENU_FILE_MANAGER) {
             resp = fmanager();
             if (resp)return resp;
@@ -114,7 +114,7 @@ u8 demoMenu() {
 
         //usb client demo compatible with usb64.exe
         if (selector == MENU_USB_LOADER) {
-            usbLoadGame();
+            usbLoadRom();
         }
 
         //everdrive hardware identification
@@ -185,13 +185,13 @@ void mainBootSimulator(u8 cic) {
 
 
     static u16 cheats_on; /* 0 = off, 1 = select, 2 = all */
-    static u8 game_cic;
+    static u8 rom_cic;
 
-    game_cic = cic;
+    rom_cic = cic;
     cheats_on = 0;
 
 
-    // Start game via CIC boot code
+    // Start Rom via CIC boot code
     asm __volatile__(
             ".set noreorder;"
 
@@ -297,7 +297,7 @@ void mainBootSimulator(u8 cic) {
             "lui    $t3, 0xB000;"
 
             : // outputs
-            : "r" (game_cic), // inputs
+            : "r" (rom_cic), // inputs
             "r" (cheats_on)
             : "$4", "$5", "$6", "$8", // clobber
             "$11", "$19", "$20", "$21",

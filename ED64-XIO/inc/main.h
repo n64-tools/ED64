@@ -18,7 +18,7 @@ extern "C" {
 void mainBootSimulator(u8 cic);
 u8 fmanager();
 void usbTerminal();
-void usbLoadGame();
+void usbLoadRom();
 u8 fileRead();
 u8 fileWrite();
 
