@@ -31,7 +31,7 @@ ASFLAGS = -mtune=vr4300 -march=vr4300
 
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
 SOURCES_S := $(wildcard $(SRCDIR)/*.s)
-SOURCES := $(wildcard $(SRCDIR)**/*.c)
+SOURCES := $(wildcard $(SRCDIR)/**/*.c)
 
 OBJECTS_FF := $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 OBJECTS_S := $(SOURCES_S:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
