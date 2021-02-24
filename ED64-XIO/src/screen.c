@@ -64,8 +64,8 @@ const u32 pal_320[] = {
 #define SYSTEM_MAXIMUM_SCREEN_VERTICAL   240
 
 void systemRegionInitilize();
-//void systemPiRead_safe(void *ram, unsigned long pi_address, unsigned long len);
-//void systemPiWrite_safe(void *ram, unsigned long pi_address, unsigned long len);
+//void system_pi_read_safe(void *ram, unsigned long pi_address, unsigned long len);
+//void system_pi_write_safe(void *ram, unsigned long pi_address, unsigned long len);
 
 
 static volatile struct PI_regs_s * const PI_regs = (struct PI_regs_s *) 0xa4600000;
@@ -84,7 +84,7 @@ u16 pal[16] = {
     0x0000, 0x0000, 0x0000, 0x0aa0
 };
 
-void systemInitialize() {
+void system_initialize() {
 
     disable_interrupts();
     set_AI_interrupt(0);
@@ -158,7 +158,7 @@ void systemRegionInitilize() {
     enable_interrupts();
 }
 
-void systemPiRead(void *ram, unsigned long pi_address, unsigned long len) {
+void system_pi_read(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
@@ -175,7 +175,7 @@ void systemPiRead(void *ram, unsigned long pi_address, unsigned long len) {
     enable_interrupts();
 }
 
-void systemPiWrite(void *ram, unsigned long pi_address, unsigned long len) {
+void system_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
@@ -236,7 +236,7 @@ void screenDrawChar8X8(u32 val, u32 x, u32 y) {
     }
 }
 
-void screenRepaint() {
+void screen_repaint() {
 
     u16 *chr_ptr = screen_graphics_buffer;
 
@@ -252,67 +252,67 @@ void screenRepaint() {
     }
 
     data_cache_hit_writeback(screen.current, screen.buff_len * 2);
-    screenVsync();
+    screen_perform_vsync();
     vregs[1] = (vu32) screen.current;
 
 }
 
-void screenVsync() {
+void screen_perform_vsync() {
 
     while (vregs[4] == 0x200);
     while (vregs[4] != 0x200);
 }
 
 
-void screenAppendHex4(u8 val);
+void screen_append_hex4(u8 val);
 
-void screenClear() {
+void screen_clear() {
 
     screen_current_pal = 0;
-    screenSetXY(SCREEN_BORDER_X, SCREEN_BORDER_Y);
+    screen_set_xy(SCREEN_BORDER_X, SCREEN_BORDER_Y);
     for (int i = 0; i < SCREEN_SIZE_HORIZONTAL * SCREEN_SIZE_VERTICAL; i++)screen_graphics_buffer[i] = PAL_B3;
-    screenSetPal(PAL_B1);
+    screen_set_pal(PAL_B1);
 }
 
-void screenSetPal(u16 pal) {
+void screen_set_pal(u16 pal) {
     screen_current_pal = pal;
 }
 
-void screenAppendString(u8 *str) {
+void screen_append_string(u8 *str) {
     while (*str != 0)*screen_display_ptr++ = *str++ + screen_current_pal;
 }
 
-void screenAppendChar(u8 chr) {
+void screen_append_character(u8 chr) {
 
     *screen_display_ptr++ = chr + screen_current_pal;
 }
 
-void screenAppendHex4(u8 val) {
+void screen_append_hex4(u8 val) {
 
     val += (val < 10 ? '0' : '7');
     *screen_display_ptr++ = val + screen_current_pal;
 }
 
-void screenAppendHex8(u8 val) {
+void screen_append_hex8(u8 val) {
 
-    screenAppendHex4(val >> 4);
-    screenAppendHex4(val & 15);
+    screen_append_hex4(val >> 4);
+    screen_append_hex4(val & 15);
 }
 
-void screenAppendHex16(u16 val) {
+void screen_append_hex16(u16 val) {
 
-    screenAppendHex8(val >> 8);
-    screenAppendHex8(val);
+    screen_append_hex8(val >> 8);
+    screen_append_hex8(val);
 }
 
-void screenAppendHex32(u32 val) {
+void screen_append_hex32(u32 val) {
 
-    screenAppendHex16(val >> 16);
-    screenAppendHex16(val);
+    screen_append_hex16(val >> 16);
+    screen_append_hex16(val);
 
 }
 
-void screenSetXY(u8 x, u8 y) {
+void screen_set_xy(u8 x, u8 y) {
 
     screen_cons_ptr = x + y * SCREEN_SIZE_HORIZONTAL;
     screen_display_ptr = &screen_graphics_buffer[screen_cons_ptr];
@@ -320,10 +320,10 @@ void screenSetXY(u8 x, u8 y) {
     screen_last_y_position = y;
 }
 
-void screenPrint(u8 *str) {
+void screen_print(u8 *str) {
 
     screen_display_ptr = &screen_graphics_buffer[screen_cons_ptr];
     screen_cons_ptr += SCREEN_SIZE_HORIZONTAL;
     screen_last_y_position++;
-    screenAppendString(str);
+    screen_append_string(str);
 }

@@ -15,16 +15,16 @@ void usbTerminal() {
     u8 tout;
     struct controller_data cd;
 
-    screenClear();
-    screenPrint("USB COM terminal demo");
-    screenPrint("Press B to exit");
-    screenRepaint();
+    screen_clear();
+    screen_print("USB COM terminal demo");
+    screen_print("Press B to exit");
+    screen_repaint();
 
     data[4] = 1;
 
     for ( ;; ) { //forever
 
-        screenVsync();
+        screen_perform_vsync();
         controller_scan();
         cd = get_keys_down();
         if (cd.c[0].B)return;
@@ -39,8 +39,8 @@ void usbTerminal() {
         //send echo string back to the serial port
         ed64_usb_write(data, 4);
 
-        screenPrint(data);
-        screenRepaint();
+        screen_print(data);
+        screen_repaint();
     }
 }
 
@@ -50,14 +50,14 @@ void usbLoadRom() {
     u8 cmd[16];
     struct controller_data cd;
 
-    screenClear();
-    screenPrint("Waiting for ROM data...");
-    screenPrint("Press B to exit");
-    screenRepaint();
+    screen_clear();
+    screen_print("Waiting for ROM data...");
+    screen_print("Press B to exit");
+    screen_repaint();
 
     for ( ;; ) { //forever
 
-        screenVsync();
+        screen_perform_vsync();
         controller_scan();
         cd = get_keys_down();
         if (cd.c[0].B)return;
@@ -82,7 +82,7 @@ void usbLoadRom() {
         //start the ROM
         if (usb_cmd == 's') {
             ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); //set save type
-            mainSimulatedRomBoot(CIC_6102); //run the ROM
+            perform_simulated_rom_boot(CIC_6102); //run the ROM
         }
 
         //fill ro memory. used if rom size less than 2MB (required for correct crc values)
@@ -123,7 +123,7 @@ void usbCmdCmemFill(u8 *cmd) {
     }
 
     while (slen--) {
-        systemPiWrite(buff, addr, 512);
+        system_pi_write(buff, addr, 512);
         addr += 512;
     }
 }
@@ -144,7 +144,7 @@ u8 usbCmdRomWrite(u8 *cmd) {
         resp = ed64_usb_read_end(buff); //wait for block receiving completion and read it to the buffer
         if (slen != 0)ed64_usb_read_start(); //begin next block receiving while previous block transfers to the ROM
         if (resp)return resp;
-        systemPiWrite(buff, addr, 512); //copy received block to the rom memory
+        system_pi_write(buff, addr, 512); //copy received block to the rom memory
         addr += 512;
     }
 

@@ -98,9 +98,9 @@ typedef struct {
 #define SCREEN_SIZE_VERTICAL      30 //screen.h
 
 
-void systemInitialize();
-void systemPiRead(void *ram, unsigned long pi_address, unsigned long len);
-void systemPiWrite(void *ram, unsigned long pi_address, unsigned long len);
+void system_initialize();
+void system_pi_read(void *ram, unsigned long pi_address, unsigned long len);
+void system_pi_write(void *ram, unsigned long pi_address, unsigned long len);
 
 
 
@@ -122,18 +122,18 @@ void systemPiWrite(void *ram, unsigned long pi_address, unsigned long len);
 // #define PAL_WG          0x1700
 // #define PAL_RB          0x0500
 
-void screenClear();
-void screenPrint(u8 *str);
-void screenSetXY(u8 x, u8 y);
-void screenSetPal(u16 pal);
-void screenAppendString(u8 *str);
-void screenAppendChar(u8 chr);
-void screenAppendHex8(u8 val);
-void screenAppendHex16(u16 val);
-void screenAppendHex32(u32 val);
-void screenAppendHex32(u32 val);
-void screenRepaint();
-void screenVsync();
+void screen_clear();
+void screen_print(u8 *str);
+void screen_set_xy(u8 x, u8 y);
+void screen_set_pal(u16 pal);
+void screen_append_string(u8 *str);
+void screen_append_character(u8 chr);
+void screen_append_hex8(u8 val);
+void screen_append_hex16(u16 val);
+void screen_append_hex32(u32 val);
+void screen_append_hex32(u32 val);
+void screen_repaint();
+void screen_perform_vsync();
 
 #ifdef __cplusplus
 }

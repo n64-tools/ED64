@@ -26,21 +26,21 @@ u8 fileManager() {
     for ( ;; ) { //forever
 
         //print items
-        screenClear();
+        screen_clear();
         for (int i = 0; i < MAXIMUM_DIRECTORY_COUNT && inf[i].fname[0]; i++) {
-            screenPrint(selector == i ? ">" : " ");
+            screen_print(selector == i ? ">" : " ");
             u8 tmp = inf[i].fname[MAXIMUM_STRING_LENGTH];
             inf[i].fname[MAXIMUM_STRING_LENGTH] = 0; //make sure that the printed string doesn't exceed max len
-            screenAppendString(inf[i].fname);
+            screen_append_string(inf[i].fname);
             inf[i].fname[MAXIMUM_STRING_LENGTH] = tmp;
         }
 
-        screenRepaint();
+        screen_repaint();
 
         //controls
         for ( ;; ) { //forever
 
-            screenVsync();
+            screen_perform_vsync();
             controller_scan();
             cd = get_keys_down();
 
@@ -58,15 +58,15 @@ u8 fileManager() {
 
             if (cd.c[0].A && !(inf[selector].fattrib & AM_DIR)) {
 
-                screenClear();
-                screenPrint("loading...");
-                screenRepaint();
+                screen_clear();
+                screen_print("loading...");
+                screen_repaint();
 
                 resp = fileManager_LoadGame(inf[selector].fname);
                 if (resp)return resp;
 
                 ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); //set save type
-                mainSimulatedRomBoot(CIC_6102); //run the rom
+                perform_simulated_rom_boot(CIC_6102); //run the rom
             }
         }
     }

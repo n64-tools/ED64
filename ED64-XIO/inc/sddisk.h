@@ -22,8 +22,8 @@ u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen);
 u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen);
 u8 sd_disk_read(void *dst, u32 saddr, u32 slen);
 u8 sd_disk_write(void *src, u32 saddr, u32 slen);
-u8 disk_close_rw();
-u8 disk_stop();
+u8 sd_disk_close_rw();
+u8 sd_disk_stop();
 
 #ifdef __cplusplus
 }

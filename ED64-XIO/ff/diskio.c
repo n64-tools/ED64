@@ -9,7 +9,7 @@
 
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
-#include "main.h"
+#include "sddisk.h"
 
 
 /* Definitions of physical drive number for each drive */
@@ -102,7 +102,7 @@ DRESULT disk_ioctl(
 
     switch (cmd) {
         case CTRL_SYNC:
-            res = disk_close_rw();
+            res = sd_disk_close_rw();
             dresp = res;
             res = res == 0 ? RES_OK : RES_ERROR;
             break;

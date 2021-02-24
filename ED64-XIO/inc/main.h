@@ -12,10 +12,10 @@ extern "C" {
 
 #include "screen.h"
 #include "ed64.h"
-#include "disk.h"
+#include "sddisk.h"
 #include "ff.h"
 
-void mainSimulatedRomBoot(u8 cic);
+void perform_simulated_rom_boot(u8 cic);
 u8 fileManager();
 void usbTerminal();
 void usbLoadRom();

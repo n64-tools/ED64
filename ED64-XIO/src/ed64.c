@@ -117,13 +117,13 @@ void ed64Initialize() {
 
 void ed64RegisterWrite(u16 reg, u32 val) {
 
-    systemPiWrite(&val, REG_ADDR(reg), 4);
+    system_pi_write(&val, REG_ADDR(reg), 4);
 }
 
 u32 ed64RegisterRead(u16 reg) {
 
     u32 val;
-    systemPiRead(&val, REG_ADDR(reg), 4);
+    system_pi_read(&val, REG_ADDR(reg), 4);
     return val;
 }
 
@@ -185,7 +185,7 @@ u8 ed64_usb_read(void *dst, u32 len) {
         resp = ed64UsbBusy(); //wait until requested data amount will be transferred to the internal buffer
         if (resp)break; //timeout
 
-        systemPiRead(dst, REG_ADDR(REG_USB_DAT + baddr), blen); //get data from internal buffer
+        system_pi_read(dst, REG_ADDR(REG_USB_DAT + baddr), blen); //get data from internal buffer
 
         dst += blen;
         len -= blen;
@@ -207,7 +207,7 @@ u8 ed64_usb_write(void *src, u32 len) {
         if (blen > len)blen = len;
         baddr = 512 - blen; //address in fpga internal buffer. data length equal to 512-int buffer addr
 
-        systemPiWrite(src, REG_ADDR(REG_USB_DAT + baddr), blen); //copy data to the internal buffer
+        system_pi_write(src, REG_ADDR(REG_USB_DAT + baddr), blen); //copy data to the internal buffer
         src += 512;
 
         ed64RegisterWrite(REG_USB_CFG, USB_CMD_WR | baddr); //usb write request
@@ -231,7 +231,7 @@ u8 ed64_usb_read_end(void *dst) {
     u8 resp = ed64UsbBusy();
     if (resp)return resp;
 
-    systemPiRead(dst, REG_ADDR(REG_USB_DAT), 512);
+    system_pi_read(dst, REG_ADDR(REG_USB_DAT), 512);
 
     return 0;
 }
@@ -327,8 +327,8 @@ u8 ed64_sdio_to_ram(void *dst, u16 slen) {
         ed64_sdio_bit_length(4);
 
         ed64SdioSwitchMode(REG_SD_DAT_RD);
-        systemPiRead(dst, REG_ADDR(REG_SDIO_ARD), 512);
-        systemPiRead(crc, REG_ADDR(REG_SDIO_ARD), 8);
+        system_pi_read(dst, REG_ADDR(REG_SDIO_ARD), 512);
+        system_pi_read(crc, REG_ADDR(REG_SDIO_ARD), 8);
         dst += 512;
 
     }
@@ -369,8 +369,8 @@ u8 ed64_ram_to_sdio(void *src, u16 slen) {
         ed64_sdio_data_write(0xf0);
 
         ed64_sdio_bit_length(4);
-        systemPiWrite(src, REG_ADDR(REG_SDIO_ARD), 512);
-        systemPiWrite(crc, REG_ADDR(REG_SDIO_ARD), 8);
+        system_pi_write(src, REG_ADDR(REG_SDIO_ARD), 512);
+        system_pi_write(crc, REG_ADDR(REG_SDIO_ARD), 8);
         src += 512;
 
         ed64_sdio_bit_length(1);

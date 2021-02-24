@@ -14,12 +14,12 @@ int main(void) {
     u8 resp;
     FATFS fs;
 
-    systemInitialize();
+    system_initialize();
     ed64Initialize();
 
-    screenClear();
-    screenPrint("FAT init...");
-    screenRepaint();
+    screen_clear();
+    screen_print("FAT init...");
+    screen_repaint();
 
     //mount disk
     memset(&fs, 0, sizeof (fs));
@@ -60,19 +60,19 @@ u8 demoMenu() {
 
     for ( ;; ) { //forever
 
-        screenClear();
+        screen_clear();
 
         for (int i = 0; i < MENU_SIZE; i++) {
-            screenPrint("          ");
+            screen_print("          ");
             if (i == selector) {
-                screenAppendString(">");
+                screen_append_string(">");
             } else {
-                screenAppendString(" ");
+                screen_append_string(" ");
             }
-            screenAppendString(menu[i]);
+            screen_append_string(menu[i]);
         }
 
-        screenRepaint();
+        screen_repaint();
         controller_scan();
         cd = get_keys_down();
 
@@ -130,36 +130,36 @@ void mainGetEdid() {
     struct controller_data cd;
     u32 id = ed64_get_cartridge_type_id();
 
-    screenClear();
-    screenPrint("Device ID     ");
-    screenAppendHex32(id);
-    screenPrint("");
-    screenPrint("Device Name   ");
+    screen_clear();
+    screen_print("Device ID     ");
+    screen_append_hex32(id);
+    screen_print("");
+    screen_print("Device Name   ");
 
     switch (id) {
         case ED64_CART_ID_V2:
-            screenAppendString("EverDrive 64 V2.5");
+            screen_append_string("EverDrive 64 V2.5");
             break;
         case ED64_CART_ID_V3:
-            screenAppendString("EverDrive 64 V3");
+            screen_append_string("EverDrive 64 V3");
             break;
         case ED64_CART_ID_X7:
-            screenAppendString("EverDrive 64 X7");
+            screen_append_string("EverDrive 64 X7");
             break;
         case ED64_CART_ID_X5:
-            screenAppendString("EverDrive 64 X5");
+            screen_append_string("EverDrive 64 X5");
             break;
         default:
-            screenAppendString("Unknown");
+            screen_append_string("Unknown");
             break;
     }
 
 
-    screenPrint("");
-    screenPrint("Press B to exit");
-    screenRepaint();
+    screen_print("");
+    screen_print("Press B to exit");
+    screen_repaint();
     for ( ;; ) { //forever
-        screenVsync();
+        screen_perform_vsync();
         controller_scan();
         cd = get_keys_down();
 
@@ -173,15 +173,15 @@ void mainGetEdid() {
 
 void mainPrintError(u8 err) {
 
-    screenClear();
-    screenPrint("error: ");
-    screenAppendHex8(err);
-    screenRepaint();
+    screen_clear();
+    screen_print("error: ");
+    screen_append_hex8(err);
+    screen_repaint();
 
     for ( ;; ) ; //forever
 }
 
-void mainSimulatedRomBoot(u8 cic) {
+void perform_simulated_rom_boot(u8 cic) {
 
 
     static u16 cheats_on; /* 0 = off, 1 = select, 2 = all */

@@ -9,8 +9,8 @@ u8 fileRead() {
     UINT br;
     u8 resp;
 
-    screenClear();
-    screenRepaint();
+    screen_clear();
+    screen_repaint();
 
 
     resp = f_open(&f, path, FA_READ);
@@ -23,21 +23,21 @@ u8 fileRead() {
     if (resp != FR_OK)return resp;
 
 
-    screenClear();
-    screenPrint("Data read from: ");
-    screenAppendString(path);
-    screenPrint("Press B to exit");
+    screen_clear();
+    screen_print("Data read from: ");
+    screen_append_string(path);
+    screen_print("Press B to exit");
 
-    screenPrint("");
+    screen_print("");
     for (int i = 0; i < sizeof (buff); i++) {
-        if (i % 16 == 0)screenPrint("");
-        screenAppendHex8(buff[i]);
+        if (i % 16 == 0)screen_print("");
+        screen_append_hex8(buff[i]);
     }
 
 
-    screenRepaint();
+    screen_repaint();
     for ( ;; ) { //forever
-        screenVsync();
+        screen_perform_vsync();
         controller_scan();
         cd = get_keys_down();
 
@@ -59,8 +59,8 @@ u8 fileWrite() {
     u8 resp;
     u32 str_len;
 
-    screenClear();
-    screenRepaint();
+    screen_clear();
+    screen_repaint();
 
     for (str_len = 0; msg[str_len] != 0; str_len++);
 
@@ -74,16 +74,16 @@ u8 fileWrite() {
     if (resp != FR_OK)return resp;
 
 
-    screenClear();
-    screenPrint(msg);
-    screenPrint("");
-    screenPrint("String above was written to: ");
-    screenPrint(path);
-    screenPrint("Press B to exit");
+    screen_clear();
+    screen_print(msg);
+    screen_print("");
+    screen_print("String above was written to: ");
+    screen_print(path);
+    screen_print("Press B to exit");
 
-    screenRepaint();
+    screen_repaint();
     for ( ;; ) { //forever
-        screenVsync();
+        screen_perform_vsync();
         controller_scan();
         cd = get_keys_down();
 
