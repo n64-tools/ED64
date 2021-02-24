@@ -6,11 +6,12 @@ CHKSUM64PATH = $(ROOTDIR)/bin/chksum64
 MKDFSPATH = $(ROOTDIR)/bin/mkdfs
 N64TOOL = $(ROOTDIR)/bin/n64tool
 
-SRCDIR_FF := ff
 SRCDIR := src
 SRCDIR_EDLIB := $(SRCDIR)/edlib
+SRCDIR_FFLIB := $(SRCDIR_EDLIB)/ff
 LIBDIR := lib
 INCDIR := inc
+INCDIR_EDLIB := inc/edlib
 RESDIR := res
 OBJDIR = obj
 BINDIR = bin
@@ -28,18 +29,18 @@ OBJCOPY = $(GCCN64PREFIX)objcopy
 
 LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -ldragonsys -Tn64.ld
 
-FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -Iedlib -I$(SRCDIR_FF) -I$(INCDIR) -G0 
+FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB) -G0 
 ASFLAGS = -mtune=vr4300 -march=vr4300
 
-SOURCES_FF := $(wildcard $(SRCDIR_FF)/*.c)
 SOURCES_ASM := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
 SOURCES_EDLIB := $(wildcard $(SRCDIR_EDLIB)/*.c)
+SOURCES_FFLIB := $(wildcard $(SRCDIR_FFLIB)/*.c)
 
-OBJECTS_FF := $(SOURCES_FF:$(SRCDIR_FF)/%.c=$(OBJDIR)/%.o)
 OBJECTS_ASM := $(SOURCES_ASM:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 OBJECTS_EDLIB := $(SOURCES_EDLIB:$(SRCDIR_EDLIB)/%.c=$(OBJDIR)/%.o)
+OBJECTS_FFLIB := $(SOURCES_FFLIB:$(SRCDIR_FFLIB)/%.c=$(OBJDIR)/%.o)
 
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
@@ -47,11 +48,8 @@ $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(N64TOOL) -l 256K -t $(HEADERTITLE) -h $(HEADERDIR)/$(HEADERNAME) -o $(BINDIR)/$(PROG_NAME).v64 $(BINDIR)/$(PROG_NAME).bin
 	$(CHKSUM64PATH) $(BINDIR)/$(PROG_NAME).v64
 
-$(PROG_NAME).elf : $(OBJECTS_FF) $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_EDLIB)
-	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS_FF) $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_EDLIB) $(LINK_FLAGS)
-
-$(OBJECTS_FF): $(OBJDIR)/%.o : $(SRCDIR_FF)/%.c
-	$(CC) $(FLAGS) -c $< -o $@
+$(PROG_NAME).elf : $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_EDLIB) $(OBJECTS_FFLIB)
+	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_EDLIB) $(OBJECTS_FFLIB) $(LINK_FLAGS)
 
 $(OBJECTS_ASM): $(OBJDIR)/%.o : $(SRCDIR)/%.s
 	$(CC) $(ASFLAGS) -c $< -o $@
@@ -60,6 +58,9 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(OBJECTS_EDLIB): $(OBJDIR)/%.o : $(SRCDIR_EDLIB)/%.c
+	$(CC) $(FLAGS) -c $< -o $@
+
+$(OBJECTS_FFLIB): $(OBJDIR)/%.o : $(SRCDIR_FFLIB)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
 all: $(PROG_NAME).v64

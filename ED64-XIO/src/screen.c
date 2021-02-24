@@ -190,7 +190,7 @@ void system_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
 }
 
 /******************************************************************************
-* gfx
+* screen graphics
 ******************************************************************************/
 u16 *screen_display_ptr;
 u16 screen_current_pal;
