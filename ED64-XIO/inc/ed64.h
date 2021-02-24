@@ -59,28 +59,28 @@ extern "C" {
 void ed64Initialize();
 
 // USB functions
-u8 ed64UsbCanRead();
-u8 ed64UsbCanWrite();
-u8 ed64UsbRead(void *dst, u32 len);
-u8 ed64UsbWrite(void *src, u32 len);
-void ed64UsbReadStart();
-u8 ed64UsbReadEnd(void *dst);
+u8 ed64_usb_can_read();
+u8 ed64_usb_can_write();
+u8 ed64_usb_read(void *dst, u32 len);
+u8 ed64_usb_write(void *src, u32 len);
+void ed64_usb_read_start();
+u8 ed64_usb_read_end(void *dst);
 
 // SD card functions
-void ed64SdioSpeed(u8 speed);
-void ed64SdioBitLength(u8 val);
-u8 ed64SdioCommandRead();
-void ed64SdioCommandWrite(u8 val);
+void ed64_sdio_speed(u8 speed);
+void ed64_sdio_bit_length(u8 val);
+u8 ed64_sdio_command_read();
+void ed64_sdio_command_write(u8 val);
 u8 ed64SdioDataRead();
-void ed64SdioDataWrite(u8 val);
-u8 ed64SdioToRam(void *dst, u16 slen);
-u8 ed64SdioToRom(u32 dst, u16 slen);
-u8 ed64RamToSdCard(void *src, u16 slen);
+void ed64_sdio_data_write(u8 val);
+u8 ed64_sdio_to_ram(void *dst, u16 slen);
+u8 ed64_sdio_to_rom(u32 dst, u16 slen);
+u8 ed64_ram_to_sdio(void *src, u16 slen);
 
 // Menu functions
-void ed64SetRomSaveType(u8 type); //set save type
-void ed64RomWriteByteswap(u8 swap_on);
-u32 ed64GetCartridgeTypeId();
+void ed64_set_rom_save_type(u8 type); //set save type
+void ed64_rom_write_bytes_swapped(u8 swap_on);
+u32 ed64_get_cartridge_type_id();
 
 #ifdef __cplusplus
 }

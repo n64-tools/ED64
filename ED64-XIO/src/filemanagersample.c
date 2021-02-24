@@ -65,7 +65,7 @@ u8 fileManager() {
                 resp = fileManager_LoadGame(inf[selector].fname);
                 if (resp)return resp;
 
-                ed64SetRomSaveType(ED64_SAVE_TYPE_EEP16K); //set save type
+                ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); //set save type
                 mainSimulatedRomBoot(CIC_6102); //run the rom
             }
         }
@@ -120,14 +120,14 @@ u8 fileManager_LoadGame(u8 *path) {
     if (header[1] == 0x80) {
         //enable byte swapping for disk operations if rom image has swapped byte order
         //affects only reading to ROM address space
-        ed64RomWriteByteswap(1);
+        ed64_rom_write_bytes_swapped(1);
     }
 
     //warning! file can be read directly to rom but not to bram
     resp = f_read(&f, (void *) ED64_ADDR_ROM, fsize, &br);
     if (resp)return resp;
 
-    ed64RomWriteByteswap(0);
+    ed64_rom_write_bytes_swapped(0);
     if (resp)return resp;
 
     resp = f_close(&f);

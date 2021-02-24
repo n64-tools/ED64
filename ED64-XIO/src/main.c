@@ -128,7 +128,7 @@ u8 demoMenu() {
 void mainGetEdid() {
 
     struct controller_data cd;
-    u32 id = ed64GetCartridgeTypeId();
+    u32 id = ed64_get_cartridge_type_id();
 
     screenClear();
     screenPrint("Device ID     ");

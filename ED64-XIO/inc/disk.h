@@ -18,12 +18,12 @@ extern "C" {
 #define DISK_ERR_WR2    0xD3//io error
 
 u8 diskInit();
-u8 diskReadToRam(u32 sd_addr, void *dst, u16 slen);
-u8 diskReadToRom(u32 sd_addr, u32 dst, u16 slen);
-u8 diskRead(void *dst, u32 saddr, u32 slen);
-u8 diskWrite(void *src, u32 saddr, u32 slen);
-u8 diskCloseRW();
-u8 diskStop();
+u8 disk_read_to_ram(u32 sd_addr, void *dst, u16 slen);
+u8 disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen);
+u8 disk_read(void *dst, u32 saddr, u32 slen);
+u8 disk_write(void *src, u32 saddr, u32 slen);
+u8 disk_close_rw();
+u8 disk_stop();
 
 #ifdef __cplusplus
 }

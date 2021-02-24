@@ -112,7 +112,7 @@ void ed64Initialize() {
     ed64RegisterWrite(REG_SD_STATUS, ed64_sd_cfg);
 
     //turn off backup ram
-    ed64SetRomSaveType(ED64_SAVE_TYPE_OFF);
+    ed64_set_rom_save_type(ED64_SAVE_TYPE_OFF);
 }
 
 void ed64RegisterWrite(u16 reg, u32 val) {
@@ -134,20 +134,20 @@ void ed64UsbInitialize() {
     ed64RegisterWrite(REG_USB_CFG, USB_CMD_RD_NOP); //turn off usb r/w activity
 
     //flush fifo buffer
-    while (ed64UsbCanRead()) {
-        resp = ed64UsbRead(buff, 512);
+    while (ed64_usb_can_read()) {
+        resp = ed64_usb_read(buff, 512);
         if (resp)break;
     }
 }
 
-u8 ed64UsbCanRead() {
+u8 ed64_usb_can_read() {
 
     u32 status = ed64RegisterRead(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
 
-u8 ed64UsbCanWrite() {
+u8 ed64_usb_can_write() {
 
     u32 status = ed64RegisterRead(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
     if (status == USB_STA_PWR)return 1;
@@ -168,7 +168,7 @@ u8 ed64UsbBusy() {
     return 0;
 }
 
-u8 ed64UsbRead(void *dst, u32 len) {
+u8 ed64_usb_read(void *dst, u32 len) {
 
     u8 resp = 0;
     u16 blen, baddr;
@@ -194,7 +194,7 @@ u8 ed64UsbRead(void *dst, u32 len) {
     return resp;
 }
 
-u8 ed64UsbWrite(void *src, u32 len) {
+u8 ed64_usb_write(void *src, u32 len) {
 
     u8 resp = 0;
     u16 blen, baddr;
@@ -221,12 +221,12 @@ u8 ed64UsbWrite(void *src, u32 len) {
     return resp;
 }
 
-void ed64UsbReadStart() {
+void ed64_usb_read_start() {
 
     ed64RegisterWrite(REG_USB_CFG, USB_CMD_RD | 512);
 }
 
-u8 ed64UsbReadEnd(void *dst) {
+u8 ed64_usb_read_end(void *dst) {
 
     u8 resp = ed64UsbBusy();
     if (resp)return resp;
@@ -240,7 +240,7 @@ u8 ed64UsbReadEnd(void *dst) {
 //******************************************************************************
 void sdCrc16(void *src, u16 *crc_out);
 
-void ed64SdioSpeed(u8 speed) {
+void ed64_sdio_speed(u8 speed) {
 
     if (speed == ED64_SD_CONTROLLER_SPEED_SLOW) {
         ed64_sd_cfg &= ~SD_CFG_SPD;
@@ -259,13 +259,13 @@ void ed64SdioSwitchMode(u16 mode) {
     ed64_old_sd_mode = mode;
 
     u16 old_sd_cfg = ed64_sd_cfg;
-    ed64SdioBitLength(0);
+    ed64_sdio_bit_length(0);
     ed64RegisterWrite(mode, 0xffff);
     ed64_sd_cfg = old_sd_cfg;
     ed64RegisterWrite(REG_SD_STATUS, old_sd_cfg);
 }
 
-void ed64SdioBitLength(u8 val) {
+void ed64_sdio_bit_length(u8 val) {
 
     ed64_sd_cfg &= ~SD_CFG_BITLEN;
     ed64_sd_cfg |= (val & SD_CFG_BITLEN);
@@ -276,13 +276,13 @@ void ed64_sd_busy() {
     while ((ed64RegisterRead(REG_SD_STATUS) & SD_STA_BUSY) != 0);
 }
 
-void ed64SdioCommandWrite(u8 val) {
+void ed64_sdio_command_write(u8 val) {
     ed64SdioSwitchMode(REG_SD_CMD_WR);
     ed64RegisterWrite(REG_SD_CMD_WR, val);
     ed64_sd_busy();
 }
 
-u8 ed64SdioCommandRead() {
+u8 ed64_sdio_command_read() {
 
     ed64SdioSwitchMode(REG_SD_CMD_RD);
     ed64RegisterWrite(REG_SD_CMD_RD, 0xffff);
@@ -290,7 +290,7 @@ u8 ed64SdioCommandRead() {
     return ed64RegisterRead(REG_SD_CMD_RD);
 }
 
-void ed64SdioDataWrite(u8 val) {
+void ed64_sdio_data_write(u8 val) {
     ed64SdioSwitchMode(REG_SD_DAT_WR);
     ed64RegisterWrite(REG_SD_DAT_WR, 0x00ff | (val << 8));
     //ed64_sd_busy();
@@ -304,7 +304,7 @@ u8 ed64SdioDataRead() {
     return ed64RegisterRead(REG_SD_DAT_RD);
 }
 
-u8 ed64SdioToRam(void *dst, u16 slen) {
+u8 ed64_sdio_to_ram(void *dst, u16 slen) {
 
     u16 i;
     u8 crc[8];
@@ -314,7 +314,7 @@ u8 ed64SdioToRam(void *dst, u16 slen) {
 
     while (slen--) {
 
-        ed64SdioBitLength(1);
+        ed64_sdio_bit_length(1);
         i = 1;
         while (ed64SdioDataRead() != 0xf0) {
             i++;
@@ -324,7 +324,7 @@ u8 ed64SdioToRam(void *dst, u16 slen) {
             }
         }
 
-        ed64SdioBitLength(4);
+        ed64_sdio_bit_length(4);
 
         ed64SdioSwitchMode(REG_SD_DAT_RD);
         systemPiRead(dst, REG_ADDR(REG_SDIO_ARD), 512);
@@ -338,7 +338,7 @@ u8 ed64SdioToRam(void *dst, u16 slen) {
     return 0;
 }
 
-u8 ed64SdioToRom(u32 dst, u16 slen) {
+u8 ed64_sdio_to_rom(u32 dst, u16 slen) {
 
     u16 resp = DMA_STA_BUSY;
 
@@ -355,7 +355,7 @@ u8 ed64SdioToRom(u32 dst, u16 slen) {
     return 0;
 }
 
-u8 ed64RamToSdCard(void *src, u16 slen) {
+u8 ed64_ram_to_sdio(void *src, u16 slen) {
 
     u8 resp;
     u16 crc[4];
@@ -364,17 +364,17 @@ u8 ed64RamToSdCard(void *src, u16 slen) {
 
         sdCrc16(src, crc);
 
-        ed64SdioBitLength(2);
-        ed64SdioDataWrite(0xff);
-        ed64SdioDataWrite(0xf0);
+        ed64_sdio_bit_length(2);
+        ed64_sdio_data_write(0xff);
+        ed64_sdio_data_write(0xf0);
 
-        ed64SdioBitLength(4);
+        ed64_sdio_bit_length(4);
         systemPiWrite(src, REG_ADDR(REG_SDIO_ARD), 512);
         systemPiWrite(crc, REG_ADDR(REG_SDIO_ARD), 8);
         src += 512;
 
-        ed64SdioBitLength(1);
-        ed64SdioDataWrite(0xff);
+        ed64_sdio_bit_length(1);
+        ed64_sdio_data_write(0xff);
 
         for (int i = 0;; i++) {
             resp = ed64SdioDataRead();
@@ -536,13 +536,13 @@ void sdCrc16(void *src, u16 *crc_out) {
 
 //******************************************************************************
 
-void ed64SetRomSaveType(u8 type) {
+void ed64_set_rom_save_type(u8 type) {
 
     ed64RegisterWrite(REG_GAM_CFG, type);
 }
 
 //swaps bytes copied from SD card. only affects reads to ROM area
-void ed64RomWriteByteswap(u8 swap_on) {
+void ed64_rom_write_bytes_swapped(u8 swap_on) {
 
     if (swap_on) {
         ed64RegisterWrite(REG_SYS_CFG, CFG_SWAP_ON);
@@ -551,7 +551,7 @@ void ed64RomWriteByteswap(u8 swap_on) {
     }
 }
 
-u32 ed64GetCartridgeTypeId() {
+u32 ed64_get_cartridge_type_id() {
 
     return ed64RegisterRead(REG_EDID);
 }

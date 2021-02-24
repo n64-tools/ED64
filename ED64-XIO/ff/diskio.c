@@ -60,7 +60,7 @@ DRESULT disk_read(
         UINT count /* Number of sectors to read */
         ) {
 
-    dresp = diskRead(buff, sector, count);
+    dresp = disk_read(buff, sector, count);
     if (dresp)return RES_ERROR;
     return RES_OK;
 }
@@ -81,7 +81,7 @@ DRESULT disk_write(
         ) {
 
 
-    dresp = diskWrite((BYTE *) buff, sector, count);
+    dresp = disk_write((BYTE *) buff, sector, count);
     if (dresp)return RES_ERROR;
     return RES_OK;
 }
@@ -102,7 +102,7 @@ DRESULT disk_ioctl(
 
     switch (cmd) {
         case CTRL_SYNC:
-            res = diskCloseRW();
+            res = disk_close_rw();
             dresp = res;
             res = res == 0 ? RES_OK : RES_ERROR;
             break;
