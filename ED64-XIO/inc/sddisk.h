@@ -10,6 +10,9 @@
 extern "C" {
 #endif
 
+#include "ed64.h"
+#include "types.h"
+
 #define DISK_ERR_INIT   0xD0
 #define DISK_ERR_CTO    0xD1
 #define DISK_ERR_RD1    0xD2//cmd tout
