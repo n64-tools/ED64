@@ -1,7 +1,7 @@
-//
-// Copyright (c) Krikzz and Contributors.
-// See LICENSE file in the project root for full license information.
-//
+/*
+* Copyright (c) Krikzz and Contributors.
+* See LICENSE file in the project root for full license information.
+*/
 
 #ifndef __ED64_SCREEN_H
 #define	__ED64_SCREEN_H

@@ -1,7 +1,7 @@
-//
-// Copyright (c) Krikzz and Contributors.
-// See LICENSE file in the project root for full license information.
-//
+/*
+* Copyright (c) Krikzz and Contributors.
+* See LICENSE file in the project root for full license information.
+*/
 
 #include "ed64.h"
 

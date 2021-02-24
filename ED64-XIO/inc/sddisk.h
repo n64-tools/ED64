@@ -1,10 +1,10 @@
-//
-// Copyright (c) Krikzz and Contributors.
-// See LICENSE file in the project root for full license information.
-//
+/*
+* Copyright (c) Krikzz and Contributors.
+* See LICENSE file in the project root for full license information.
+*/
 
-#ifndef __ED64_DISK_H
-#define	__ED64_DISK_H
+#ifndef __ED64_SDDISK_H
+#define	__ED64_SDDISK_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,4 +32,4 @@ u8 sd_disk_stop();
 }
 #endif
 
-#endif	/* DISK_H */
+#endif	/* SDDISK_H */
