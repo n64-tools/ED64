@@ -312,7 +312,7 @@ u8 sd_disk_close_rw() {
 // write operations
 //******************************************************************************
 
-u8 diskOpenWrite(u32 saddr) {
+u8 sd_disk_open_write(u32 saddr) {
 
     u8 resp;
     if (disk_mode == DISK_MODE_WR && saddr == disk_cur_addr)return 0;
@@ -332,7 +332,7 @@ u8 sd_disk_write(void *src, u32 saddr, u32 slen) {
 
     u8 resp;
 
-    resp = diskOpenWrite(saddr);
+    resp = sd_disk_open_write(saddr);
     if (resp)return DISK_ERR_WR1;
     disk_cur_addr += slen;
 

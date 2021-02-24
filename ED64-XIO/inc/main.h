@@ -16,11 +16,11 @@ extern "C" {
 #include "ff.h"
 
 void perform_simulated_rom_boot(u8 cic);
-u8 fileManager();
-void usbTerminal();
-void usbLoadRom();
-u8 fileRead();
-u8 fileWrite();
+u8 file_menu_display();
+void usb_terminal_display();
+void usb_terminal_load_rom();
+u8 file_display_read();
+u8 file_display_write();
 
 #ifdef __cplusplus
 }

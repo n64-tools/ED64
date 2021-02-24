@@ -5,7 +5,7 @@
 
 #include "main.h"
 
-u8 fileRead() {
+u8 file_display_read() {
 
     u8 *path = "ED64/OS64.v64";
     struct controller_data cd;
@@ -54,7 +54,7 @@ u8 fileRead() {
     return 0;
 }
 
-u8 fileWrite() {
+u8 file_display_write() {
 
     u8 *path = "test.txt";
     u8 *msg = "This is test message";

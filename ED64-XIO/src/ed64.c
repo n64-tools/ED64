@@ -272,35 +272,35 @@ void ed64_sdio_bit_length(u8 val) {
     ed64_register_write(REG_SD_STATUS, ed64_sd_cfg);
 }
 
-void ed64_sd_busy() {
+void ed64_sdio_busy() {
     while ((ed64_register_read(REG_SD_STATUS) & SD_STA_BUSY) != 0);
 }
 
 void ed64_sdio_command_write(u8 val) {
     ed64_sdio_switch_mode(REG_SD_CMD_WR);
     ed64_register_write(REG_SD_CMD_WR, val);
-    ed64_sd_busy();
+    ed64_sdio_busy();
 }
 
 u8 ed64_sdio_command_read() {
 
     ed64_sdio_switch_mode(REG_SD_CMD_RD);
     ed64_register_write(REG_SD_CMD_RD, 0xffff);
-    ed64_sd_busy();
+    ed64_sdio_busy();
     return ed64_register_read(REG_SD_CMD_RD);
 }
 
 void ed64_sdio_data_write(u8 val) {
     ed64_sdio_switch_mode(REG_SD_DAT_WR);
     ed64_register_write(REG_SD_DAT_WR, 0x00ff | (val << 8));
-    //ed64_sd_busy();
+    //ed64_sdio_busy();
 }
 
 u8 ed64_sdio_data_read() {
 
     ed64_sdio_switch_mode(REG_SD_DAT_RD);
     ed64_register_write(REG_SD_DAT_RD, 0xffff);
-    //ed64_sd_busy();
+    //ed64_sdio_busy();
     return ed64_register_read(REG_SD_DAT_RD);
 }
 

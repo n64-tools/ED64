@@ -5,13 +5,13 @@
 
 #include "main.h"
 
-u8 fileManager_LoadDirectory(u8 *path, FILINFO *inf, u32 max_items);
-u8 fileManager_LoadGame(u8 *path);
+u8 file_menu_load_directory(u8 *path, FILINFO *inf, u32 max_items);
+u8 file_menu_load_rom(u8 *path);
 
 #define MAXIMUM_DIRECTORY_COUNT   20
 #define MAXIMUM_STRING_LENGTH     36
 
-u8 fileManager() {
+u8 file_menu_display() {
 
     FILINFO inf[MAXIMUM_DIRECTORY_COUNT];
     u32 selector = 0;
@@ -19,7 +19,7 @@ u8 fileManager() {
     u8 resp;
 
     //open root dir
-    resp = fileManager_LoadDirectory("", inf, MAXIMUM_DIRECTORY_COUNT);
+    resp = file_menu_load_directory("", inf, MAXIMUM_DIRECTORY_COUNT);
     if (resp)return resp;
 
 
@@ -62,7 +62,7 @@ u8 fileManager() {
                 screen_print("loading...");
                 screen_repaint();
 
-                resp = fileManager_LoadGame(inf[selector].fname);
+                resp = file_menu_load_rom(inf[selector].fname);
                 if (resp)return resp;
 
                 ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); //set save type
@@ -74,7 +74,7 @@ u8 fileManager() {
     return 0;
 }
 
-u8 fileManager_LoadDirectory(u8 *path, FILINFO *inf, u32 max_items) {
+u8 file_menu_load_directory(u8 *path, FILINFO *inf, u32 max_items) {
 
     u8 resp;
     DIR dir;
@@ -96,7 +96,7 @@ u8 fileManager_LoadDirectory(u8 *path, FILINFO *inf, u32 max_items) {
     return 0;
 }
 
-u8 fileManager_LoadGame(u8 *path) {
+u8 file_menu_load_rom(u8 *path) {
 
     FIL f;
     u8 resp;

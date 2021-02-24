@@ -5,9 +5,9 @@
 
 #include "main.h"
 
-void mainGetEdid();
-void mainPrintError(u8 err);
-u8 demoMenu();
+void main_get_ed64_hardware_id();
+void main_display_error_text(u8 err);
+u8 main_display_menu();
 
 int main(void) {
 
@@ -24,17 +24,17 @@ int main(void) {
     //mount disk
     memset(&fs, 0, sizeof (fs));
     resp = f_mount(&fs, "", 1);
-    if (resp)mainPrintError(resp);
+    if (resp)main_display_error_text(resp);
 
 
     for ( ;; ) { //forever
-        resp = demoMenu();
-        if (resp)mainPrintError(resp);
+        resp = main_display_menu();
+        if (resp)main_display_error_text(resp);
     }
 
 }
 
-u8 demoMenu() {
+u8 main_display_menu() {
 
     enum {
         MENU_FILE_MANAGER,
@@ -88,20 +88,20 @@ u8 demoMenu() {
 
         //browse files in root dir and launch the rom
         if (selector == MENU_FILE_MANAGER) {
-            resp = fileManager();
+            resp = file_menu_display();
             if (resp)return resp;
         }
 
 
         //read data from file
         if (selector == MENU_FILE_READ) {
-            resp = fileRead();
+            resp = file_display_read();
             if (resp)return resp;
         }
 
         //write string to the test.txt file
         if (selector == MENU_FILE_WRITE) {
-            resp = fileWrite();
+            resp = file_display_write();
             if (resp)return resp;
         }
 
@@ -109,23 +109,23 @@ u8 demoMenu() {
         //Send some strings via virtual COM port and they will be printed on screen.
         //string length should be multiple of 4
         if (selector == MENU_USB_TERMINAL) {
-            usbTerminal();
+            usb_terminal_display();
         }
 
         //usb client demo compatible with usb64.exe
         if (selector == MENU_USB_LOADER) {
-            usbLoadRom();
+            usb_terminal_load_rom();
         }
 
         //everdrive hardware identification
         if (selector == MENU_EDID) {
-            mainGetEdid();
+            main_get_ed64_hardware_id();
         }
 
     }
 }
 
-void mainGetEdid() {
+void main_get_ed64_hardware_id() {
 
     struct controller_data cd;
     u32 id = ed64_get_cartridge_type_id();
@@ -171,7 +171,7 @@ void mainGetEdid() {
 
 }
 
-void mainPrintError(u8 err) {
+void main_display_error_text(u8 err) {
 
     screen_clear();
     screen_print("error: ");
