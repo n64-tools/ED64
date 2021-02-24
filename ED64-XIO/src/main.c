@@ -92,41 +92,41 @@ u8 main_display_menu() {
     if (!cd.c[0].A)
       continue;
 
-    // browse files in root dir and launch the rom
+    /* browse files in root dir and launch the rom */
     if (selector == MENU_FILE_MANAGER) {
       resp = file_menu_display();
       if (resp)
         return resp;
     }
 
-    // read data from file
+    /* read data from file */
     if (selector == MENU_FILE_READ) {
       resp = file_display_read();
       if (resp)
         return resp;
     }
 
-    // write string to the test.txt file
+    /* write string to the test.txt file */
     if (selector == MENU_FILE_WRITE) {
       resp = file_display_write();
       if (resp)
         return resp;
     }
 
-    // simple communication via USB. receive and transmit strings.
-    // Send some strings via virtual COM port and they will be printed on
-    // screen.
-    // string length should be multiple of 4
+    /* simple communication via USB. receive and transmit strings.
+    * Send some strings via virtual COM port and they will be printed on
+    * screen. */
+    /* string length should be multiple of 4 */
     if (selector == MENU_USB_TERMINAL) {
       usb_terminal_display();
     }
 
-    // usb client demo compatible with usb64.exe
+    /* usb client demo compatible with usb64.exe */
     if (selector == MENU_USB_LOADER) {
       usb_command_display_load_rom();
     }
 
-    // everdrive hardware identification
+    /* everdrive type identification */
     if (selector == MENU_EDID) {
       main_display_ed64_cartridge_type();
     }
@@ -196,7 +196,7 @@ void perform_simulated_rom_boot(u8 cic) {
   rom_cic = cic;
   cheats_on = 0;
 
-  // Start Rom via CIC boot code
+  /* Start Rom via CIC boot code */
   asm __volatile__(
       ".set noreorder;"
 

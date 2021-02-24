@@ -95,22 +95,22 @@ u16 ed64_sd_cfg;
 
 void ed64_initialize() {
 
-  // setup n64 bus timings for better performance
+  /* setup n64 bus timings for better performance */
   IO_WRITE(PI_BSD_DOM1_LAT_REG, 0x04);
   IO_WRITE(PI_BSD_DOM1_PWD_REG, 0x0C);
 
-  // unlock regs
+  /* unlock regs */
   ed64_register_write(REG_KEY, 0xAA55);
 
   ed64_register_write(REG_SYS_CFG, 0);
 
-  // flush usb
+  /* flush usb */
   ed64_usb_initialize();
 
   ed64_sd_cfg = 0;
   ed64_register_write(REG_SD_STATUS, ed64_sd_cfg);
 
-  // turn off backup ram
+  /* turn off backup ram */
   ed64_set_rom_save_type(ED64_SAVE_TYPE_OFF);
 }
 
@@ -130,9 +130,10 @@ void ed64_usb_initialize() {
 
   u8 buff[512];
   u8 resp;
-  ed64_register_write(REG_USB_CFG, USB_CMD_RD_NOP); // turn off usb r/w activity
+  ed64_register_write(REG_USB_CFG,
+                      USB_CMD_RD_NOP); /* turn off usb r/w activity */
 
-  // flush fifo buffer
+  /* flush fifo buffer */
   while (ed64_usb_can_read()) {
     resp = ed64_usb_read(buff, 512);
     if (resp)
@@ -178,25 +179,24 @@ u8 ed64_usb_read(void *dst, u32 len) {
 
   while (len) {
 
-    blen = 512; // rx block len
+    blen = 512; // rx block len */
     if (blen > len)
       blen = len;
-    baddr = 512 - blen; // address in fpga internal buffer. requested data
-                        // length equal to 512-int buffer addr
+    baddr = 512 - blen; /* address in fpga internal buffer. requested data
+                         length equal to 512-int buffer addr */
 
-    ed64_register_write(REG_USB_CFG, USB_CMD_RD | baddr); // usb read request.
-                                                          // fpga will receive
-                                                          // usb bytes until the
-                                                          // buffer address
-                                                          // reaches 512
+    ed64_register_write(REG_USB_CFG,
+                        USB_CMD_RD | baddr); /* usb read request. fpga will
+                                                receive usb bytes until the
+                                                buffer address reaches 512 */
 
-    resp = ed64_usb_busy(); // wait until requested data amount will be
-                            // transferred to the internal buffer
+    resp = ed64_usb_busy(); /* wait until requested data amount will be
+                               transferred to the internal buffer */
     if (resp)
-      break; // timeout
+      break; /* timeout */
 
     system_pi_read(dst, REG_ADDR(REG_USB_DAT + baddr),
-                   blen); // get data from internal buffer
+                   blen); /* get data from internal buffer */
 
     dst += blen;
     len -= blen;
@@ -214,22 +214,24 @@ u8 ed64_usb_write(void *src, u32 len) {
 
   while (len) {
 
-    blen = 512; // tx block len
+    blen = 512; /* tx block len */
     if (blen > len)
       blen = len;
-    baddr = 512 - blen; // address in fpga internal buffer. data length equal to
-                        // 512-int buffer addr
+    baddr =
+        512 - blen; /* address in fpga internal buffer. data length equal to
+                       512-int buffer addr */
 
     system_pi_write(src, REG_ADDR(REG_USB_DAT + baddr),
-                    blen); // copy data to the internal buffer
+                    blen); /* copy data to the internal buffer */
     src += 512;
 
-    ed64_register_write(REG_USB_CFG, USB_CMD_WR | baddr); // usb write request
+    ed64_register_write(REG_USB_CFG,
+                        USB_CMD_WR | baddr); /* usb write request */
 
-    resp =
-        ed64_usb_busy(); // wait until the requested data amount is transferred
+    resp = ed64_usb_busy(); /* wait until the requested data amount is
+                               transferred */
     if (resp)
-      break; // timeout
+      break; /* timeout */
 
     len -= blen;
   }
@@ -268,7 +270,7 @@ void ed64_sdio_speed(u8 speed) {
   ed64_register_write(REG_SD_STATUS, ed64_sd_cfg);
 }
 u16 ed64_old_sd_mode;
-// this function gives time for setting stable values on open bus
+/* this function gives time for setting stable values on open bus */
 
 void ed64_sdio_switch_mode(u16 mode) {
 
@@ -411,7 +413,7 @@ u8 ed64_ram_to_sdio(void *src, u16 slen) {
     resp &= 7;
     if (resp != 0x02) {
       if (resp == 5)
-        return 2; // crc error
+        return 2; /* crc error */
       return 3;
     }
 
@@ -558,7 +560,7 @@ void ed64_sdio_crc16(void *src, u16 *crc_out) {
 
 void ed64_set_rom_save_type(u8 type) { ed64_register_write(REG_GAM_CFG, type); }
 
-// swaps bytes copied from SD card. only affects reads to ROM area
+/* swaps bytes copied from SD card. only affects reads to ROM area */
 void ed64_rom_write_bytes_swapped(u8 swap_on) {
 
   if (swap_on) {
