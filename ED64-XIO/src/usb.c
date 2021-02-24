@@ -15,16 +15,16 @@ void usbTerminal() {
     u8 tout;
     struct controller_data cd;
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint("USB COM terminal demo");
-    graphicsOutputPrint("Press B to exit");
-    graphicsOutputRepaint();
+    screenClear();
+    screenPrint("USB COM terminal demo");
+    screenPrint("Press B to exit");
+    screenRepaint();
 
     data[4] = 1;
 
     for ( ;; ) { //forever
 
-        graphicsOutputVsync();
+        screenVsync();
         controller_scan();
         cd = get_keys_down();
         if (cd.c[0].B)return;
@@ -39,8 +39,8 @@ void usbTerminal() {
         //send echo string back to the serial port
         ed64UsbWrite(data, 4);
 
-        graphicsOutputPrint(data);
-        graphicsOutputRepaint();
+        screenPrint(data);
+        screenRepaint();
     }
 }
 
@@ -50,14 +50,14 @@ void usbLoadRom() {
     u8 cmd[16];
     struct controller_data cd;
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint("Waiting for ROM data...");
-    graphicsOutputPrint("Press B to exit");
-    graphicsOutputRepaint();
+    screenClear();
+    screenPrint("Waiting for ROM data...");
+    screenPrint("Press B to exit");
+    screenRepaint();
 
     for ( ;; ) { //forever
 
-        graphicsOutputVsync();
+        screenVsync();
         controller_scan();
         cd = get_keys_down();
         if (cd.c[0].B)return;

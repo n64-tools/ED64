@@ -10,35 +10,35 @@ u8 fileRead() {
     UINT br;
     u8 resp;
 
-    graphicsOutputCleanScreen();
-    graphicsOutputRepaint();
+    screenClear();
+    screenRepaint();
 
 
     resp = f_open(&f, path, FA_READ);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     resp = f_read(&f, buff, sizeof (buff), &br);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     resp = f_close(&f);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint("Data read from: ");
-    graphicsOutputAppendString(path);
-    graphicsOutputPrint("Press B to exit");
+    screenClear();
+    screenPrint("Data read from: ");
+    screenAppendString(path);
+    screenPrint("Press B to exit");
 
-    graphicsOutputPrint("");
+    screenPrint("");
     for (int i = 0; i < sizeof (buff); i++) {
-        if (i % 16 == 0)graphicsOutputPrint("");
-        graphicsOutputAppendHex8(buff[i]);
+        if (i % 16 == 0)screenPrint("");
+        screenAppendHex8(buff[i]);
     }
 
 
-    graphicsOutputRepaint();
+    screenRepaint();
     for ( ;; ) { //forever
-        graphicsOutputVsync();
+        screenVsync();
         controller_scan();
         cd = get_keys_down();
 
@@ -60,31 +60,31 @@ u8 fileWrite() {
     u8 resp;
     u32 str_len;
 
-    graphicsOutputCleanScreen();
-    graphicsOutputRepaint();
+    screenClear();
+    screenRepaint();
 
     for (str_len = 0; msg[str_len] != 0; str_len++);
 
     resp = f_open(&f, path, FA_WRITE | FA_CREATE_ALWAYS);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     resp = f_write(&f, msg, str_len, &bw);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     resp = f_close(&f);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint(msg);
-    graphicsOutputPrint("");
-    graphicsOutputPrint("String above was written to: ");
-    graphicsOutputPrint(path);
-    graphicsOutputPrint("Press B to exit");
+    screenClear();
+    screenPrint(msg);
+    screenPrint("");
+    screenPrint("String above was written to: ");
+    screenPrint(path);
+    screenPrint("Press B to exit");
 
-    graphicsOutputRepaint();
+    screenRepaint();
     for ( ;; ) { //forever
-        graphicsOutputVsync();
+        screenVsync();
         controller_scan();
         cd = get_keys_down();
 

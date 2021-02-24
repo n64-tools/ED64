@@ -94,8 +94,8 @@ typedef struct {
     u16 *bgr_ptr;
 } Screen;
 
-#define G_SCREEN_W      40 //screen.w
-#define G_SCREEN_H      30 //screen.h
+#define SCREEN_SIZE_HORIZONTAL      40 //screen.w
+#define SCREEN_SIZE_VERTICAL      30 //screen.h
 
 
 void screenInitialize();
@@ -104,11 +104,11 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
 
 
 
-#define G_SCREEN_W      40 //screen.w
-#define G_SCREEN_H      30 //screen.h
-#define G_BORDER_X      2
-#define G_BORDER_Y      2
-// #define G_MAX_STRING_LENGTH   (G_SCREEN_W - G_BORDER_X*2)
+#define SCREEN_SIZE_HORIZONTAL      40 //screen.w
+#define SCREEN_SIZE_VERTICAL      30 //screen.h
+#define SCREEN_BORDER_X      2
+#define SCREEN_BORDER_Y      2
+// #define G_MAX_STRING_LENGTH   (SCREEN_SIZE_HORIZONTAL - SCREEN_BORDER_X*2)
 
 #define PAL_B1          0x1000
 // #define PAL_B2          0x2000
@@ -122,18 +122,18 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
 // #define PAL_WG          0x1700
 // #define PAL_RB          0x0500
 
-void graphicsOutputCleanScreen();
-void graphicsOutputPrint(u8 *str);
-void gSetXY(u8 x, u8 y);
-void gSetPal(u16 pal);
-void graphicsOutputAppendString(u8 *str);
-void graphicsOutputAppendChar(u8 chr);
-void graphicsOutputAppendHex8(u8 val);
-void graphicsOutputAppendHex16(u16 val);
-void graphicsOutputAppendHex32(u32 val);
-void graphicsOutputAppendHex32(u32 val);
-void graphicsOutputRepaint();
-void graphicsOutputVsync();
+void screenClear();
+void screenPrint(u8 *str);
+void screenSetXY(u8 x, u8 y);
+void screenSetPal(u16 pal);
+void screenAppendString(u8 *str);
+void screenAppendChar(u8 chr);
+void screenAppendHex8(u8 val);
+void screenAppendHex16(u16 val);
+void screenAppendHex32(u32 val);
+void screenAppendHex32(u32 val);
+void screenRepaint();
+void screenVsync();
 
 #ifdef __cplusplus
 }

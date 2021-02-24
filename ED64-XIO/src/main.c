@@ -17,9 +17,9 @@ int main(void) {
     screenInitialize();
     ed64Initialize();
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint("FAT init...");
-    graphicsOutputRepaint();
+    screenClear();
+    screenPrint("FAT init...");
+    screenRepaint();
 
     //mount disk
     memset(&fs, 0, sizeof (fs));
@@ -60,19 +60,19 @@ u8 demoMenu() {
 
     for ( ;; ) { //forever
 
-        graphicsOutputCleanScreen();
+        screenClear();
 
         for (int i = 0; i < MENU_SIZE; i++) {
-            graphicsOutputPrint("          ");
+            screenPrint("          ");
             if (i == selector) {
-                graphicsOutputAppendString(">");
+                screenAppendString(">");
             } else {
-                graphicsOutputAppendString(" ");
+                screenAppendString(" ");
             }
-            graphicsOutputAppendString(menu[i]);
+            screenAppendString(menu[i]);
         }
 
-        graphicsOutputRepaint();
+        screenRepaint();
         controller_scan();
         cd = get_keys_down();
 
@@ -130,36 +130,36 @@ void mainGetEdid() {
     struct controller_data cd;
     u32 id = ed64GetCartridgeTypeId();
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint("Device ID     ");
-    graphicsOutputAppendHex32(id);
-    graphicsOutputPrint("");
-    graphicsOutputPrint("Device Name   ");
+    screenClear();
+    screenPrint("Device ID     ");
+    screenAppendHex32(id);
+    screenPrint("");
+    screenPrint("Device Name   ");
 
     switch (id) {
         case ED64_CART_ID_V2:
-            graphicsOutputAppendString("EverDrive 64 V2.5");
+            screenAppendString("EverDrive 64 V2.5");
             break;
         case ED64_CART_ID_V3:
-            graphicsOutputAppendString("EverDrive 64 V3");
+            screenAppendString("EverDrive 64 V3");
             break;
         case ED64_CART_ID_X7:
-            graphicsOutputAppendString("EverDrive 64 X7");
+            screenAppendString("EverDrive 64 X7");
             break;
         case ED64_CART_ID_X5:
-            graphicsOutputAppendString("EverDrive 64 X5");
+            screenAppendString("EverDrive 64 X5");
             break;
         default:
-            graphicsOutputAppendString("Unknown");
+            screenAppendString("Unknown");
             break;
     }
 
 
-    graphicsOutputPrint("");
-    graphicsOutputPrint("Press B to exit");
-    graphicsOutputRepaint();
+    screenPrint("");
+    screenPrint("Press B to exit");
+    screenRepaint();
     for ( ;; ) { //forever
-        graphicsOutputVsync();
+        screenVsync();
         controller_scan();
         cd = get_keys_down();
 
@@ -173,10 +173,10 @@ void mainGetEdid() {
 
 void mainPrintError(u8 err) {
 
-    graphicsOutputCleanScreen();
-    graphicsOutputPrint("error: ");
-    graphicsOutputAppendHex8(err);
-    graphicsOutputRepaint();
+    screenClear();
+    screenPrint("error: ");
+    screenAppendHex8(err);
+    screenRepaint();
 
     for ( ;; ) ; //forever
 }

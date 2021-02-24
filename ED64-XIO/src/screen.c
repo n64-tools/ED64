@@ -63,7 +63,7 @@ const u32 pal_320[] = {
 #define SYS_MAX_PIXEL_W   320
 #define SYS_MAX_PIXEL_H   240
 
-void sysDisplayInit();
+void screenRegionInitilize();
 void sysPI_rd_safe(void *ram, unsigned long pi_address, unsigned long len);
 void sysPI_wr_safe(void *ram, unsigned long pi_address, unsigned long len);
 
@@ -119,11 +119,11 @@ void screenInitialize() {
     screen.current = screen.buff[screen.buff_sw];
     screen.bgr_ptr = 0;
 
-    sysDisplayInit();
+    screenRegionInitilize();
 
 }
 
-void sysDisplayInit() {
+void screenRegionInitilize() {
 
     u32 i;
     u32 *v_setup;
@@ -194,14 +194,14 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len) {
 }
 
 //****************************************************************************** gfx
-u16 *g_disp_ptr;
-u16 g_cur_pal;
-u16 g_cons_ptr;
-u8 g_last_x;
-u8 g_last_y;
-u16 gfx_buff[G_SCREEN_W * G_SCREEN_H];
+u16 *screen_display_ptr;
+u16 screen_current_pal;
+u16 screen_cons_ptr;
+u8 screen_last_x_position;
+u8 screen_last_y_position;
+u16 screen_graphics_buffer[SCREEN_SIZE_HORIZONTAL * SCREEN_SIZE_VERTICAL];
 
-void gDrawChar8X8(u32 val, u32 x, u32 y) {
+void screenDrawChar8X8(u32 val, u32 x, u32 y) {
 
     u64 tmp;
     u32 font_val;
@@ -236,9 +236,9 @@ void gDrawChar8X8(u32 val, u32 x, u32 y) {
     }
 }
 
-void graphicsOutputRepaint() {
+void screenRepaint() {
 
-    u16 *chr_ptr = gfx_buff;
+    u16 *chr_ptr = screen_graphics_buffer;
 
     screen.buff_sw = (screen.buff_sw ^ 1) & 1;
     screen.current = screen.buff[screen.buff_sw];
@@ -247,83 +247,83 @@ void graphicsOutputRepaint() {
     for (u32 y = 0; y < screen.h; y++) {
         for (u32 x = 0; x < screen.w; x++) {
 
-            gDrawChar8X8(*chr_ptr++, x, y);
+            screenDrawChar8X8(*chr_ptr++, x, y);
         }
     }
 
     data_cache_hit_writeback(screen.current, screen.buff_len * 2);
-    graphicsOutputVsync();
+    screenVsync();
     vregs[1] = (vu32) screen.current;
 
 }
 
-void graphicsOutputVsync() {
+void screenVsync() {
 
     while (vregs[4] == 0x200);
     while (vregs[4] != 0x200);
 }
 
 
-void graphicsOutputAppendHex4(u8 val);
+void screenAppendHex4(u8 val);
 
-void graphicsOutputCleanScreen() {
+void screenClear() {
 
-    g_cur_pal = 0;
-    gSetXY(G_BORDER_X, G_BORDER_Y);
-    for (int i = 0; i < G_SCREEN_W * G_SCREEN_H; i++)gfx_buff[i] = PAL_B3;
-    gSetPal(PAL_B1);
+    screen_current_pal = 0;
+    screenSetXY(SCREEN_BORDER_X, SCREEN_BORDER_Y);
+    for (int i = 0; i < SCREEN_SIZE_HORIZONTAL * SCREEN_SIZE_VERTICAL; i++)screen_graphics_buffer[i] = PAL_B3;
+    screenSetPal(PAL_B1);
 }
 
-void gSetPal(u16 pal) {
-    g_cur_pal = pal;
+void screenSetPal(u16 pal) {
+    screen_current_pal = pal;
 }
 
-void graphicsOutputAppendString(u8 *str) {
-    while (*str != 0)*g_disp_ptr++ = *str++ + g_cur_pal;
+void screenAppendString(u8 *str) {
+    while (*str != 0)*screen_display_ptr++ = *str++ + screen_current_pal;
 }
 
-void graphicsOutputAppendChar(u8 chr) {
+void screenAppendChar(u8 chr) {
 
-    *g_disp_ptr++ = chr + g_cur_pal;
+    *screen_display_ptr++ = chr + screen_current_pal;
 }
 
-void graphicsOutputAppendHex4(u8 val) {
+void screenAppendHex4(u8 val) {
 
     val += (val < 10 ? '0' : '7');
-    *g_disp_ptr++ = val + g_cur_pal;
+    *screen_display_ptr++ = val + screen_current_pal;
 }
 
-void graphicsOutputAppendHex8(u8 val) {
+void screenAppendHex8(u8 val) {
 
-    graphicsOutputAppendHex4(val >> 4);
-    graphicsOutputAppendHex4(val & 15);
+    screenAppendHex4(val >> 4);
+    screenAppendHex4(val & 15);
 }
 
-void graphicsOutputAppendHex16(u16 val) {
+void screenAppendHex16(u16 val) {
 
-    graphicsOutputAppendHex8(val >> 8);
-    graphicsOutputAppendHex8(val);
+    screenAppendHex8(val >> 8);
+    screenAppendHex8(val);
 }
 
-void graphicsOutputAppendHex32(u32 val) {
+void screenAppendHex32(u32 val) {
 
-    graphicsOutputAppendHex16(val >> 16);
-    graphicsOutputAppendHex16(val);
+    screenAppendHex16(val >> 16);
+    screenAppendHex16(val);
 
 }
 
-void gSetXY(u8 x, u8 y) {
+void screenSetXY(u8 x, u8 y) {
 
-    g_cons_ptr = x + y * G_SCREEN_W;
-    g_disp_ptr = &gfx_buff[g_cons_ptr];
-    g_last_x = x;
-    g_last_y = y;
+    screen_cons_ptr = x + y * SCREEN_SIZE_HORIZONTAL;
+    screen_display_ptr = &screen_graphics_buffer[screen_cons_ptr];
+    screen_last_x_position = x;
+    screen_last_y_position = y;
 }
 
-void graphicsOutputPrint(u8 *str) {
+void screenPrint(u8 *str) {
 
-    g_disp_ptr = &gfx_buff[g_cons_ptr];
-    g_cons_ptr += G_SCREEN_W;
-    g_last_y++;
-    graphicsOutputAppendString(str);
+    screen_display_ptr = &screen_graphics_buffer[screen_cons_ptr];
+    screen_cons_ptr += SCREEN_SIZE_HORIZONTAL;
+    screen_last_y_position++;
+    screenAppendString(str);
 }
