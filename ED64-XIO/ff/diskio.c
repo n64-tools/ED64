@@ -40,7 +40,7 @@ DSTATUS disk_initialize(
         BYTE pdrv /* Physical drive nmuber to identify the drive */
         ) {
 
-    dresp = diskInit();
+    dresp = sd_disk_initialize();
     dstat = 0;
     if (dresp)dstat = STA_NOINIT;
 

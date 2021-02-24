@@ -56,7 +56,7 @@ extern "C" {
 
 
 
-void ed64Initialize();
+void ed64_initialize();
 
 // USB functions
 u8 ed64_usb_can_read();
@@ -71,7 +71,7 @@ void ed64_sdio_speed(u8 speed);
 void ed64_sdio_bit_length(u8 val);
 u8 ed64_sdio_command_read();
 void ed64_sdio_command_write(u8 val);
-u8 ed64SdioDataRead();
+u8 ed64_sdio_data_read();
 void ed64_sdio_data_write(u8 val);
 u8 ed64_sdio_to_ram(void *dst, u16 slen);
 u8 ed64_sdio_to_rom(u32 dst, u16 slen);

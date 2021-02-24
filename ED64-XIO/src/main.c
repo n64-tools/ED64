@@ -15,7 +15,7 @@ int main(void) {
     FATFS fs;
 
     system_initialize();
-    ed64Initialize();
+    ed64_initialize();
 
     screen_clear();
     screen_print("FAT init...");

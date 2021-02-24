@@ -63,7 +63,7 @@ const u32 pal_320[] = {
 #define SYSTEM_MAXIMUM_SCREEN_HORIZONTAL   320
 #define SYSTEM_MAXIMUM_SCREEN_VERTICAL   240
 
-void systemRegionInitilize();
+void system_region_initilize();
 //void system_pi_read_safe(void *ram, unsigned long pi_address, unsigned long len);
 //void system_pi_write_safe(void *ram, unsigned long pi_address, unsigned long len);
 
@@ -119,11 +119,11 @@ void system_initialize() {
     screen.current = screen.buff[screen.buff_sw];
     screen.bgr_ptr = 0;
 
-    systemRegionInitilize();
+    system_region_initilize();
 
 }
 
-void systemRegionInitilize() {
+void system_region_initilize() {
 
     u32 i;
     u32 *v_setup;
@@ -201,7 +201,7 @@ u8 screen_last_x_position;
 u8 screen_last_y_position;
 u16 screen_graphics_buffer[SCREEN_SIZE_HORIZONTAL * SCREEN_SIZE_VERTICAL];
 
-void screenDrawChar8X8(u32 val, u32 x, u32 y) {
+void screen_draw_chararacter_8x8(u32 val, u32 x, u32 y) {
 
     u64 tmp;
     u32 font_val;
@@ -247,7 +247,7 @@ void screen_repaint() {
     for (u32 y = 0; y < screen.h; y++) {
         for (u32 x = 0; x < screen.w; x++) {
 
-            screenDrawChar8X8(*chr_ptr++, x, y);
+            screen_draw_chararacter_8x8(*chr_ptr++, x, y);
         }
     }
 
