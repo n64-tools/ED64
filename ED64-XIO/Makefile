@@ -8,7 +8,7 @@ N64TOOL = $(ROOTDIR)/bin/n64tool
 
 SRCDIR_FF := ff
 SRCDIR := src
-SRCDIR_EDLIB : $(SRCDIR)/edlib
+SRCDIR_EDLIB := $(SRCDIR)/edlib
 LIBDIR := lib
 INCDIR := inc
 RESDIR := res
