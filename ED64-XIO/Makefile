@@ -6,9 +6,8 @@ CHKSUM64PATH = $(ROOTDIR)/bin/chksum64
 MKDFSPATH = $(ROOTDIR)/bin/mkdfs
 N64TOOL = $(ROOTDIR)/bin/n64tool
 
-SRCDIR := src
-SRCSYSDIR := src/sys
 FFDIR := ff
+SRCDIR := src
 INCDIR := inc
 RESDIR := res
 OBJDIR = obj
@@ -33,12 +32,10 @@ ASFLAGS = -mtune=vr4300 -march=vr4300
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
 SOURCES_S := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
-SOURCES := $(wildcard $(SRCSYSDIR)/*.c)
 
 OBJECTS_FF := $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 OBJECTS_S := $(SOURCES_S:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-OBJECTS := $(SOURCES:$(SRCSYSDIR)/%.c=$(OBJDIR)/%.o)
 
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
