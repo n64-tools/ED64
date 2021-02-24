@@ -14,7 +14,7 @@ int main(void) {
     u8 resp;
     FATFS fs;
 
-    screenInitialize();
+    systemInitialize();
     ed64Initialize();
 
     screenClear();
@@ -88,7 +88,7 @@ u8 demoMenu() {
 
         //browse files in root dir and launch the rom
         if (selector == MENU_FILE_MANAGER) {
-            resp = fmanager();
+            resp = fileManager();
             if (resp)return resp;
         }
 

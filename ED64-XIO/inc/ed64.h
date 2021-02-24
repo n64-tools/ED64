@@ -45,14 +45,14 @@ extern "C" {
 #define ED64_CART_ID_X5      0xED640014
 
 //rom save config register flags
-#define SAVE_TYPE_OFF        0x0000
-// #define SAVE_TYPE_EEP4K      0x0001
-#define SAVE_TYPE_EEP16K     0x0002
-// #define SAVE_TYPE_SRM32K     0x0003
-// #define SAVE_TYPE_SRM96K     0x0004
-// #define SAVE_TYPE_FLASH      0x0005
-// #define SAVE_TYPE_SRM128K    0x0006
-// #define SAVE_TYPE_DD64       0x0010
+#define ED64_SAVE_TYPE_OFF        0x0000
+// #define ED64_SAVE_TYPE_EEP4K      0x0001
+#define ED64_SAVE_TYPE_EEP16K     0x0002
+// #define ED64_SAVE_TYPE_SRM32K     0x0003
+// #define ED64_SAVE_TYPE_SRM96K     0x0004
+// #define ED64_SAVE_TYPE_FLASH      0x0005
+// #define ED64_SAVE_TYPE_SRM128K    0x0006
+// #define ED64_SAVE_TYPE_DD64       0x0010
 
 
 
@@ -67,15 +67,15 @@ void ed64UsbReadStart();
 u8 ed64UsbReadEnd(void *dst);
 
 // SD card functions
-void ed64SdCardSpeed(u8 speed);
-void ed64_sd_bitlen(u8 val);
-u8 ed64_sd_cmd_rd();
-void ed64_sd_cmd_wr(u8 val);
-u8 ed64_sd_dat_rd();
-void ed64_sd_dat_wr(u8 val);
-u8 ed64_sd_to_ram(void *dst, u16 slen);
-u8 ed64_sd_to_rom(u32 dst, u16 slen);
-u8 ed64_ram_to_sd(void *src, u16 slen);
+void ed64SdioSpeed(u8 speed);
+void ed64SdioBitLength(u8 val);
+u8 ed64SdioCommandRead();
+void ed64SdioCommandWrite(u8 val);
+u8 ed64SdioDataRead();
+void ed64SdioDataWrite(u8 val);
+u8 ed64SdioToRam(void *dst, u16 slen);
+u8 ed64SdioToRom(u32 dst, u16 slen);
+u8 ed64RamToSdCard(void *src, u16 slen);
 
 // Menu functions
 void ed64SetRomSaveType(u8 type); //set save type

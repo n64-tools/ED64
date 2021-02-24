@@ -112,18 +112,18 @@ void ed64Initialize() {
     ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
 
     //turn off backup ram
-    ed64SetRomSaveType(SAVE_TYPE_OFF);
+    ed64SetRomSaveType(ED64_SAVE_TYPE_OFF);
 }
 
 void ed64_reg_wr(u16 reg, u32 val) {
 
-    sysPI_wr(&val, REG_ADDR(reg), 4);
+    systemPiWrite(&val, REG_ADDR(reg), 4);
 }
 
 u32 ed64_reg_rd(u16 reg) {
 
     u32 val;
-    sysPI_rd(&val, REG_ADDR(reg), 4);
+    systemPiRead(&val, REG_ADDR(reg), 4);
     return val;
 }
 
@@ -185,7 +185,7 @@ u8 ed64UsbRead(void *dst, u32 len) {
         resp = ed64_usb_busy(); //wait until requested data amount will be transferred to the internal buffer
         if (resp)break; //timeout
 
-        sysPI_rd(dst, REG_ADDR(REG_USB_DAT + baddr), blen); //get data from internal buffer
+        systemPiRead(dst, REG_ADDR(REG_USB_DAT + baddr), blen); //get data from internal buffer
 
         dst += blen;
         len -= blen;
@@ -207,7 +207,7 @@ u8 ed64UsbWrite(void *src, u32 len) {
         if (blen > len)blen = len;
         baddr = 512 - blen; //address in fpga internal buffer. data length equal to 512-int buffer addr
 
-        sysPI_wr(src, REG_ADDR(REG_USB_DAT + baddr), blen); //copy data to the internal buffer
+        systemPiWrite(src, REG_ADDR(REG_USB_DAT + baddr), blen); //copy data to the internal buffer
         src += 512;
 
         ed64_reg_wr(REG_USB_CFG, USB_CMD_WR | baddr); //usb write request
@@ -231,16 +231,16 @@ u8 ed64UsbReadEnd(void *dst) {
     u8 resp = ed64_usb_busy();
     if (resp)return resp;
 
-    sysPI_rd(dst, REG_ADDR(REG_USB_DAT), 512);
+    systemPiRead(dst, REG_ADDR(REG_USB_DAT), 512);
 
     return 0;
 }
-//****************************************************************************** sdio
-//******************************************************************************
+//****************************************************************************** 
+// sdio functions
 //******************************************************************************
 void sdCrc16(void *src, u16 *crc_out);
 
-void ed64SdCardSpeed(u8 speed) {
+void ed64SdioSpeed(u8 speed) {
 
     if (speed == ED64_SD_CONTROLLER_SPEED_SLOW) {
         ed64_sd_cfg &= ~SD_CFG_SPD;
@@ -259,13 +259,13 @@ void ed64_sd_switch_mode(u16 mode) {
     ed64_old_sd_mode = mode;
 
     u16 old_sd_cfg = ed64_sd_cfg;
-    ed64_sd_bitlen(0);
+    ed64SdioBitLength(0);
     ed64_reg_wr(mode, 0xffff);
     ed64_sd_cfg = old_sd_cfg;
     ed64_reg_wr(REG_SD_STATUS, old_sd_cfg);
 }
 
-void ed64_sd_bitlen(u8 val) {
+void ed64SdioBitLength(u8 val) {
 
     ed64_sd_cfg &= ~SD_CFG_BITLEN;
     ed64_sd_cfg |= (val & SD_CFG_BITLEN);
@@ -276,13 +276,13 @@ void ed64_sd_busy() {
     while ((ed64_reg_rd(REG_SD_STATUS) & SD_STA_BUSY) != 0);
 }
 
-void ed64_sd_cmd_wr(u8 val) {
+void ed64SdioCommandWrite(u8 val) {
     ed64_sd_switch_mode(REG_SD_CMD_WR);
     ed64_reg_wr(REG_SD_CMD_WR, val);
     ed64_sd_busy();
 }
 
-u8 ed64_sd_cmd_rd() {
+u8 ed64SdioCommandRead() {
 
     ed64_sd_switch_mode(REG_SD_CMD_RD);
     ed64_reg_wr(REG_SD_CMD_RD, 0xffff);
@@ -290,13 +290,13 @@ u8 ed64_sd_cmd_rd() {
     return ed64_reg_rd(REG_SD_CMD_RD);
 }
 
-void ed64_sd_dat_wr(u8 val) {
+void ed64SdioDataWrite(u8 val) {
     ed64_sd_switch_mode(REG_SD_DAT_WR);
     ed64_reg_wr(REG_SD_DAT_WR, 0x00ff | (val << 8));
     //ed64_sd_busy();
 }
 
-u8 ed64_sd_dat_rd() {
+u8 ed64SdioDataRead() {
 
     ed64_sd_switch_mode(REG_SD_DAT_RD);
     ed64_reg_wr(REG_SD_DAT_RD, 0xffff);
@@ -304,7 +304,7 @@ u8 ed64_sd_dat_rd() {
     return ed64_reg_rd(REG_SD_DAT_RD);
 }
 
-u8 ed64_sd_to_ram(void *dst, u16 slen) {
+u8 ed64SdioToRam(void *dst, u16 slen) {
 
     u16 i;
     u8 crc[8];
@@ -314,9 +314,9 @@ u8 ed64_sd_to_ram(void *dst, u16 slen) {
 
     while (slen--) {
 
-        ed64_sd_bitlen(1);
+        ed64SdioBitLength(1);
         i = 1;
-        while (ed64_sd_dat_rd() != 0xf0) {
+        while (ed64SdioDataRead() != 0xf0) {
             i++;
             if (i == 0) {
                 IO_WRITE(PI_BSD_DOM1_PWD_REG, old_pwd);
@@ -324,11 +324,11 @@ u8 ed64_sd_to_ram(void *dst, u16 slen) {
             }
         }
 
-        ed64_sd_bitlen(4);
+        ed64SdioBitLength(4);
 
         ed64_sd_switch_mode(REG_SD_DAT_RD);
-        sysPI_rd(dst, REG_ADDR(REG_SDIO_ARD), 512);
-        sysPI_rd(crc, REG_ADDR(REG_SDIO_ARD), 8);
+        systemPiRead(dst, REG_ADDR(REG_SDIO_ARD), 512);
+        systemPiRead(crc, REG_ADDR(REG_SDIO_ARD), 8);
         dst += 512;
 
     }
@@ -338,7 +338,7 @@ u8 ed64_sd_to_ram(void *dst, u16 slen) {
     return 0;
 }
 
-u8 ed64_sd_to_rom(u32 dst, u16 slen) {
+u8 ed64SdioToRom(u32 dst, u16 slen) {
 
     u16 resp = DMA_STA_BUSY;
 
@@ -355,7 +355,7 @@ u8 ed64_sd_to_rom(u32 dst, u16 slen) {
     return 0;
 }
 
-u8 ed64_ram_to_sd(void *src, u16 slen) {
+u8 ed64RamToSdCard(void *src, u16 slen) {
 
     u8 resp;
     u16 crc[4];
@@ -364,20 +364,20 @@ u8 ed64_ram_to_sd(void *src, u16 slen) {
 
         sdCrc16(src, crc);
 
-        ed64_sd_bitlen(2);
-        ed64_sd_dat_wr(0xff);
-        ed64_sd_dat_wr(0xf0);
+        ed64SdioBitLength(2);
+        ed64SdioDataWrite(0xff);
+        ed64SdioDataWrite(0xf0);
 
-        ed64_sd_bitlen(4);
-        sysPI_wr(src, REG_ADDR(REG_SDIO_ARD), 512);
-        sysPI_wr(crc, REG_ADDR(REG_SDIO_ARD), 8);
+        ed64SdioBitLength(4);
+        systemPiWrite(src, REG_ADDR(REG_SDIO_ARD), 512);
+        systemPiWrite(crc, REG_ADDR(REG_SDIO_ARD), 8);
         src += 512;
 
-        ed64_sd_bitlen(1);
-        ed64_sd_dat_wr(0xff);
+        ed64SdioBitLength(1);
+        ed64SdioDataWrite(0xff);
 
         for (int i = 0;; i++) {
-            resp = ed64_sd_dat_rd();
+            resp = ed64SdioDataRead();
             if ((resp & 1) == 0)break;
             if (i == 1024)return 1;
         }
@@ -385,7 +385,7 @@ u8 ed64_ram_to_sd(void *src, u16 slen) {
         resp = 0;
         for (int i = 0; i < 3; i++) {
             resp <<= 1;
-            resp |= ed64_sd_dat_rd() & 1;
+            resp |= ed64SdioDataRead() & 1;
         }
 
         resp &= 7;
@@ -396,7 +396,7 @@ u8 ed64_ram_to_sd(void *src, u16 slen) {
 
         for (int i = 0;; i++) {
 
-            if (ed64_sd_dat_rd() == 0xff)break;
+            if (ed64SdioDataRead() == 0xff)break;
             if (i == 65535)return 4;
         }
     }

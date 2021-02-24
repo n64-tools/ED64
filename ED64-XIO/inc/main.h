@@ -16,7 +16,7 @@ extern "C" {
 #include "ff.h"
 
 void mainSimulatedRomBoot(u8 cic);
-u8 fmanager();
+u8 fileManager();
 void usbTerminal();
 void usbLoadRom();
 u8 fileRead();

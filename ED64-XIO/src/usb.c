@@ -5,9 +5,9 @@
 
 #include "main.h"
 
-u8 usbResp(u8 resp);
+u8 usbResponse(u8 resp);
 void usbCmdCmemFill(u8 *cmd);
-u8 usbCmdRomWR(u8 *cmd);
+u8 usbCmdRomWrite(u8 *cmd);
 
 void usbTerminal() {
 
@@ -76,12 +76,12 @@ void usbLoadRom() {
 
         //host send this command during the everdrive seek
         if (usb_cmd == 't') {
-            usbResp(0);
+            usbResponse(0);
         }
 
         //start the ROM
         if (usb_cmd == 's') {
-            ed64SetRomSaveType(SAVE_TYPE_EEP16K); //set save type
+            ed64SetRomSaveType(ED64_SAVE_TYPE_EEP16K); //set save type
             mainSimulatedRomBoot(CIC_6102); //run the ROM
         }
 
@@ -92,14 +92,14 @@ void usbLoadRom() {
 
         //write to ROM memory
         if (usb_cmd == 'W') {
-            usbCmdRomWR(cmd);
+            usbCmdRomWrite(cmd);
         }
 
     }
 
 }
 
-u8 usbResp(u8 resp) {
+u8 usbResponse(u8 resp) {
 
     u8 buff[16];
     buff[0] = 'c';
@@ -123,12 +123,12 @@ void usbCmdCmemFill(u8 *cmd) {
     }
 
     while (slen--) {
-        sysPI_wr(buff, addr, 512);
+        systemPiWrite(buff, addr, 512);
         addr += 512;
     }
 }
 
-u8 usbCmdRomWR(u8 *cmd) {
+u8 usbCmdRomWrite(u8 *cmd) {
 
     u8 resp;
     u8 buff[512];
@@ -144,7 +144,7 @@ u8 usbCmdRomWR(u8 *cmd) {
         resp = ed64UsbReadEnd(buff); //wait for block receiving completion and read it to the buffer
         if (slen != 0)ed64UsbReadStart(); //begin next block receiving while previous block transfers to the ROM
         if (resp)return resp;
-        sysPI_wr(buff, addr, 512); //copy received block to the rom memory
+        systemPiWrite(buff, addr, 512); //copy received block to the rom memory
         addr += 512;
     }
 

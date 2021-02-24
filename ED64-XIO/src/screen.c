@@ -60,12 +60,12 @@ const u32 pal_320[] = {
 
 #define SI_STATUS_DMA_BUSY  ( 1 << 0 )
 #define SI_STATUS_IO_BUSY   ( 1 << 1 )
-#define SYS_MAX_PIXEL_W   320
-#define SYS_MAX_PIXEL_H   240
+#define SYSTEM_MAXIMUM_SCREEN_HORIZONTAL   320
+#define SYSTEM_MAXIMUM_SCREEN_VERTICAL   240
 
-void screenRegionInitilize();
-void sysPI_rd_safe(void *ram, unsigned long pi_address, unsigned long len);
-void sysPI_wr_safe(void *ram, unsigned long pi_address, unsigned long len);
+void systemRegionInitilize();
+//void systemPiRead_safe(void *ram, unsigned long pi_address, unsigned long len);
+//void systemPiWrite_safe(void *ram, unsigned long pi_address, unsigned long len);
 
 
 static volatile struct PI_regs_s * const PI_regs = (struct PI_regs_s *) 0xa4600000;
@@ -84,7 +84,7 @@ u16 pal[16] = {
     0x0000, 0x0000, 0x0000, 0x0aa0
 };
 
-void screenInitialize() {
+void systemInitialize() {
 
     disable_interrupts();
     set_AI_interrupt(0);
@@ -114,16 +114,16 @@ void screenInitialize() {
     rdp_init();
 
     screen.buff_sw = 0;
-    screen.buff[0] = (u16 *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
-    screen.buff[1] = (u16 *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
+    screen.buff[0] = (u16 *) malloc(SYSTEM_MAXIMUM_SCREEN_HORIZONTAL * SYSTEM_MAXIMUM_SCREEN_VERTICAL * 2);
+    screen.buff[1] = (u16 *) malloc(SYSTEM_MAXIMUM_SCREEN_HORIZONTAL * SYSTEM_MAXIMUM_SCREEN_VERTICAL * 2);
     screen.current = screen.buff[screen.buff_sw];
     screen.bgr_ptr = 0;
 
-    screenRegionInitilize();
+    systemRegionInitilize();
 
 }
 
-void screenRegionInitilize() {
+void systemRegionInitilize() {
 
     u32 i;
     u32 *v_setup;
@@ -158,7 +158,7 @@ void screenRegionInitilize() {
     enable_interrupts();
 }
 
-void sysPI_rd(void *ram, unsigned long pi_address, unsigned long len) {
+void systemPiRead(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
@@ -175,7 +175,7 @@ void sysPI_rd(void *ram, unsigned long pi_address, unsigned long len) {
     enable_interrupts();
 }
 
-void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len) {
+void systemPiWrite(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 

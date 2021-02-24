@@ -5,21 +5,21 @@
 
 #include "main.h"
 
-u8 fmLoadDir(u8 *path, FILINFO *inf, u32 max_items);
-u8 fmLoadGame(u8 *path);
+u8 fileManager_LoadDirectory(u8 *path, FILINFO *inf, u32 max_items);
+u8 fileManager_LoadGame(u8 *path);
 
-#define MAX_DIRECTORY_COUNT   20
-#define MAX_STRING_LENGTH     36
+#define MAXIMUM_DIRECTORY_COUNT   20
+#define MAXIMUM_STRING_LENGTH     36
 
-u8 fmanager() {
+u8 fileManager() {
 
-    FILINFO inf[MAX_DIRECTORY_COUNT];
+    FILINFO inf[MAXIMUM_DIRECTORY_COUNT];
     u32 selector = 0;
     struct controller_data cd;
     u8 resp;
 
     //open root dir
-    resp = fmLoadDir("", inf, MAX_DIRECTORY_COUNT);
+    resp = fileManager_LoadDirectory("", inf, MAXIMUM_DIRECTORY_COUNT);
     if (resp)return resp;
 
 
@@ -27,12 +27,12 @@ u8 fmanager() {
 
         //print items
         screenClear();
-        for (int i = 0; i < MAX_DIRECTORY_COUNT && inf[i].fname[0]; i++) {
+        for (int i = 0; i < MAXIMUM_DIRECTORY_COUNT && inf[i].fname[0]; i++) {
             screenPrint(selector == i ? ">" : " ");
-            u8 tmp = inf[i].fname[MAX_STRING_LENGTH];
-            inf[i].fname[MAX_STRING_LENGTH] = 0; //make sure that the printed string doesn't exceed max len
+            u8 tmp = inf[i].fname[MAXIMUM_STRING_LENGTH];
+            inf[i].fname[MAXIMUM_STRING_LENGTH] = 0; //make sure that the printed string doesn't exceed max len
             screenAppendString(inf[i].fname);
-            inf[i].fname[MAX_STRING_LENGTH] = tmp;
+            inf[i].fname[MAXIMUM_STRING_LENGTH] = tmp;
         }
 
         screenRepaint();
@@ -52,7 +52,7 @@ u8 fmanager() {
             }
 
             if (cd.c[0].down) {
-                if ((selector + 1) < MAX_DIRECTORY_COUNT && inf[selector + 1].fname[0])selector++;
+                if ((selector + 1) < MAXIMUM_DIRECTORY_COUNT && inf[selector + 1].fname[0])selector++;
                 break;
             }
 
@@ -62,10 +62,10 @@ u8 fmanager() {
                 screenPrint("loading...");
                 screenRepaint();
 
-                resp = fmLoadGame(inf[selector].fname);
+                resp = fileManager_LoadGame(inf[selector].fname);
                 if (resp)return resp;
 
-                ed64SetRomSaveType(SAVE_TYPE_EEP16K); //set save type
+                ed64SetRomSaveType(ED64_SAVE_TYPE_EEP16K); //set save type
                 mainSimulatedRomBoot(CIC_6102); //run the rom
             }
         }
@@ -74,7 +74,7 @@ u8 fmanager() {
     return 0;
 }
 
-u8 fmLoadDir(u8 *path, FILINFO *inf, u32 max_items) {
+u8 fileManager_LoadDirectory(u8 *path, FILINFO *inf, u32 max_items) {
 
     u8 resp;
     DIR dir;
@@ -96,7 +96,7 @@ u8 fmLoadDir(u8 *path, FILINFO *inf, u32 max_items) {
     return 0;
 }
 
-u8 fmLoadGame(u8 *path) {
+u8 fileManager_LoadGame(u8 *path) {
 
     FIL f;
     u8 resp;
