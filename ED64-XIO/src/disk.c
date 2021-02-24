@@ -328,7 +328,7 @@ u8 diskOpenWrite(u32 saddr) {
     return 0;
 }
 
-u8 disk_write(void *src, u32 saddr, u32 slen) {
+u8 sd_disk_write(void *src, u32 saddr, u32 slen) {
 
     u8 resp;
 

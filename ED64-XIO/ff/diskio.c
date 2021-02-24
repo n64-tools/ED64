@@ -81,7 +81,7 @@ DRESULT disk_write(
         ) {
 
 
-    dresp = disk_write((BYTE *) buff, sector, count);
+    dresp = sd_disk_write((BYTE *) buff, sector, count);
     if (dresp)return RES_ERROR;
     return RES_OK;
 }
