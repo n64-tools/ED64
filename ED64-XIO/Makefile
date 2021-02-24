@@ -6,8 +6,9 @@ CHKSUM64PATH = $(ROOTDIR)/bin/chksum64
 MKDFSPATH = $(ROOTDIR)/bin/mkdfs
 N64TOOL = $(ROOTDIR)/bin/n64tool
 
+SRCDIR = src
+SRCDIR := src/sys
 FFDIR := ff
-SRCDIR := src
 INCDIR := inc
 RESDIR := res
 OBJDIR = obj
