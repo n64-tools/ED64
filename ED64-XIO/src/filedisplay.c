@@ -42,7 +42,7 @@ u8 file_display_read() {
   }
 
   screen_repaint();
-  for (;;) { // forever
+  for (;;) { /* forever */
     screen_perform_vsync();
     controller_scan();
     cd = get_keys_down();
@@ -91,7 +91,7 @@ u8 file_display_write() {
   screen_print("Press B to exit");
 
   screen_repaint();
-  for (;;) { // forever
+  for (;;) { /* forever */
     screen_perform_vsync();
     controller_scan();
     cd = get_keys_down();

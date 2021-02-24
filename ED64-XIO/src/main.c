@@ -30,7 +30,7 @@ int main(void) {
   screen_append_string(" done.");
   screen_repaint();
 
-  for (;;) { // forever
+  for (;;) { /* forever */
     resp = main_display_menu();
     if (resp)
       main_display_error_text(resp);
@@ -61,7 +61,7 @@ u8 main_display_menu() {
   menu[MENU_USB_LOADER] = "USB Loader";
   menu[MENU_EDID] = "Identify ED64 Type";
 
-  for (;;) { // forever
+  for (;;) { /* forever */
 
     screen_clear();
 
@@ -165,7 +165,7 @@ void main_display_ed64_cartridge_type() {
   screen_print("");
   screen_print("Press B to exit");
   screen_repaint();
-  for (;;) { // forever
+  for (;;) { /* forever */
     screen_perform_vsync();
     controller_scan();
     cd = get_keys_down();
@@ -185,7 +185,7 @@ void main_display_error_text(u8 err) {
   screen_repaint();
 
   for (;;)
-    ; // forever
+    ; /* forever */
 }
 
 void perform_simulated_rom_boot(u8 cic) {

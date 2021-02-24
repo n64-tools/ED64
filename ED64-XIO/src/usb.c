@@ -22,7 +22,7 @@ void usb_terminal_display() {
 
   data[4] = 1;
 
-  for (;;) { // forever
+  for (;;) { /* forever */
 
     screen_perform_vsync();
     controller_scan();
@@ -33,13 +33,13 @@ void usb_terminal_display() {
     if (!ed64_usb_can_read())
       continue;
 
-    // read from virtual serial port.
-    // size must be a multiple of 4. use 512B blocks for best performance
+    /* read from virtual serial port. size must be a multiple of 4. use 512B
+     * blocks for best performance */
     tout = ed64_usb_read(data, 4);
     if (tout)
       continue;
 
-    // send echo string back to the serial port
+    /* send echo string back to the serial port */
     ed64_usb_write(data, 4);
 
     screen_print(data);
@@ -58,7 +58,7 @@ void usb_command_display_load_rom() {
   screen_print("Press B to exit");
   screen_repaint();
 
-  for (;;) { // forever
+  for (;;) { /* forever */
 
     screen_perform_vsync();
     controller_scan();
@@ -83,19 +83,19 @@ void usb_command_display_load_rom() {
       continue;
     usb_cmd = cmd[3];
 
-    // host send this command during the everdrive seek
+    /* host send this command during the everdrive seek */
     if (usb_cmd == 't') {
       usb_command_packet_response(0);
     }
 
-    // start the ROM
+    /* start the ROM */
     if (usb_cmd == 's') {
       ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); // set save type
       perform_simulated_rom_boot(CIC_6102);          // run the ROM
     }
 
-    // fill ro memory. used if rom size less than 2MB (required for correct crc
-    // values)
+    /* fill ro memory. used if rom size less than 2MB (required for correct crc
+     * values) */
     if (usb_cmd == 'c') {
       usb_command_cmem_fill(cmd);
     }
@@ -140,24 +140,26 @@ u8 usb_command_rom_write(u8 *cmd) {
 
   u8 resp;
   u8 buff[512];
-  u32 addr = *(u32 *)&cmd[4]; // destination address
-  u32 slen = *(u32 *)&cmd[8]; // size in sectors (512B)
+  u32 addr = *(u32 *)&cmd[4]; /* destination address */
+  u32 slen = *(u32 *)&cmd[8]; /* size in sectors (512B) */
 
   if (slen == 0)
     return 0;
 
-  ed64_usb_read_start(); // begin first block receiving (512B)
+  ed64_usb_read_start(); /* begin first block receiving (512B) */
 
   while (slen--) {
 
-    resp = ed64_usb_read_end(
-        buff); // wait for block receiving completion and read it to the buffer
+    resp = ed64_usb_read_end(buff); /* wait for block receiving completion and
+                                       read it to the buffer */
     if (slen != 0)
-      ed64_usb_read_start(); // begin next block receiving while previous block
-                             // transfers to the ROM
+      ed64_usb_read_start(); /* begin next block receiving while previous block
+                                */
+    /* transfers to the ROM */
     if (resp)
       return resp;
-    system_pi_write(buff, addr, 512); // copy received block to the rom memory
+    system_pi_write(buff, addr,
+                    512); /* copy received block to the rom memory */
     addr += 512;
   }
 

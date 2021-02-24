@@ -23,7 +23,7 @@ u8 file_menu_display() {
   if (resp)
     return resp;
 
-  for (;;) { // forever
+  for (;;) { /* forever */
 
     // print items
     screen_clear();
@@ -39,7 +39,7 @@ u8 file_menu_display() {
     screen_repaint();
 
     // controls
-    for (;;) { // forever
+    for (;;) { /* forever */
 
       screen_perform_vsync();
       controller_scan();
