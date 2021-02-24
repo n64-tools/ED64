@@ -5,9 +5,9 @@
 
 #include "main.h"
 
-u8 usb_terminal_packet_response(u8 resp);
-void usb_terminal_command_cmem_fill(u8 *cmd);
-u8 usb_terminal_command_rom_write(u8 *cmd);
+u8 usb_command_packet_response(u8 resp);
+void usb_command_cmem_fill(u8 *cmd);
+u8 usb_command_rom_write(u8 *cmd);
 
 void usb_terminal_display() {
 
@@ -44,7 +44,7 @@ void usb_terminal_display() {
     }
 }
 
-void usb_terminal_load_rom() {
+void usb_command_display_load_rom() {
 
     u8 resp, usb_cmd;
     u8 cmd[16];
@@ -76,7 +76,7 @@ void usb_terminal_load_rom() {
 
         //host send this command during the everdrive seek
         if (usb_cmd == 't') {
-            usb_terminal_packet_response(0);
+            usb_command_packet_response(0);
         }
 
         //start the ROM
@@ -87,19 +87,19 @@ void usb_terminal_load_rom() {
 
         //fill ro memory. used if rom size less than 2MB (required for correct crc values)
         if (usb_cmd == 'c') {
-            usb_terminal_command_cmem_fill(cmd);
+            usb_command_cmem_fill(cmd);
         }
 
         //write to ROM memory
         if (usb_cmd == 'W') {
-            usb_terminal_command_rom_write(cmd);
+            usb_command_rom_write(cmd);
         }
 
     }
 
 }
 
-u8 usb_terminal_packet_response(u8 resp) {
+u8 usb_command_packet_response(u8 resp) {
 
     u8 buff[16];
     buff[0] = 'c';
@@ -110,7 +110,7 @@ u8 usb_terminal_packet_response(u8 resp) {
     return ed64_usb_write(buff, sizeof (buff));
 }
 
-void usb_terminal_command_cmem_fill(u8 *cmd) {
+void usb_command_cmem_fill(u8 *cmd) {
 
     u16 i;
     u32 addr = *(u32 *) & cmd[4];
@@ -128,7 +128,7 @@ void usb_terminal_command_cmem_fill(u8 *cmd) {
     }
 }
 
-u8 usb_terminal_command_rom_write(u8 *cmd) {
+u8 usb_command_rom_write(u8 *cmd) {
 
     u8 resp;
     u8 buff[512];

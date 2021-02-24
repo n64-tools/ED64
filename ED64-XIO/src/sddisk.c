@@ -6,27 +6,27 @@
 #include "main.h"
 
 
-#define CMD0  0x40    // software reset
-#define CMD1  0x41    // brings card out of idle state
-#define CMD8  0x48    // Reserved
-#define CMD12 0x4C    // stop transmission on multiple block read
-#define CMD17 0x51    // read single block
-#define CMD18 0x52    // read multiple block
-#define CMD58 0x7A    // reads the OCR register
-#define CMD55 0x77
-#define CMD41 0x69
-#define CMD24 0x58    // writes a single block
-#define CMD25 0x59    // writes a multi block
+#define CMD0   0x40 /* software reset */
+#define CMD1   0x41 /* brings card out of idle state */
+#define CMD8   0x48 /* Reserved */
+#define CMD12  0x4C /* stop transmission on multiple block read */
+#define CMD17  0x51 /* read single block */
+#define CMD18  0x52 /* read multiple block */
+#define CMD58  0x7A /* reads the OCR register */
+#define CMD55  0x77
+#define CMD41  0x69
+#define CMD24  0x58 /* writes a single block */
+#define CMD25  0x59 /* writes a multi block */
 #define	ACMD41 0x69
-#define	ACMD6 0x46
-#define SD_V2 2
-#define SD_HC 1
+#define	ACMD6  0x46
+#define SD_V2  2
+#define SD_HC  1
 
-#define CMD2 0x42 //read cid
-#define CMD3 0x43 //read rca
-#define CMD7 0x47
-#define CMD9 0x49
-#define CMD6 0x46 //set hi speed
+#define CMD2   0x42 /* read cid */
+#define CMD3   0x43 /* read rca */
+#define CMD7   0x47
+#define CMD9   0x49
+#define CMD6   0x46 /* set high speed */
 
 #define R1 1
 #define R2 2

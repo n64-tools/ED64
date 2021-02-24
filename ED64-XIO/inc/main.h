@@ -18,7 +18,7 @@ extern "C" {
 void perform_simulated_rom_boot(u8 cic);
 u8 file_menu_display();
 void usb_terminal_display();
-void usb_terminal_load_rom();
+void usb_command_display_load_rom();
 u8 file_display_read();
 u8 file_display_write();
 

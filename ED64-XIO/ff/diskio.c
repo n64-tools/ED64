@@ -95,7 +95,7 @@ DRESULT disk_write(
 
 DRESULT disk_ioctl(
         BYTE pdrv, /* Physical drive nmuber (0..) */
-        BYTE cmd, /* Control code */
+        BYTE cmd,  /* Control code */
         void *buff /* Buffer to send/receive control data */
         ) {
     DRESULT res = RES_ERROR;

@@ -5,7 +5,7 @@
 
 #include "main.h"
 
-void main_get_ed64_hardware_id();
+void main_display_ed64_cartridge_type();
 void main_display_error_text(u8 err);
 u8 main_display_menu();
 
@@ -18,7 +18,7 @@ int main(void) {
     ed64_initialize();
 
     screen_clear();
-    screen_print("FAT init...");
+    screen_print("Filesystem initializing...");
     screen_repaint();
 
     //mount disk
@@ -26,6 +26,8 @@ int main(void) {
     resp = f_mount(&fs, "", 1);
     if (resp)main_display_error_text(resp);
 
+    screen_append_string(" done.");
+    screen_repaint();
 
     for ( ;; ) { //forever
         resp = main_display_menu();
@@ -56,7 +58,7 @@ u8 main_display_menu() {
     menu[MENU_FILE_WRITE] = "File Write";
     menu[MENU_USB_TERMINAL] = "USB Terminal";
     menu[MENU_USB_LOADER] = "USB Loader";
-    menu[MENU_EDID] = "ED64 Cart ID";
+    menu[MENU_EDID] = "Identify ED64 Cartridge type";
 
     for ( ;; ) { //forever
 
@@ -114,27 +116,27 @@ u8 main_display_menu() {
 
         //usb client demo compatible with usb64.exe
         if (selector == MENU_USB_LOADER) {
-            usb_terminal_load_rom();
+            usb_command_display_load_rom();
         }
 
         //everdrive hardware identification
         if (selector == MENU_EDID) {
-            main_get_ed64_hardware_id();
+            main_display_ed64_cartridge_type();
         }
 
     }
 }
 
-void main_get_ed64_hardware_id() {
+void main_display_ed64_cartridge_type() {
 
     struct controller_data cd;
     u32 id = ed64_get_cartridge_type_id();
 
     screen_clear();
-    screen_print("Device ID     ");
+    screen_print("Cartridge Type ID:    ");
     screen_append_hex32(id);
     screen_print("");
-    screen_print("Device Name   ");
+    screen_print("Cartridge Type:   ");
 
     switch (id) {
         case ED64_CART_ID_V2:
