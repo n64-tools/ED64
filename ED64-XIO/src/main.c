@@ -58,7 +58,7 @@ u8 main_display_menu() {
     menu[MENU_FILE_WRITE] = "File Write";
     menu[MENU_USB_TERMINAL] = "USB Terminal";
     menu[MENU_USB_LOADER] = "USB Loader";
-    menu[MENU_EDID] = "Identify ED64 Cartridge type";
+    menu[MENU_EDID] = "Identify ED64 Type";
 
     for ( ;; ) { //forever
 
