@@ -108,7 +108,7 @@ void system_pi_write(void *ram, unsigned long pi_address, unsigned long len);
 #define SCREEN_SIZE_VERTICAL      30 //screen.h
 #define SCREEN_BORDER_X      2
 #define SCREEN_BORDER_Y      2
-// #define G_MAXIMUM_STRING_LENGTH   (SCREEN_SIZE_HORIZONTAL - SCREEN_BORDER_X*2)
+// #define SCREEN_MAXIMUM_STRING_LENGTH   (SCREEN_SIZE_HORIZONTAL - SCREEN_BORDER_X*2)
 
 #define PAL_B1          0x1000
 // #define PAL_B2          0x2000
