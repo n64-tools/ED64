@@ -8,7 +8,7 @@ N64TOOL = $(ROOTDIR)/bin/n64tool
 
 FFDIR := ff
 SRCDIR := src
-SRCSYSDIR : $(SRCDIR)/sys
+SRCDIR_EDLIB : $(SRCDIR)/sys
 LIBDIR := lib
 INCDIR := inc
 RESDIR := res
@@ -34,12 +34,12 @@ ASFLAGS = -mtune=vr4300 -march=vr4300
 SOURCES_FF := $(wildcard $(FFDIR)/*.c)
 SOURCES_ASM := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
-SOURCES_SYS := $(wildcard $(SRCSYSDIR)/*.c)
+SOURCES_EDLIB := $(wildcard $(SRCDIR_EDLIB)/*.c)
 
 OBJECTS_FF := $(SOURCES_FF:$(FFDIR)/%.c=$(OBJDIR)/%.o)
 OBJECTS_ASM := $(SOURCES_ASM:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-OBJECTS_SYS := $(SOURCES:$(SRCSYSDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS_EDLIB := $(SOURCES_EDLIB:$(SRCDIR_EDLIB)/%.c=$(OBJDIR)/%.o)
 
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
@@ -47,8 +47,8 @@ $(PROG_NAME).v64: $ $(PROG_NAME).elf
 	$(N64TOOL) -l 256K -t $(HEADERTITLE) -h $(HEADERDIR)/$(HEADERNAME) -o $(BINDIR)/$(PROG_NAME).v64 $(BINDIR)/$(PROG_NAME).bin
 	$(CHKSUM64PATH) $(BINDIR)/$(PROG_NAME).v64
 
-$(PROG_NAME).elf : $(OBJECTS_FF) $(OBJECTS_ASM) $(OBJECTS)
-	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS_FF) $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_SYS) $(LINK_FLAGS)
+$(PROG_NAME).elf : $(OBJECTS_FF) $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_EDLIB)
+	$(LD) -o $(BINDIR)/$(PROG_NAME).elf $(OBJECTS_FF) $(OBJECTS_ASM) $(OBJECTS) $(OBJECTS_EDLIB) $(LINK_FLAGS)
 
 $(OBJECTS_FF): $(OBJDIR)/%.o : $(FFDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
@@ -59,7 +59,7 @@ $(OBJECTS_ASM): $(OBJDIR)/%.o : $(SRCDIR)/%.s
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
-$(OBJECTS_SYS): $(OBJDIR)/%.o : $(SRCSYSDIR)/%.c
+$(OBJECTS_EDLIB): $(OBJDIR)/%.o : $(SRCDIR_EDLIB)/%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
 all: $(PROG_NAME).v64
