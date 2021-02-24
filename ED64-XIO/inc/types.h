@@ -4,7 +4,7 @@
 */
 
 #ifndef __ED64_TYPES_H
-#define	__ED64_TYPES_H
+#define __ED64_TYPES_H
 
 #ifdef __cplusplus
 extern "C" {
