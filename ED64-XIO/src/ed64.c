@@ -87,10 +87,10 @@
 
 #define REG_ADDR(reg)   (KSEG1 | REG_BASE | (reg))
 
-u32 ed64_reg_rd(u16 reg);
-void ed64_reg_wr(u16 reg, u32 val);
-void ed64_usb_init();
-u8 ed64_usb_busy();
+u32 ed64RegisterRead(u16 reg);
+void ed64RegisterWrite(u16 reg, u32 val);
+void ed64UsbInitialize();
+u8 ed64UsbBusy();
 
 u16 ed64_sd_cfg;
 
@@ -101,37 +101,37 @@ void ed64Initialize() {
     IO_WRITE(PI_BSD_DOM1_PWD_REG, 0x0C);
 
     //unlock regs
-    ed64_reg_wr(REG_KEY, 0xAA55);
+    ed64RegisterWrite(REG_KEY, 0xAA55);
 
-    ed64_reg_wr(REG_SYS_CFG, 0);
+    ed64RegisterWrite(REG_SYS_CFG, 0);
 
     //flush usb 
-    ed64_usb_init();
+    ed64UsbInitialize();
 
     ed64_sd_cfg = 0;
-    ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
+    ed64RegisterWrite(REG_SD_STATUS, ed64_sd_cfg);
 
     //turn off backup ram
     ed64SetRomSaveType(ED64_SAVE_TYPE_OFF);
 }
 
-void ed64_reg_wr(u16 reg, u32 val) {
+void ed64RegisterWrite(u16 reg, u32 val) {
 
     systemPiWrite(&val, REG_ADDR(reg), 4);
 }
 
-u32 ed64_reg_rd(u16 reg) {
+u32 ed64RegisterRead(u16 reg) {
 
     u32 val;
     systemPiRead(&val, REG_ADDR(reg), 4);
     return val;
 }
 
-void ed64_usb_init() {
+void ed64UsbInitialize() {
 
     u8 buff[512];
     u8 resp;
-    ed64_reg_wr(REG_USB_CFG, USB_CMD_RD_NOP); //turn off usb r/w activity
+    ed64RegisterWrite(REG_USB_CFG, USB_CMD_RD_NOP); //turn off usb r/w activity
 
     //flush fifo buffer
     while (ed64UsbCanRead()) {
@@ -142,26 +142,26 @@ void ed64_usb_init() {
 
 u8 ed64UsbCanRead() {
 
-    u32 status = ed64_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
+    u32 status = ed64RegisterRead(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
 
 u8 ed64UsbCanWrite() {
 
-    u32 status = ed64_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
+    u32 status = ed64RegisterRead(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
 
-u8 ed64_usb_busy() {
+u8 ed64UsbBusy() {
 
     u32 tout = 0;
 
-    while ((ed64_reg_rd(REG_USB_CFG) & USB_STA_ACT) != 0) {
+    while ((ed64RegisterRead(REG_USB_CFG) & USB_STA_ACT) != 0) {
 
         if (tout++ != 8192)continue;
-        ed64_reg_wr(REG_USB_CFG, USB_CMD_RD_NOP);
+        ed64RegisterWrite(REG_USB_CFG, USB_CMD_RD_NOP);
         return ED64_ERR_USB_TOUT;
     }
 
@@ -180,9 +180,9 @@ u8 ed64UsbRead(void *dst, u32 len) {
         baddr = 512 - blen; //address in fpga internal buffer. requested data length equal to 512-int buffer addr
 
 
-        ed64_reg_wr(REG_USB_CFG, USB_CMD_RD | baddr); //usb read request. fpga will receive usb bytes until the buffer address reaches 512
+        ed64RegisterWrite(REG_USB_CFG, USB_CMD_RD | baddr); //usb read request. fpga will receive usb bytes until the buffer address reaches 512
 
-        resp = ed64_usb_busy(); //wait until requested data amount will be transferred to the internal buffer
+        resp = ed64UsbBusy(); //wait until requested data amount will be transferred to the internal buffer
         if (resp)break; //timeout
 
         systemPiRead(dst, REG_ADDR(REG_USB_DAT + baddr), blen); //get data from internal buffer
@@ -199,7 +199,7 @@ u8 ed64UsbWrite(void *src, u32 len) {
     u8 resp = 0;
     u16 blen, baddr;
 
-    ed64_reg_wr(REG_USB_CFG, USB_CMD_WR_NOP);
+    ed64RegisterWrite(REG_USB_CFG, USB_CMD_WR_NOP);
 
     while (len) {
 
@@ -210,9 +210,9 @@ u8 ed64UsbWrite(void *src, u32 len) {
         systemPiWrite(src, REG_ADDR(REG_USB_DAT + baddr), blen); //copy data to the internal buffer
         src += 512;
 
-        ed64_reg_wr(REG_USB_CFG, USB_CMD_WR | baddr); //usb write request
+        ed64RegisterWrite(REG_USB_CFG, USB_CMD_WR | baddr); //usb write request
 
-        resp = ed64_usb_busy(); //wait until the requested data amount is transferred
+        resp = ed64UsbBusy(); //wait until the requested data amount is transferred
         if (resp)break; //timeout
 
         len -= blen;
@@ -223,12 +223,12 @@ u8 ed64UsbWrite(void *src, u32 len) {
 
 void ed64UsbReadStart() {
 
-    ed64_reg_wr(REG_USB_CFG, USB_CMD_RD | 512);
+    ed64RegisterWrite(REG_USB_CFG, USB_CMD_RD | 512);
 }
 
 u8 ed64UsbReadEnd(void *dst) {
 
-    u8 resp = ed64_usb_busy();
+    u8 resp = ed64UsbBusy();
     if (resp)return resp;
 
     systemPiRead(dst, REG_ADDR(REG_USB_DAT), 512);
@@ -248,60 +248,60 @@ void ed64SdioSpeed(u8 speed) {
         ed64_sd_cfg |= SD_CFG_SPD;
     }
 
-    ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
+    ed64RegisterWrite(REG_SD_STATUS, ed64_sd_cfg);
 }
 u16 ed64_old_sd_mode;
 //this function gives time for setting stable values on open bus
 
-void ed64_sd_switch_mode(u16 mode) {
+void ed64SdioSwitchMode(u16 mode) {
 
     if (ed64_old_sd_mode == mode)return;
     ed64_old_sd_mode = mode;
 
     u16 old_sd_cfg = ed64_sd_cfg;
     ed64SdioBitLength(0);
-    ed64_reg_wr(mode, 0xffff);
+    ed64RegisterWrite(mode, 0xffff);
     ed64_sd_cfg = old_sd_cfg;
-    ed64_reg_wr(REG_SD_STATUS, old_sd_cfg);
+    ed64RegisterWrite(REG_SD_STATUS, old_sd_cfg);
 }
 
 void ed64SdioBitLength(u8 val) {
 
     ed64_sd_cfg &= ~SD_CFG_BITLEN;
     ed64_sd_cfg |= (val & SD_CFG_BITLEN);
-    ed64_reg_wr(REG_SD_STATUS, ed64_sd_cfg);
+    ed64RegisterWrite(REG_SD_STATUS, ed64_sd_cfg);
 }
 
 void ed64_sd_busy() {
-    while ((ed64_reg_rd(REG_SD_STATUS) & SD_STA_BUSY) != 0);
+    while ((ed64RegisterRead(REG_SD_STATUS) & SD_STA_BUSY) != 0);
 }
 
 void ed64SdioCommandWrite(u8 val) {
-    ed64_sd_switch_mode(REG_SD_CMD_WR);
-    ed64_reg_wr(REG_SD_CMD_WR, val);
+    ed64SdioSwitchMode(REG_SD_CMD_WR);
+    ed64RegisterWrite(REG_SD_CMD_WR, val);
     ed64_sd_busy();
 }
 
 u8 ed64SdioCommandRead() {
 
-    ed64_sd_switch_mode(REG_SD_CMD_RD);
-    ed64_reg_wr(REG_SD_CMD_RD, 0xffff);
+    ed64SdioSwitchMode(REG_SD_CMD_RD);
+    ed64RegisterWrite(REG_SD_CMD_RD, 0xffff);
     ed64_sd_busy();
-    return ed64_reg_rd(REG_SD_CMD_RD);
+    return ed64RegisterRead(REG_SD_CMD_RD);
 }
 
 void ed64SdioDataWrite(u8 val) {
-    ed64_sd_switch_mode(REG_SD_DAT_WR);
-    ed64_reg_wr(REG_SD_DAT_WR, 0x00ff | (val << 8));
+    ed64SdioSwitchMode(REG_SD_DAT_WR);
+    ed64RegisterWrite(REG_SD_DAT_WR, 0x00ff | (val << 8));
     //ed64_sd_busy();
 }
 
 u8 ed64SdioDataRead() {
 
-    ed64_sd_switch_mode(REG_SD_DAT_RD);
-    ed64_reg_wr(REG_SD_DAT_RD, 0xffff);
+    ed64SdioSwitchMode(REG_SD_DAT_RD);
+    ed64RegisterWrite(REG_SD_DAT_RD, 0xffff);
     //ed64_sd_busy();
-    return ed64_reg_rd(REG_SD_DAT_RD);
+    return ed64RegisterRead(REG_SD_DAT_RD);
 }
 
 u8 ed64SdioToRam(void *dst, u16 slen) {
@@ -326,7 +326,7 @@ u8 ed64SdioToRam(void *dst, u16 slen) {
 
         ed64SdioBitLength(4);
 
-        ed64_sd_switch_mode(REG_SD_DAT_RD);
+        ed64SdioSwitchMode(REG_SD_DAT_RD);
         systemPiRead(dst, REG_ADDR(REG_SDIO_ARD), 512);
         systemPiRead(crc, REG_ADDR(REG_SDIO_ARD), 8);
         dst += 512;
@@ -342,12 +342,12 @@ u8 ed64SdioToRom(u32 dst, u16 slen) {
 
     u16 resp = DMA_STA_BUSY;
 
-    ed64_reg_wr(REG_DMA_ADDR, dst);
-    ed64_reg_wr(REG_DMA_LEN, slen);
+    ed64RegisterWrite(REG_DMA_ADDR, dst);
+    ed64RegisterWrite(REG_DMA_LEN, slen);
 
-    ed64_sd_switch_mode(REG_SD_DAT_RD);
+    ed64SdioSwitchMode(REG_SD_DAT_RD);
     while ((resp & DMA_STA_BUSY)) {
-        resp = ed64_reg_rd(REG_DMA_STA);
+        resp = ed64RegisterRead(REG_DMA_STA);
     }
 
     if ((resp & DMA_STA_ERROR))return 1;
@@ -538,20 +538,20 @@ void sdCrc16(void *src, u16 *crc_out) {
 
 void ed64SetRomSaveType(u8 type) {
 
-    ed64_reg_wr(REG_GAM_CFG, type);
+    ed64RegisterWrite(REG_GAM_CFG, type);
 }
 
 //swaps bytes copied from SD card. only affects reads to ROM area
 void ed64RomWriteByteswap(u8 swap_on) {
 
     if (swap_on) {
-        ed64_reg_wr(REG_SYS_CFG, CFG_SWAP_ON);
+        ed64RegisterWrite(REG_SYS_CFG, CFG_SWAP_ON);
     } else {
-        ed64_reg_wr(REG_SYS_CFG, 0);
+        ed64RegisterWrite(REG_SYS_CFG, 0);
     }
 }
 
 u32 ed64GetCartridgeTypeId() {
 
-    return ed64_reg_rd(REG_EDID);
+    return ed64RegisterRead(REG_EDID);
 }
