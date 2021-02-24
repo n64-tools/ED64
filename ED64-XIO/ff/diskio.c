@@ -60,7 +60,7 @@ DRESULT disk_read(
         UINT count /* Number of sectors to read */
         ) {
 
-    dresp = disk_read(buff, sector, count);
+    dresp = sd_disk_read(buff, sector, count);
     if (dresp)return RES_ERROR;
     return RES_OK;
 }

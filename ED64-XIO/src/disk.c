@@ -44,7 +44,7 @@
 u32 crc7(u8 *buff, u32 len);
 
 u8 diskCmdSD(u8 cmd, u32 arg);
-u8 disk_readResp(u8 cmd);
+u8 sd_disk_readResp(u8 cmd);
 u8 diskOpenRead(u32 saddr);
 u8 disk_close_rw();
 
@@ -177,10 +177,10 @@ u8 diskCmdSD(u8 cmd, u32 arg) {
 
     if (cmd == CMD18)return 0;
 
-    return disk_readResp(cmd);
+    return sd_disk_readResp(cmd);
 }
 
-u8 disk_readResp(u8 cmd) {
+u8 sd_disk_readResp(u8 cmd) {
 
     u16 i;
 
@@ -242,7 +242,7 @@ u8 diskOpenRead(u32 saddr) {
     return 0;
 }
 
-u8 disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
+u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
 
     u8 resp = 0;
 
@@ -256,7 +256,7 @@ u8 disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
     return 0;
 }
 
-u8 disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
+u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
 
     u8 resp = 0;
 
@@ -270,12 +270,12 @@ u8 disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
     return 0;
 }
 
-u8 disk_read(void *dst, u32 saddr, u32 slen) {
+u8 sd_disk_read(void *dst, u32 saddr, u32 slen) {
 
     if (((u32) dst & 0x1FFFFFFF) < 0x800000) {
-        return disk_read_to_ram(saddr, dst, slen);
+        return sd_disk_read_to_ram(saddr, dst, slen);
     } else {
-        return disk_read_to_rom(saddr, ((u32) dst) & 0x3FFFFFF, slen);
+        return sd_disk_read_to_rom(saddr, ((u32) dst) & 0x3FFFFFF, slen);
     }
 }
 //******************************************************************************
