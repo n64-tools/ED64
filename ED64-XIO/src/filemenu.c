@@ -80,7 +80,7 @@ u8 file_menu_load_directory(u8 *path, FILINFO *inf, u32 max_items) {
     DIR dir;
 
     resp = f_opendir(&dir, path);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     //load directory items
     for (int i = 0; i < max_items; i++) {
@@ -91,9 +91,9 @@ u8 file_menu_load_directory(u8 *path, FILINFO *inf, u32 max_items) {
     }
 
     resp = f_closedir(&dir);
-    if (resp)return resp;
+    //if (resp)return resp;
 
-    return 0;
+    return resp;
 }
 
 u8 file_menu_load_rom(u8 *path) {
@@ -105,17 +105,17 @@ u8 file_menu_load_rom(u8 *path) {
     u32 fsize;
 
     resp = f_open(&f, path, FA_READ);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     fsize = f.obj.objsize - f.fptr;
 
     //read rom header
     resp = f_read(&f, header, sizeof (header), &br);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     //set read position
     resp = f_lseek(&f, 0);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     if (header[1] == 0x80) {
         //enable byte swapping for disk operations if rom image has swapped byte order
@@ -125,13 +125,13 @@ u8 file_menu_load_rom(u8 *path) {
 
     //warning! file can be read directly to rom but not to bram
     resp = f_read(&f, (void *) ED64_ADDR_ROM, fsize, &br);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     ed64_rom_write_bytes_swapped(0);
-    if (resp)return resp;
+    if (resp != FR_OK)return resp;
 
     resp = f_close(&f);
-    if (resp)return resp;
+    //if (resp != FR_OK)return resp;
 
-    return 0;
+    return resp;
 }
