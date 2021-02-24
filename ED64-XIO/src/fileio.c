@@ -1,4 +1,3 @@
-
 #include "main.h"
 
 u8 fileRead() {
