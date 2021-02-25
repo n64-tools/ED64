@@ -63,11 +63,15 @@ $(OBJECTS_EDLIB): $(OBJDIR)/%.o : $(SRCDIR_EDLIB)/%.c
 $(OBJECTS_FFLIB): $(OBJDIR)/%.o : $(SRCDIR_FFLIB)/%.c
 	$(CC) $(CCFLAGS) -c $< -o $@
 
-all: OPTIMIZE_FLAG = -O2 -g0
-all: $(PROG_NAME).v64
+release: BINDIR := bin/release
+release: OPTIMIZE_FLAG = -O2 -g0
+release: $(PROG_NAME).v64
 
+debug: BINDIR := bin/debug
 debug: OPTIMIZE_FLAG = -O0 -DDEBUG -g
 debug: $(PROG_NAME).v64
+
+all: $(release)
 
 clean:
 	$(RM) $(BINDIR)/*.v64 
