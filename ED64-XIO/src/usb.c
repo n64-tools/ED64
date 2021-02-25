@@ -90,8 +90,8 @@ void usb_command_display_load_rom() {
 
     /* start the ROM */
     if (usb_cmd == 's') {
-      ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); // set save type
-      perform_simulated_rom_boot(CIC_6102);          // run the ROM
+      ed64_set_rom_save_type(ED64_SAVE_TYPE_EEP16K); /* set save type */
+      perform_simulated_rom_boot(CIC_6102); /*run the ROM using CIC 6102 */
     }
 
     /* fill ro memory. used if rom size less than 2MB (required for correct crc
