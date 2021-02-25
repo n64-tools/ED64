@@ -82,6 +82,6 @@ debug: $(PROG_NAME).v64
 all: $(release)
 
 clean:
-	$(info "Cleaning $(PROG_NAME) folders...")
+	$(info "Cleaning $(PROG_NAME) build folders...")
 	@$(RM) $(call FIXPATH,$(BINDIR)/**/*)
 	@$(RM) $(call FIXPATH,$(OBJDIR)/*.o)
