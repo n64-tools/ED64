@@ -121,30 +121,30 @@ u8 file_menu_load_rom(u8 *path) {
 
   /* read rom header */
   resp = f_read(&f, header, sizeof(header), &br);
-  if (resp != FR_OK)
-    return resp;
+  if (resp == FR_OK) {
+    // return resp;
 
-  /* set read position */
-  resp = f_lseek(&f, 0);
-  if (resp != FR_OK)
-    return resp;
+    /* set read position */
+    resp = f_lseek(&f, 0);
+    if (resp != FR_OK)
+      return resp;
 
-  if (header[1] == 0x80) {
-    /* enable byte swapping for disk operations if rom image has swapped byte
-    * order
-    * affects only reading to ROM address space */
-    ed64_rom_write_bytes_swapped(1);
+    if (header[1] == 0x80) {
+      /* enable byte swapping for disk operations if rom image has swapped byte
+      * order
+      * affects only reading to ROM address space */
+      ed64_rom_write_bytes_swapped(1);
+    }
+
+    /* WARNING! file can be read directly to rom but not to bram */
+    resp = f_read(&f, (void *)ED64_ADDR_ROM, fsize, &br);
+    if (resp != FR_OK)
+      return resp;
+
+    ed64_rom_write_bytes_swapped(0);
+    if (resp != FR_OK)
+      return resp;
   }
-
-  /* WARNING! file can be read directly to rom but not to bram */
-  resp = f_read(&f, (void *)ED64_ADDR_ROM, fsize, &br);
-  if (resp != FR_OK)
-    return resp;
-
-  ed64_rom_write_bytes_swapped(0);
-  if (resp != FR_OK)
-    return resp;
-
   resp = f_close(&f);
   // if (resp != FR_OK)return resp;
 

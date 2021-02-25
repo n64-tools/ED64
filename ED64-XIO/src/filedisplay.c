@@ -22,8 +22,10 @@ u8 file_display_read() {
     return resp;
 
   resp = f_read(&f, buff, sizeof(buff), &br);
-  if (resp != FR_OK)
-    return resp;
+  if (resp != FR_OK) {
+  //  return resp; //we should continue so that the file is closed!
+      screen_print("Error reading file.");
+  }
 
   resp = f_close(&f);
   if (resp != FR_OK)
