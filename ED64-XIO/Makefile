@@ -13,8 +13,8 @@ LIBDIR := lib
 INCDIR := inc
 INCDIR_EDLIB := inc/edlib
 RESDIR := res
-OBJDIR = obj
-BINDIR = bin
+OBJDIR := obj
+BINDIR := bin
 
 PROG_NAME =	ED64-XIO-SAMPLE
 
@@ -63,7 +63,7 @@ $(OBJECTS_EDLIB): $(OBJDIR)/%.o : $(SRCDIR_EDLIB)/%.c
 $(OBJECTS_FFLIB): $(OBJDIR)/%.o : $(SRCDIR_FFLIB)/%.c
 	$(CC) $(CCFLAGS) -c $< -o $@
 
-all: OPTIMIZE_FLAG = -O2 -G0
+all: OPTIMIZE_FLAG = -O2 -g0
 all: $(PROG_NAME).v64
 
 debug: OPTIMIZE_FLAG = -O0 -DDEBUG -g
