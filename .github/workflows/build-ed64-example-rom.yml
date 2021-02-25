@@ -19,7 +19,7 @@ jobs:
       - name: Setup Build environment
         run: |
           cd ${{ github.workspace }}/ED64-XIO/
-          mkdir bin && mkdir obj
+          mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
           libdragon start
 
       - name: Build ROM
