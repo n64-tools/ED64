@@ -29,8 +29,8 @@ OBJCOPY = $(GCCN64PREFIX)objcopy
 
 LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -ldragonsys -Tn64.ld
 
-FLAGS = -std=gnu99 -march=vr4300 -mtune=vr4300 -O2 -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB) -G0 
 ASFLAGS = -mtune=vr4300 -march=vr4300
+CCFLAGS = -std=gnu99 $(ASFLAGS) $(OPTIMIZE_FLAG) -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB)
 
 SOURCES_ASM := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
@@ -55,15 +55,19 @@ $(OBJECTS_ASM): $(OBJDIR)/%.o : $(SRCDIR)/%.s
 	$(CC) $(ASFLAGS) -c $< -o $@
 	
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CCFLAGS) -c $< -o $@
 
 $(OBJECTS_EDLIB): $(OBJDIR)/%.o : $(SRCDIR_EDLIB)/%.c
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CCFLAGS) -c $< -o $@
 
 $(OBJECTS_FFLIB): $(OBJDIR)/%.o : $(SRCDIR_FFLIB)/%.c
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CCFLAGS) -c $< -o $@
 
+all: OPTIMIZE_FLAG = -O2 -G0
 all: $(PROG_NAME).v64
+
+debug: OPTIMIZE_FLAG = -O0 -DDEBUG -g
+debug: $(PROG_NAME).v64
 
 clean:
 	$(RM) $(BINDIR)/*.v64 
