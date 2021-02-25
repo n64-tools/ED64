@@ -1,4 +1,4 @@
-#FatFS by http://www.elm-chan.org/fsw/ff/00index_e.html
+# FatFS lib by http://www.elm-chan.org/fsw/ff/00index_e.html
 
 Certain files in this folder should be updated periodically to the latest release.
 
