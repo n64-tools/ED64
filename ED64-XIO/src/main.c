@@ -13,7 +13,7 @@ int main(void) {
 
   u8 resp;
   //FATFS fs;
-  FATFS *fs /* Ponter to the filesystem object */
+  FATFS *fs; /* Ponter to the filesystem object */
 
   system_initialize();
   ed64_initialize();
