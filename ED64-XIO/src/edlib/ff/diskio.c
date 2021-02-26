@@ -25,9 +25,11 @@
 DSTATUS disk_status(
         BYTE pdrv /* Physical drive nmuber to identify the drive */
         ) {
+    DSTATUS stat;
+	//int result;
 	switch (pdrv) {
 	case DEV_SDC :
-        return dstat;
+        return stat;
     }
     return STA_NOINIT;
     
@@ -41,13 +43,16 @@ DSTATUS disk_status(
 DSTATUS disk_initialize(
         BYTE pdrv /* Physical drive nmuber to identify the drive */
         ) {
+    
+    DSTATUS stat;
+    BYTE result;
 	switch (pdrv) {
 	case DEV_SDC :
-        dresp = sd_disk_initialize();
-        dstat = 0;
-        if (dresp)dstat = STA_NOINIT;
+        result = sd_disk_initialize();
+        stat = 0;
+        if (result)stat = STA_NOINIT;
 
-        return dstat;
+        return stat;
     }
     return STA_NOINIT;
 }
@@ -117,14 +122,14 @@ DRESULT disk_ioctl(
         void *buff /* Buffer to send/receive control data */
         ) {
     DRESULT res = RES_ERROR;
-	BYTE result;
+	//BYTE result;
 
 	switch (pdrv) {
 	case DEV_SDC :
         switch (cmd) {
             case CTRL_SYNC:
                 res = sd_disk_close_rw();
-                result = res;
+                //result = res;
                 res = res == 0 ? RES_OK : RES_ERROR;
                 break;
 
