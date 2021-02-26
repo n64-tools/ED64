@@ -12,7 +12,8 @@ u8 main_display_menu();
 int main(void) {
 
   u8 resp;
-  FATFS fs;
+  //FATFS fs;
+  FATFS *fs /* Ponter to the filesystem object */
 
   system_initialize();
   ed64_initialize();
@@ -21,9 +22,11 @@ int main(void) {
   screen_print("Filesystem initializing...");
   screen_repaint();
 
-  // mount disk
-  memset(&fs, 0, sizeof(fs));
-  resp = f_mount(&fs, "", 1);
+  /* mount disk */
+  //memset(&fs, 0, sizeof(fs));
+  //resp = f_mount(&fs, "", 1);
+  fs = malloc(sizeof (FATFS));           /* Get work area for the volume */
+  f_mount(fs, "", 0);                    /* Mount the default drive */
   if (resp)
     main_display_error_text(resp);
 

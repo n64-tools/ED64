@@ -9,26 +9,28 @@
 
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
-#include "sddisk.h"
+#include "sddisk.h"     /* Declarations of sd disk binding functions */
 
 
 /* Definitions of physical drive number for each drive */
-// #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
-// #define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
+#define DEV_SDC      0   /* Map SD card to physical drive 0 */
+// #define DEV_RAM		1	/* Example: Map Ramdisk to physical drive 1 */
 // #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
 
 /*-----------------------------------------------------------------------*/
 /* Get Drive Status                                                      */
 /*-----------------------------------------------------------------------*/
-DSTATUS dstat;
-BYTE dresp;
 
 DSTATUS disk_status(
         BYTE pdrv /* Physical drive nmuber to identify the drive */
         ) {
-
-    return dstat;
+	switch (pdrv) {
+	case DEV_SDC :
+        return dstat;
+    }
+    return STA_NOINIT;
+    
 }
 
 /*-----------------------------------------------------------------------*/
@@ -39,12 +41,15 @@ DSTATUS disk_status(
 DSTATUS disk_initialize(
         BYTE pdrv /* Physical drive nmuber to identify the drive */
         ) {
+	switch (pdrv) {
+	case DEV_SDC :
+        dresp = sd_disk_initialize();
+        dstat = 0;
+        if (dresp)dstat = STA_NOINIT;
 
-    dresp = sd_disk_initialize();
-    dstat = 0;
-    if (dresp)dstat = STA_NOINIT;
-
-    return dstat;
+        return dstat;
+    }
+    return STA_NOINIT;
 }
 
 
@@ -60,9 +65,16 @@ DRESULT disk_read(
         UINT count /* Number of sectors to read */
         ) {
 
-    dresp = sd_disk_read(buff, sector, count);
-    if (dresp)return RES_ERROR;
-    return RES_OK;
+    //DRESULT res;
+	BYTE result;
+
+	switch (pdrv) {
+	case DEV_SDC :
+        result = sd_disk_read(buff, sector, count);
+        if (result) return RES_ERROR;
+        return RES_OK;
+    }
+    return RES_PARERR;
 }
 
 
@@ -80,10 +92,16 @@ DRESULT disk_write(
         UINT count /* Number of sectors to write */
         ) {
 
+    //DRESULT res;
+	BYTE result;
 
-    dresp = sd_disk_write((BYTE *) buff, sector, count);
-    if (dresp)return RES_ERROR;
-    return RES_OK;
+	switch (pdrv) {
+	case DEV_SDC :
+        result = sd_disk_write((BYTE *) buff, sector, count);
+        if (result)return RES_ERROR;
+        return RES_OK;
+    }
+    return RES_PARERR;
 }
 
 #endif
@@ -99,31 +117,36 @@ DRESULT disk_ioctl(
         void *buff /* Buffer to send/receive control data */
         ) {
     DRESULT res = RES_ERROR;
+	BYTE result;
 
-    switch (cmd) {
-        case CTRL_SYNC:
-            res = sd_disk_close_rw();
-            dresp = res;
-            res = res == 0 ? RES_OK : RES_ERROR;
-            break;
+	switch (pdrv) {
+	case DEV_SDC :
+        switch (cmd) {
+            case CTRL_SYNC:
+                res = sd_disk_close_rw();
+                result = res;
+                res = res == 0 ? RES_OK : RES_ERROR;
+                break;
 
-        case GET_SECTOR_COUNT:
-            *(DWORD*) buff = 0;
-            res = RES_OK;
-            break;
+            case GET_SECTOR_COUNT:
+                *(DWORD*) buff = 0;
+                res = RES_OK;
+                break;
 
-        case GET_SECTOR_SIZE:
-            *(DWORD*) buff = 512;
-            res = RES_OK;
-            break;
+            case GET_SECTOR_SIZE:
+                *(DWORD*) buff = 512;
+                res = RES_OK;
+                break;
 
-        case GET_BLOCK_SIZE:
-            *(DWORD*) buff = 512;
-            res = RES_OK;
-            break;
+            case GET_BLOCK_SIZE:
+                *(DWORD*) buff = 512;
+                res = RES_OK;
+                break;
+        }
+
+        return res;
     }
-
-    return res;
+    return RES_PARERR;
 }
 
 DWORD get_fattime (void)

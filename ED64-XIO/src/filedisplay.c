@@ -7,7 +7,7 @@
 
 u8 file_display_read() {
 
-  u8 *path = "ED64/OS64.v64";
+  u8 *path = "/ED64/OS64.v64";
   struct controller_data cd;
   u8 buff[256];
   FIL f;
