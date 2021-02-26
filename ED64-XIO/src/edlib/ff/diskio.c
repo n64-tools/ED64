@@ -44,13 +44,15 @@ DSTATUS disk_initialize(
         BYTE pdrv /* Physical drive nmuber to identify the drive */
         ) {
     
-    DSTATUS stat;
+    DSTATUS stat = 0;
     BYTE result;
 	switch (pdrv) {
 	case DEV_SDC :
         result = sd_disk_initialize();
-        stat = 0;
-        if (result)stat = STA_NOINIT;
+        if(result == STA_PROTECT)stat = STA_PROTECT;
+        else if(result == STA_NODISK)stat = STA_NODISK;
+        else if (result)stat = STA_NOINIT;
+        else stat = 0;
 
         return stat;
     }
@@ -157,5 +159,7 @@ DRESULT disk_ioctl(
 DWORD get_fattime (void)
 {
 	//TODO: can we use the X7 or V3 RTC?
-	return ((DWORD)(FF_NORTC_YEAR - 1980) << 25 | (DWORD)FF_NORTC_MON << 21 | (DWORD)FF_NORTC_MDAY << 16);
+	return ((DWORD)(FF_NORTC_YEAR - 1980) << 25 |
+            (DWORD)FF_NORTC_MON << 21 |
+            (DWORD)FF_NORTC_MDAY << 16);
 }
