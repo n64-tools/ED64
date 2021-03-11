@@ -23,10 +23,13 @@ int main(void) {
   screen_repaint();
 
   /* mount disk */
+  fs = malloc(sizeof (FATFS));           /* Get work area for the volume */
+  memset(fs, 0, sizeof(fs));
+ 
   //memset(&fs, 0, sizeof(fs));
   //resp = f_mount(&fs, "", 1);
-  fs = malloc(sizeof (FATFS));           /* Get work area for the volume */
-  f_mount(fs, "", 0);                    /* Mount the default drive */
+  
+  resp = f_mount(fs, "", 0);             /* Mount the default drive */
   if (resp)
     main_display_error_text(resp);
 

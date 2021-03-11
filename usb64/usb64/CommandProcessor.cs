@@ -206,7 +206,7 @@ namespace ed64usb
                         //Lets remove them as a workaround!
                         for (int i = romBytes.Count; i > 0; i--) //cycle backwards through the byte array
                         {
-                            if (romBytes[i] == 0xff)
+                            if (romBytes.ElementAt(i) == 0xff)
                             {
                                 romBytes.RemoveAt(i);
                             }
