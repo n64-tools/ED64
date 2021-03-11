@@ -27,10 +27,10 @@ DSTATUS disk_status(
         ) {
     DSTATUS stat;
 	//int result;
-	switch (pdrv) {
-	case DEV_SDC :
+	// switch (pdrv) {
+	// case DEV_SDC :
         return stat;
-    }
+    // }
     return STA_NOINIT;
     
 }
@@ -46,8 +46,8 @@ DSTATUS disk_initialize(
     
     DSTATUS stat = 0;
     BYTE result;
-	switch (pdrv) {
-	case DEV_SDC :
+	// switch (pdrv) {
+	// case DEV_SDC :
         result = sd_disk_initialize();
         if(result == STA_PROTECT)stat = STA_PROTECT;
         else if(result == STA_NODISK)stat = STA_NODISK;
@@ -55,8 +55,8 @@ DSTATUS disk_initialize(
         else stat = 0;
 
         return stat;
-    }
-    return STA_NOINIT;
+    // }
+    // return STA_NOINIT;
 }
 
 
@@ -75,13 +75,13 @@ DRESULT disk_read(
     //DRESULT res;
 	BYTE result;
 
-	switch (pdrv) {
-	case DEV_SDC :
+	// switch (pdrv) {
+	// case DEV_SDC :
         result = sd_disk_read(buff, sector, count);
         if (result) return RES_ERROR;
         return RES_OK;
-    }
-    return RES_PARERR;
+    // }
+    // return RES_PARERR;
 }
 
 
@@ -102,13 +102,13 @@ DRESULT disk_write(
     //DRESULT res;
 	BYTE result;
 
-	switch (pdrv) {
-	case DEV_SDC :
+	// switch (pdrv) {
+	// case DEV_SDC :
         result = sd_disk_write((BYTE *) buff, sector, count);
         if (result)return RES_ERROR;
         return RES_OK;
-    }
-    return RES_PARERR;
+    // }
+    // return RES_PARERR;
 }
 
 #endif
@@ -126,8 +126,8 @@ DRESULT disk_ioctl(
     DRESULT res = RES_ERROR;
 	//BYTE result;
 
-	switch (pdrv) {
-	case DEV_SDC :
+	// switch (pdrv) {
+	// case DEV_SDC :
         switch (cmd) {
             case CTRL_SYNC:
                 res = sd_disk_close_rw();
@@ -152,8 +152,8 @@ DRESULT disk_ioctl(
         }
 
         return res;
-    }
-    return RES_PARERR;
+    // }
+    // return RES_PARERR;
 }
 
 DWORD get_fattime (void)
