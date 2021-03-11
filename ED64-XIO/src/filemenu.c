@@ -19,7 +19,7 @@ u8 file_menu_display() {
   u8 resp;
 
   /* open root dir */
-  resp = file_menu_load_directory("", inf, MAXIMUM_DIRECTORY_COUNT);
+  resp = file_menu_load_directory("\", inf, MAXIMUM_DIRECTORY_COUNT);
   if (resp)
     return resp;
 

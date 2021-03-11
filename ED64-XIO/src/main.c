@@ -29,7 +29,7 @@ int main(void) {
   //memset(&fs, 0, sizeof(fs));
   //resp = f_mount(&fs, "", 1);
   
-  resp = f_mount(fs, "", 0);             /* Mount the default drive */
+  resp = f_mount(fs, "", 1);             /* Mount the default drive */
   if (resp)
     main_display_error_text(resp);
 
