@@ -16,7 +16,7 @@ void usb_terminal() {
     struct controller_data cd;
 
     screen_clear();
-    screen_print("USB COM terminal demo");
+    screen_print("USB CDC terminal demo");
     screen_print("");
     screen_print("Waiting to receive data...");
     screen_print("");
@@ -84,7 +84,7 @@ void usb_load_rom() {
             usb_cmd_resp(0);
         }
 
-        //start the rom
+        /* start the rom */
         if (usb_cmd == 's') {
             ed64_bios_rom_savetype_set(ED64_SAVE_EEP16K); /* set save type */
             rom_boot_simulator(CIC_6102); /* run the ROM */

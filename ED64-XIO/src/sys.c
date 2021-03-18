@@ -193,7 +193,9 @@ void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len) {
 
 }
 
-//****************************************************************************** gfx
+/****************************************************************************** 
+ * graphics
+******************************************************************************/
 u16 *g_disp_ptr;
 u16 g_cur_pal;
 u16 g_cons_ptr;
@@ -201,7 +203,7 @@ u8 g_last_x;
 u8 g_last_y;
 u16 gfx_buff[G_SCREEN_W * G_SCREEN_H];
 
-void gDrawChar8X8(u32 val, u32 x, u32 y) {
+void screen_draw_char_8X8(u32 val, u32 x, u32 y) {
 
     u64 tmp;
     u32 font_val;
@@ -247,7 +249,7 @@ void screen_repaint() {
     for (u32 y = 0; y < screen.h; y++) {
         for (u32 x = 0; x < screen.w; x++) {
 
-            gDrawChar8X8(*chr_ptr++, x, y);
+            screen_draw_char_8X8(*chr_ptr++, x, y);
         }
     }
 
