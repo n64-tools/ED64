@@ -15,7 +15,7 @@ int main(void) {
     FATFS fs;
 
     sysInit();
-    bi_init();
+    ed64_bios_init();
 
     screen_clear();
     screen_print("File system initilizing...");
@@ -128,7 +128,7 @@ u8 main_display_menu() {
 void main_display_edid() {
 
     struct controller_data cd;
-    u32 id = bi_get_cart_id();
+    u32 id = ed64_bios_get_cart_id();
 
     screen_clear();
     screen_print("ED64 H/W Rev ID:   ");
@@ -136,16 +136,16 @@ void main_display_edid() {
     screen_print("ED64 H/W Rev Name: ");
 
     switch (id) {
-        case CART_ID_V2:
+        case ED64_CART_ID_V2:
             screen_append_str_print("EverDrive 64 V2.5");
             break;
-        case CART_ID_V3:
+        case ED64_CART_ID_V3:
             screen_append_str_print("EverDrive 64 V3");
             break;
-        case CART_ID_X7:
+        case ED64_CART_ID_X7:
             screen_append_str_print("EverDrive 64 X7");
             break;
-        case CART_ID_X5:
+        case ED64_CART_ID_X5:
             screen_append_str_print("EverDrive 64 X5");
             break;
         default:

@@ -33,16 +33,16 @@ void usb_terminal() {
         cd = get_keys_down();
         if (cd.c[0].B)return;
 
-        if (!bi_usb_can_rd())continue;
+        if (!ed64_bios_usb_can_read())continue;
 
         /* read from virtual serial port. 
         Size must be a multiple of 4. 
         Use 512B blocks for best performance */
-        tout = bi_usb_rd(data, 4);
+        tout = ed64_bios_usb_read(data, 4);
         if (tout)continue;
 
         /* Send echo string back to the serial port */
-        bi_usb_wr(data, 4);
+        ed64_bios_usb_write(data, 4);
 
         screen_print(data);
         screen_repaint();
@@ -67,11 +67,11 @@ void usb_load_rom() {
         cd = get_keys_down();
         if (cd.c[0].B)return;
 
-        if (!bi_usb_can_rd())continue;
+        if (!ed64_bios_usb_can_read())continue;
 
-        resp = bi_usb_rd(cmd, 16);
+        resp = ed64_bios_usb_read(cmd, 16);
         if (resp)continue;
-        //resp = bi_usb_rd(cmd + 16, 512 - 16);
+        //resp = ed64_bios_usb_read(cmd + 16, 512 - 16);
         //if (resp)return resp;
 
         if (cmd[0] != 'c')continue;
@@ -86,7 +86,7 @@ void usb_load_rom() {
 
         //start the game
         if (usb_cmd == 's') {
-            bi_game_cfg_set(SAVE_EEP16K); /* set save type */
+            ed64_bios_game_config_set(SAVE_EEP16K); /* set save type */
             rom_boot_simulator(CIC_6102); /* run the ROM */
         }
 
@@ -112,7 +112,7 @@ u8 usb_cmd_resp(u8 resp) {
     buff[2] = 'd';
     buff[3] = 'r';
     buff[4] = resp;
-    return bi_usb_wr(buff, sizeof (buff));
+    return ed64_bios_usb_write(buff, sizeof (buff));
 }
 
 void usb_cmd_cmem_fill(u8 *cmd) {
@@ -142,12 +142,12 @@ u8 usb_cmd_rom_wr(u8 *cmd) {
 
     if (slen == 0)return 0;
 
-    bi_usb_rd_start(); /* begin first block receiving (512B) */
+    ed64_bios_usb_read_start(); /* begin first block receiving (512B) */
 
     while (slen--) {
 
-        resp = bi_usb_rd_end(buff); /* wait for block receiving completion and read it to the buffer */
-        if (slen != 0)bi_usb_rd_start(); /* begin next block receiving while previous block transfers to the ROM */
+        resp = ed64_bios_usb_read_end(buff); /* wait for block receiving completion and read it to the buffer */
+        if (slen != 0)ed64_bios_usb_read_start(); /* begin next block receiving while previous block transfers to the ROM */
         if (resp)return resp;
         sysPI_wr(buff, addr, 512); /* copy received block to the rom memory */
         addr += 512;
