@@ -84,9 +84,9 @@ void usb_load_rom() {
             usb_cmd_resp(0);
         }
 
-        //start the game
+        //start the rom
         if (usb_cmd == 's') {
-            ed64_bios_game_config_set(SAVE_EEP16K); /* set save type */
+            ed64_bios_rom_savetype_set(ED64_SAVE_EEP16K); /* set save type */
             rom_boot_simulator(CIC_6102); /* run the ROM */
         }
 

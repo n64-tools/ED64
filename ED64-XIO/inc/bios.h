@@ -3,8 +3,8 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#ifndef BIOS_H
-#define BIOS_H
+#ifndef ED64_BIOS_H
+#define ED64_BIOS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,9 +23,13 @@ extern "C" {
 #define ED64_ERR_USB_TOUT 0xB2
 #define ED64_ERR_FPG_CFG 0xB3
 
-/* sd controller speed select. LO speed only for init procedure */
-#define ED64_DISK_SPD_LO 0x00
-#define ED64_DISK_SPD_HI 0x01
+/* 
+SD card controller speed select.
+LOW speed is only for initilization procedure.
+HIGH speed should be used for all other functions.
+*/
+#define ED64_SDIO_SPEED_LOW  0x00
+#define ED64_SDIO_SPEED_HIGH 0x01
 
 /* bootloader flags */
 #define ED64_BCFG_BOOTMOD 0x01
@@ -35,23 +39,23 @@ extern "C" {
 #define ED64_BCFG_CICLOCK 0x8000
 
 /* 64dd ROM table to know which data areas should be saved */
-#define ED64_DD_TBL_SIZE 2048
-#define ED64_DD_PGE_SIZE 0x8000
+#define ED64_64DD_TBL_SIZE 2048
+#define ED64_64DD_PGE_SIZE 0x8000
 
 #define ED64_CART_ID_V2 0xED640007
 #define ED64_CART_ID_V3 0xED640008
 #define ED64_CART_ID_X7 0xED640013
 #define ED64_CART_ID_X5 0xED640014
 
-/* game cfg register flags */
-#define SAVE_OFF 0x0000
-#define SAVE_EEP4K 0x0001
-#define SAVE_EEP16K 0x0002
-#define SAVE_SRM32K 0x0003
-#define SAVE_SRM96K 0x0004
-#define SAVE_FLASH 0x0005
-#define SAVE_SRM128K 0x0006
-#define SAVE_DD64 0x0010
+/* rom cfg register flags */
+#define ED64_SAVE_OFF 0x0000
+#define ED64_SAVE_EEP4K 0x0001
+#define ED64_SAVE_EEP16K 0x0002
+#define ED64_SAVE_SRM32K 0x0003
+#define ED64_SAVE_SRM96K 0x0004
+#define ED64_SAVE_FLASH 0x0005
+#define ED64_SAVE_SRM128K 0x0006
+#define ED64_SAVE_DD64 0x0010
 
 void ed64_bios_init();
 u8 ed64_bios_usb_can_read();
@@ -71,7 +75,7 @@ u8 ed64_bios_sdio_to_ram(void *dst, u16 slen);
 u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen);
 u8 ed64_bios_ram_to_sdio(void *src, u16 slen);
 
-void ed64_bios_game_config_set(u8 type); /* set save type */
+void ed64_bios_rom_savetype_set(u8 type); /* set save type */
 void ed64_bios_write_endian_swap(u8 swap_on);
 u32 ed64_bios_get_cart_id();
 
@@ -79,4 +83,4 @@ u32 ed64_bios_get_cart_id();
 }
 #endif
 
-#endif /* BIOS_H */
+#endif /* ED64_BIOS_H */

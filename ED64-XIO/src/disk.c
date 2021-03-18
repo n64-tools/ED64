@@ -65,7 +65,7 @@ u8 sd_disk_init() {
     disk_card_type = 0;
     disk_mode = DISK_MODE_NOP;
 
-    ed64_bios_sdio_speed(ED64_DISK_SPD_LO);
+    ed64_bios_sdio_speed(ED64_SDIO_SPEED_LOW);
 
     ed64_bios_sdio_bitlength(8);
     for (i = 0; i < 40; i++)ed64_bios_sdio_cmd_write(0xff);
@@ -144,7 +144,7 @@ u8 sd_disk_init() {
     if (resp)return DISK_ERR_INIT;
 
 
-    ed64_bios_sdio_speed(ED64_DISK_SPD_HI);
+    ed64_bios_sdio_speed(ED64_SDIO_SPEED_HIGH);
 
     return 0;
 }

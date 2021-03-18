@@ -112,7 +112,7 @@ void ed64_bios_init() {
     ed64_bios_reg_wr(REG_SD_STATUS, ed64_bios_sd_cfg);
 
     /* turn off backup ram */
-    ed64_bios_game_config_set(SAVE_OFF);
+    ed64_bios_rom_savetype_set(ED64_SAVE_OFF);
 }
 
 void ed64_bios_reg_wr(u16 reg, u32 val) {
@@ -242,7 +242,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out);
 
 void ed64_bios_sdio_speed(u8 speed) {
 
-    if (speed == ED64_DISK_SPD_LO) {
+    if (speed == ED64_SDIO_SPEED_LOW) {
         ed64_bios_sd_cfg &= ~SD_CFG_SPD;
     } else {
         ed64_bios_sd_cfg |= SD_CFG_SPD;
@@ -536,7 +536,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
 
 //******************************************************************************/
 
-void ed64_bios_game_config_set(u8 type) {
+void ed64_bios_rom_savetype_set(u8 type) {
 
     ed64_bios_reg_wr(REG_GAM_CFG, type);
 }

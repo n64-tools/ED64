@@ -184,9 +184,9 @@ void rom_boot_simulator(u8 cic) {
 
 
     static u16 cheats_on; /* 0 = off, 1 = select, 2 = all */
-    static u8 game_cic;
+    static u8 rom_cic;
 
-    game_cic = cic;
+    rom_cic = cic;
     cheats_on = 0;
 
 
@@ -296,7 +296,7 @@ void rom_boot_simulator(u8 cic) {
             "lui    $t3, 0xB000;"
 
             : // outputs
-            : "r" (game_cic), // inputs
+            : "r" (rom_cic), // inputs
             "r" (cheats_on)
             : "$4", "$5", "$6", "$8", // clobber
             "$11", "$19", "$20", "$21",
