@@ -196,7 +196,7 @@ void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
 /****************************************************************************** 
  * graphics
 ******************************************************************************/
-u16 *g_disp_ptr;
+u16 *screen_display_ptr;
 u16 screen_cur_pal;
 u16 screen_cons_ptr;
 u8 screen_last_x;
@@ -281,18 +281,18 @@ void screen_set_pal(u16 pal) {
 }
 
 void screen_append_str_print(u8 *str) {
-    while (*str != 0)*g_disp_ptr++ = *str++ + screen_cur_pal;
+    while (*str != 0)*screen_display_ptr++ = *str++ + screen_cur_pal;
 }
 
 void screen_append_char_print(u8 chr) {
 
-    *g_disp_ptr++ = chr + screen_cur_pal;
+    *screen_display_ptr++ = chr + screen_cur_pal;
 }
 
 void screen_append_hex4_print(u8 val) {
 
     val += (val < 10 ? '0' : '7');
-    *g_disp_ptr++ = val + screen_cur_pal;
+    *screen_display_ptr++ = val + screen_cur_pal;
 }
 
 void screen_append_hex8_print(u8 val) {
@@ -317,14 +317,14 @@ void screen_append_hex32_print(u32 val) {
 void screen_set_xy_pos(u8 x, u8 y) {
 
     screen_cons_ptr = x + y * TV_SCREEN_W;
-    screen_disp_ptr = &gfx_buff[screen_cons_ptr];
+    screen_display_ptr = &gfx_buff[screen_cons_ptr];
     screen_last_x = x;
     screen_last_y = y;
 }
 
 void screen_print(u8 *str) {
 
-    screen_disp_ptr = &gfx_buff[screen_cons_ptr];
+    screen_display_ptr = &gfx_buff[screen_cons_ptr];
     screen_cons_ptr += TV_SCREEN_W;
     screen_last_y++;
     screen_append_str_print(str);
