@@ -23,7 +23,7 @@ u8 fmanager_display() {
     if (resp)return resp;
 
 
-    while (1) {
+    for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
         /* print items */
         screen_clear();
@@ -38,7 +38,7 @@ u8 fmanager_display() {
         screen_repaint();
 
         /* controls */
-        while (1) {
+        for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
             screen_vsync();
             controller_scan();

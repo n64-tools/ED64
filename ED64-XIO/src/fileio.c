@@ -45,7 +45,7 @@ u8 fm_file_read() {
 
 
     screen_repaint();
-    while (1) {
+    for ( ;; ) { /* forever [equivalent to: "while (1)"] */
         screen_vsync();
         controller_scan();
         cd = get_keys_down();
@@ -101,7 +101,7 @@ u8 fm_file_write() {
     screen_print("Press (B) to exit");
 
     screen_repaint();
-    while (1) {
+    for ( ;; ) { /* forever [equivalent to: "while (1)"] */
         screen_vsync();
         controller_scan();
         cd = get_keys_down();

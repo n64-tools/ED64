@@ -27,7 +27,7 @@ int main(void) {
     if (resp)main_display_error(resp);
 
 
-    while (1) {
+    for ( ;; ) { /* forever [equivalent to: "while (1)"] */
         resp = main_display_menu();
         if (resp)main_display_error(resp);
     }
@@ -58,7 +58,7 @@ u8 main_display_menu() {
     menu[MENU_USB_LOADER] = "USB ROM Loader";
     menu[MENU_EDID] = "ED64 Hardware Rev ID";
 
-    while (1) {
+    for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
         screen_clear();
 
@@ -157,7 +157,7 @@ void main_display_edid() {
     screen_print("");
     screen_print("Press (B) to exit");
     screen_repaint();
-    while (1) {
+    for ( ;; ) { /* forever [equivalent to: "while (1)"] */
         screen_vsync();
         controller_scan();
         cd = get_keys_down();
