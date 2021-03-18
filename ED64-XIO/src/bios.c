@@ -94,6 +94,12 @@ u8 ed64_bios_usb_busy();
 
 u16 ed64_bios_sd_cfg;
 
+
+/**
+ * @brief Initializes the ED64 cart
+ *
+ * @return 0 on successful or a other value on failure. (will probably just hang on failure!)
+ */
 void ed64_bios_init() {
 
     /* setup n64 bus timings for better performance */
@@ -113,13 +119,25 @@ void ed64_bios_init() {
 
     /* turn off backup ram */
     ed64_bios_rom_savetype_set(ED64_SAVE_OFF);
+
+    /* Always successful for now */
+    return 0;
 }
 
+/**
+ * @brief Write a register to the ED64
+ *
+ */
 void ed64_bios_reg_wr(u16 reg, u32 val) {
 
     sys_n64_pi_write(&val, REG_ADDR(reg), 4);
 }
 
+/**
+ * @brief Read a register to the ED64
+ *
+ * @return Value of the register
+ */
 u32 ed64_bios_reg_rd(u16 reg) {
 
     u32 val;
@@ -127,6 +145,11 @@ u32 ed64_bios_reg_rd(u16 reg) {
     return val;
 }
 
+/**
+ * @brief Initialize the USB CDC hardware
+ *
+ * @return 0 on successful or an error value on failure
+ */
 void ed64_bios_usb_init() {
 
     u8 buff[512];
@@ -140,6 +163,11 @@ void ed64_bios_usb_init() {
     }
 }
 
+/**
+ * @brief Checks if USB CDC is available for read
+ *
+ * @return 0 on successful or 1 on failure
+ */
 u8 ed64_bios_usb_can_read() {
 
     u32 status = ed64_bios_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
@@ -147,6 +175,11 @@ u8 ed64_bios_usb_can_read() {
     return 0;
 }
 
+/**
+ * @brief Checks if USB CDC is available for write
+ *
+ * @return 0 on successful or 1 on failure
+ */
 u8 ed64_bios_usb_can_write() {
 
     u32 status = ed64_bios_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
@@ -154,6 +187,11 @@ u8 ed64_bios_usb_can_write() {
     return 0;
 }
 
+/**
+ * @brief Checks if USB CDC is busy
+ *
+ * @return 0 on successful or other value on failure
+ */
 u8 ed64_bios_usb_busy() {
 
     u32 tout = 0;
@@ -168,6 +206,16 @@ u8 ed64_bios_usb_busy() {
     return 0;
 }
 
+/**
+ * @brief Reads from USB (CDC)
+ *
+ * @param[in]  dst
+ *             Destination pointer to copy to
+ * @param[in]  len
+ *             Length in bytes to copy
+ *
+ * @return 0 on successful or other value on failure
+ */
 u8 ed64_bios_usb_read(void *dst, u32 len) {
 
     u8 resp = 0;
@@ -194,6 +242,16 @@ u8 ed64_bios_usb_read(void *dst, u32 len) {
     return resp;
 }
 
+/**
+ * @brief Writes to USB (CDC)
+ *
+ * @param[in]  src
+ *             Source pointer to copy from
+ * @param[in]  len
+ *             Length in bytes to copy
+ *
+ * @return 0 on successful or other value on failure
+ */
 u8 ed64_bios_usb_write(void *src, u32 len) {
 
     u8 resp = 0;
@@ -221,11 +279,20 @@ u8 ed64_bios_usb_write(void *src, u32 len) {
     return resp;
 }
 
+/**
+ * @brief Starts read from USB (CDC)
+ *
+ */
 void ed64_bios_usb_read_start() {
 
     ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_RD | 512);
 }
 
+/**
+ * @brief Ends read from USB (CDC)
+ *
+ * @return 0 on successful or other value on failure
+ */
 u8 ed64_bios_usb_read_end(void *dst) {
 
     u8 resp = ed64_bios_usb_busy();
