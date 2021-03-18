@@ -20,8 +20,8 @@ void rom_boot_simulator(u8 cic);
 u8 fmanager_display();
 void usb_terminal();
 void usb_load_rom();
-u8 fileRead();
-u8 fileWrite();
+u8 fm_file_read();
+u8 fm_file_write();
 
 #ifdef __cplusplus
 }

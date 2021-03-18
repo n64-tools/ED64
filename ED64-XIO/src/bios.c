@@ -238,7 +238,7 @@ u8 bi_usb_rd_end(void *dst) {
 //******************************************************************************
 // sdio
 //******************************************************************************/
-void sdCrc16(void *src, u16 *crc_out);
+void bi_sd_crc16(void *src, u16 *crc_out);
 
 void bi_sd_speed(u8 speed) {
 
@@ -362,7 +362,7 @@ u8 bi_ram_to_sd(void *src, u16 slen) {
 
     while (slen--) {
 
-        sdCrc16(src, crc);
+        bi_sd_crc16(src, crc);
 
         bi_sd_bitlen(2);
         bi_sd_dat_wr(0xff);
@@ -405,7 +405,7 @@ u8 bi_ram_to_sd(void *src, u16 slen) {
     return 0;
 }
 
-void sdCrc16(void *src, u16 *crc_out) {
+void bi_sd_crc16(void *src, u16 *crc_out) {
 
     u16 i;
     u16 u;

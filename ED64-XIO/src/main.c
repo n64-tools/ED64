@@ -95,13 +95,13 @@ u8 main_display_menu() {
 
         /* read data from file */
         if (selector == MENU_FILE_READ) {
-            resp = fileRead();
+            resp = fm_file_read();
             if (resp)return resp;
         }
 
         /* write string to the test.txt file */
         if (selector == MENU_FILE_WRITE) {
-            resp = fileWrite();
+            resp = fm_file_write();
             if (resp)return resp;
         }
 
