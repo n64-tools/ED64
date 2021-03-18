@@ -117,13 +117,13 @@ void ed64_bios_init() {
 
 void ed64_bios_reg_wr(u16 reg, u32 val) {
 
-    sysPI_wr(&val, REG_ADDR(reg), 4);
+    sys_n64_PI_write(&val, REG_ADDR(reg), 4);
 }
 
 u32 ed64_bios_reg_rd(u16 reg) {
 
     u32 val;
-    sysPI_rd(&val, REG_ADDR(reg), 4);
+    sys_n64_PI_read(&val, REG_ADDR(reg), 4);
     return val;
 }
 
@@ -185,7 +185,7 @@ u8 ed64_bios_usb_read(void *dst, u32 len) {
         resp = ed64_bios_usb_busy(); /* wait until requested data amount will be transferred to the internal buffer */
         if (resp)break; /* timeout */
 
-        sysPI_rd(dst, REG_ADDR(REG_USB_DAT + baddr), blen); /* get data from internal buffer */
+        sys_n64_PI_read(dst, REG_ADDR(REG_USB_DAT + baddr), blen); /* get data from internal buffer */
 
         dst += blen;
         len -= blen;
@@ -207,7 +207,7 @@ u8 ed64_bios_usb_write(void *src, u32 len) {
         if (blen > len)blen = len;
         baddr = 512 - blen; /* address in fpga internal buffer. data length equal to 512-int buffer addr */
 
-        sysPI_wr(src, REG_ADDR(REG_USB_DAT + baddr), blen); /* copy data to the internal buffer */
+        sys_n64_PI_write(src, REG_ADDR(REG_USB_DAT + baddr), blen); /* copy data to the internal buffer */
         src += 512;
 
         ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_WR | baddr); /* usb write request */
@@ -231,7 +231,7 @@ u8 ed64_bios_usb_read_end(void *dst) {
     u8 resp = ed64_bios_usb_busy();
     if (resp)return resp;
 
-    sysPI_rd(dst, REG_ADDR(REG_USB_DAT), 512);
+    sys_n64_PI_read(dst, REG_ADDR(REG_USB_DAT), 512);
 
     return 0;
 }
@@ -327,8 +327,8 @@ u8 ed64_bios_sdio_to_ram(void *dst, u16 slen) {
         ed64_bios_sdio_bitlength(4);
 
         ed64_bios_sd_switch_mode(REG_SD_DAT_RD);
-        sysPI_rd(dst, REG_ADDR(REG_SDIO_ARD), 512);
-        sysPI_rd(crc, REG_ADDR(REG_SDIO_ARD), 8);
+        sys_n64_PI_read(dst, REG_ADDR(REG_SDIO_ARD), 512);
+        sys_n64_PI_read(crc, REG_ADDR(REG_SDIO_ARD), 8);
         dst += 512;
 
     }
@@ -369,8 +369,8 @@ u8 ed64_bios_ram_to_sdio(void *src, u16 slen) {
         ed64_bios_sdio_data_write(0xf0);
 
         ed64_bios_sdio_bitlength(4);
-        sysPI_wr(src, REG_ADDR(REG_SDIO_ARD), 512);
-        sysPI_wr(crc, REG_ADDR(REG_SDIO_ARD), 8);
+        sys_n64_PI_write(src, REG_ADDR(REG_SDIO_ARD), 512);
+        sys_n64_PI_write(crc, REG_ADDR(REG_SDIO_ARD), 8);
         src += 512;
 
         ed64_bios_sdio_bitlength(1);
@@ -534,7 +534,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
 
 }
 
-//******************************************************************************/
+/******************************************************************************/
 
 void ed64_bios_rom_savetype_set(u8 type) {
 

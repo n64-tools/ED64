@@ -107,9 +107,9 @@ typedef struct {
   u16 *bgr_ptr;
 } Screen;
 
-void sysInit();
-void sysPI_rd(void *ram, unsigned long pi_address, unsigned long len);
-void sysPI_wr(void *ram, unsigned long pi_address, unsigned long len);
+void sys_n64_init();
+void sys_n64_PI_read(void *ram, unsigned long pi_address, unsigned long len);
+void sys_n64_PI_write(void *ram, unsigned long pi_address, unsigned long len);
 
 #define G_SCREEN_W 40 /* screen width (horizontal) */
 #define G_SCREEN_H 30 /* screen height (vertical) */

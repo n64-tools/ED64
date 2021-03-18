@@ -14,7 +14,7 @@ int main(void) {
     u8 resp;
     FATFS fs;
 
-    sysInit();
+    sys_n64_init();
     ed64_bios_init();
 
     screen_clear();
