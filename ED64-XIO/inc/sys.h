@@ -108,26 +108,26 @@ typedef struct {
 } Screen;
 
 void sys_n64_init();
-void sys_n64_PI_read(void *ram, unsigned long pi_address, unsigned long len);
-void sys_n64_PI_write(void *ram, unsigned long pi_address, unsigned long len);
+void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len);
+void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len);
 
-#define G_SCREEN_W 40 /* screen width (horizontal) */
-#define G_SCREEN_H 30 /* screen height (vertical) */
+#define TV_SCREEN_W 40 /* screen width (horizontal) */
+#define TV_SCREEN_H 30 /* screen height (vertical) */
 #define G_BORDER_X 2
 #define G_BORDER_Y 2
-#define G_MAX_STR_LEN (G_SCREEN_W - G_BORDER_X * 2)
+#define G_MAX_STR_LEN (TV_SCREEN_W - G_BORDER_X * 2)
 
-#define PAL_B1 0x1000
-#define PAL_B2 0x2000
-#define PAL_B3 0x3000
-#define PAL_G1 0x1400
-#define PAL_G2 0x2400
-#define PAL_G3 0x3400
+#define REGION_PAL_B1 0x1000
+#define REGION_PAL_B2 0x2000
+#define REGION_PAL_B3 0x3000
+#define REGION_PAL_G1 0x1400
+#define REGION_PAL_G2 0x2400
+#define REGION_PAL_G3 0x3400
 
-#define PAL_BR 0x5000
-#define PAL_BG 0x6000
-#define PAL_WG 0x1700
-#define PAL_RB 0x0500
+#define REGION_PAL_BR 0x5000
+#define REGION_PAL_BG 0x6000
+#define REGION_PAL_WG 0x1700
+#define REGION_PAL_RB 0x0500
 
 void screen_clear();
 void screen_print(u8 *str);

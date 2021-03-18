@@ -63,7 +63,7 @@ const u32 pal_320[] = {
 #define SYS_MAX_PIXEL_W   320
 #define SYS_MAX_PIXEL_H   240
 
-void sys_n64_region_Init();
+void sys_n64_region_init();
 void sysPI_rd_safe(void *ram, unsigned long pi_address, unsigned long len);
 void sysPI_wr_safe(void *ram, unsigned long pi_address, unsigned long len);
 
@@ -119,11 +119,11 @@ void sys_n64_init() {
     screen.current = screen.buff[screen.buff_sw];
     screen.bgr_ptr = 0;
 
-    sys_n64_region_Init();
+    sys_n64_region_init();
 
 }
 
-void sys_n64_region_Init() {
+void sys_n64_region_init() {
 
     u32 i;
     u32 *v_setup;
@@ -158,7 +158,7 @@ void sys_n64_region_Init() {
     enable_interrupts();
 }
 
-void sys_n64_PI_read(void *ram, unsigned long pi_address, unsigned long len) {
+void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
@@ -175,7 +175,7 @@ void sys_n64_PI_read(void *ram, unsigned long pi_address, unsigned long len) {
     enable_interrupts();
 }
 
-void sys_n64_PI_write(void *ram, unsigned long pi_address, unsigned long len) {
+void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
@@ -201,7 +201,7 @@ u16 screen_cur_pal;
 u16 screen_cons_ptr;
 u8 screen_last_x;
 u8 screen_last_y;
-u16 gfx_buff[G_SCREEN_W * G_SCREEN_H];
+u16 gfx_buff[TV_SCREEN_W * TV_SCREEN_H];
 
 void screen_draw_char_8X8(u32 val, u32 x, u32 y) {
 
@@ -272,8 +272,8 @@ void screen_clear() {
 
     screen_cur_pal = 0;
     screen_set_xy_pos(G_BORDER_X, G_BORDER_Y);
-    for (int i = 0; i < G_SCREEN_W * G_SCREEN_H; i++)gfx_buff[i] = PAL_B3;
-    screen_set_pal(PAL_B1);
+    for (int i = 0; i < TV_SCREEN_W * TV_SCREEN_H; i++)gfx_buff[i] = REGION_PAL_B3;
+    screen_set_pal(REGION_PAL_B1);
 }
 
 void screen_set_pal(u16 pal) {
@@ -316,16 +316,16 @@ void screen_append_hex32_print(u32 val) {
 
 void screen_set_xy_pos(u8 x, u8 y) {
 
-    screen_cons_ptr = x + y * G_SCREEN_W;
-    screen_disp_ptr = &gfx_buff[g_cons_ptr];
+    screen_cons_ptr = x + y * TV_SCREEN_W;
+    screen_disp_ptr = &gfx_buff[screen_cons_ptr];
     screen_last_x = x;
     screen_last_y = y;
 }
 
 void screen_print(u8 *str) {
 
-    screen_disp_ptr = &gfx_buff[g_cons_ptr];
-    screen_cons_ptr += G_SCREEN_W;
+    screen_disp_ptr = &gfx_buff[screen_cons_ptr];
+    screen_cons_ptr += TV_SCREEN_W;
     screen_last_y++;
     screen_append_str_print(str);
 }

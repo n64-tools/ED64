@@ -128,7 +128,7 @@ void usb_cmd_cmem_fill(u8 *cmd) {
     }
 
     while (slen--) {
-        sys_n64_PI_write(buff, addr, 512);
+        sys_n64_pi_write(buff, addr, 512);
         addr += 512;
     }
 }
@@ -149,7 +149,7 @@ u8 usb_cmd_rom_wr(u8 *cmd) {
         resp = ed64_bios_usb_read_end(buff); /* wait for block receiving completion and read it to the buffer */
         if (slen != 0)ed64_bios_usb_read_start(); /* begin next block receiving while previous block transfers to the ROM */
         if (resp)return resp;
-        sys_n64_PI_write(buff, addr, 512); /* copy received block to the rom memory */
+        sys_n64_pi_write(buff, addr, 512); /* copy received block to the rom memory */
         addr += 512;
     }
 
