@@ -3,8 +3,8 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#ifndef EVERDRIVE_H
-#define EVERDRIVE_H
+#ifndef ED_ROM_SAMPLE_H
+#define ED_ROM_SAMPLE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,4 +27,4 @@ u8 fm_file_write();
 }
 #endif
 
-#endif /* EVERDRIVE_H */
+#endif /* ED_ROM_SAMPLE_H */

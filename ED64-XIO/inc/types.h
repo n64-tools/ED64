@@ -1,3 +1,15 @@
+/*
+* Copyright (c) Krikzz and Contributors.
+* See LICENSE file in the project root for full license information.
+*/
+
+#ifndef ED64_TYPES_H
+#define ED64_TYPES_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define u8 unsigned char
 #define u16 unsigned short
 #define u32 unsigned long
@@ -12,3 +24,9 @@
 #define s16 short
 #define s32 long
 #define s64 long long
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /*ED64_TYPES_H */

@@ -3,8 +3,8 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#ifndef SD_DISK_H
-#define SD_DISK_H
+#ifndef ED64_SD_DISIOK_H
+#define ED64_SD_DISIOK_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,4 +29,4 @@ u8 sd_disk_close_rw();
 }
 #endif
 
-#endif /* SD_DISK_H */
+#endif /* ED64_SD_DISIOK_H */

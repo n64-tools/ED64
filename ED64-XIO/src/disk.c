@@ -135,7 +135,7 @@ u8 sd_disk_init() {
     rca = (sd_resp_buff[1] << 24) | (sd_resp_buff[2] << 16) | (sd_resp_buff[3] << 8) | (sd_resp_buff[4] << 0);
 
 
-    resp = sd_disk_cmd(CMD9, rca); //get csd
+    resp = sd_disk_cmd(CMD9, rca); /* get csd */
     if (resp)return DISK_ERR_INIT;
 
 
@@ -216,7 +216,7 @@ u8 sd_disk_read_resp(u8 cmd) {
     ed64_bios_sdio_bitlength(1);
 
 
-    while ((sd_resp_buff[0] & 0xC0) != 0) {//wait for resp begin. first two bits should be zeros
+    while ((sd_resp_buff[0] & 0xC0) != 0) { /* wait for resp begin. first two bits should be zeros */
         sd_resp_buff[0] = ed64_bios_sdio_cmd_read();
 
         if (i++ == DISK_CMD_TOUT)return DISK_ERR_CTO;
