@@ -57,6 +57,11 @@ u8 disk_mode;
 * sdcard disk base functions
 *******************************************************************************/
 
+/**
+ * @brief Initializes the sdcard interface
+ *
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_init() {
 
     u16 i;
@@ -151,6 +156,16 @@ u8 sd_disk_init() {
     return 0;
 }
 
+/**
+ * @brief Sends an SDIO command
+ *
+ * @param[in]  cmd
+ *             The command
+ * @param[in]  arg
+ *             The value to write
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_cmd(u8 cmd, u32 arg) {
 
 
@@ -181,6 +196,15 @@ u8 sd_disk_cmd(u8 cmd, u32 arg) {
     return sd_disk_read_resp(cmd);
 }
 
+
+/**
+ * @brief Reads the SD card response
+ *
+ * @param[in]  cmd
+ *             The command to read
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_read_resp(u8 cmd) {
 
     u16 i;
@@ -208,6 +232,7 @@ u8 sd_disk_read_resp(u8 cmd) {
     return 0;
 }
 
+
 u32 crc7(u8 *buff, u32 len) {
 
     u32 a, crc = 0;
@@ -227,6 +252,14 @@ u32 crc7(u8 *buff, u32 len) {
 * sdcard read functions
 *******************************************************************************/
 
+/**
+ * @brief Reads the SD card
+ *
+ * @param[in]  saddr
+ *             The start memory address
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_open_read(u32 saddr) {
 
     u8 resp;
@@ -243,6 +276,20 @@ u8 sd_disk_open_read(u32 saddr) {
     return 0;
 }
 
+/**
+ * @brief Reads the SD card to RAM
+ *
+ * @param[in]  dst
+ *             destination pointer to copy to
+ * 
+ * @param[in]  saddr
+ *             The start memory address
+ * 
+ * @param[in]  slen
+ *             Length in bytes to copy
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
 
     u8 resp = 0;
@@ -257,6 +304,20 @@ u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
     return 0;
 }
 
+/**
+ * @brief Reads the SD card to ROM
+ *
+ * @param[in]  dst
+ *             destination pointer to copy to
+ * 
+ * @param[in]  saddr
+ *             The start memory address
+ * 
+ * @param[in]  slen
+ *             Length in bytes to copy
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
 
     u8 resp = 0;
@@ -271,6 +332,20 @@ u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
     return 0;
 }
 
+/**
+ * @brief Reads the SD card
+ *
+ * @param[in]  dst
+ *             destination pointer to copy to
+ * 
+ * @param[in]  saddr
+ *             The start memory address
+ * 
+ * @param[in]  slen
+ *             Length in bytes to copy
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_read(void *dst, u32 saddr, u32 slen) {
 
     if (((u32) dst & 0x1FFFFFFF) < 0x800000) {
@@ -284,6 +359,11 @@ u8 sd_disk_read(void *dst, u32 saddr, u32 slen) {
 * sdcard var functions
 *******************************************************************************/
 
+/**
+ * @brief Closes the SD card
+ *
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_close_rw() {
 
     u8 resp;
@@ -314,6 +394,14 @@ u8 sd_disk_close_rw() {
 * sdcard write functions
 *******************************************************************************/
 
+/**
+ * @brief Writes to the SD card
+ *
+ * @param[in]  saddr
+ *             The start memory address
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_open_write(u32 saddr) {
 
     u8 resp;
@@ -330,6 +418,20 @@ u8 sd_disk_open_write(u32 saddr) {
     return 0;
 }
 
+/**
+ * @brief Writes to the SD card
+ *
+ * @param[in]  src
+ *             Source pointer to copy from
+ * 
+ * @param[in]  saddr
+ *             The start memory address
+ * 
+ * @param[in]  slen
+ *             Length in bytes to copy
+ * 
+ * @return 0 on successful or a other value on failure.
+ */
 u8 sd_disk_write(void *src, u32 saddr, u32 slen) {
 
     u8 resp;
