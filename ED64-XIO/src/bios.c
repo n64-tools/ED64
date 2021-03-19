@@ -126,6 +126,11 @@ void ed64_bios_init() {
 
 /**
  * @brief Write a register to the ED64
+ * 
+ * @param[in]  reg
+ *             The register to write to
+ * @param[in]  val
+ *             The value of the register
  *
  */
 void ed64_bios_reg_wr(u16 reg, u32 val) {
@@ -134,7 +139,7 @@ void ed64_bios_reg_wr(u16 reg, u32 val) {
 }
 
 /**
- * @brief Read a register to the ED64
+ * @brief Read a register from the ED64
  *
  * @return Value of the register
  */
@@ -144,6 +149,11 @@ u32 ed64_bios_reg_rd(u16 reg) {
     sys_n64_pi_read(&val, REG_ADDR(reg), 4);
     return val;
 }
+
+
+/******************************************************************************
+* USB functions
+******************************************************************************/
 
 /**
  * @brief Initialize the USB CDC hardware
@@ -302,11 +312,17 @@ u8 ed64_bios_usb_read_end(void *dst) {
 
     return 0;
 }
-//******************************************************************************
-// sdio
-//******************************************************************************/
+/******************************************************************************
+* sdio functions
+******************************************************************************/
 void ed64_bios_sd_crc16(void *src, u16 *crc_out);
 
+/**
+ * @brief Sets the SDIO bus speed
+ *
+ * @param[in]  speed
+ *             the bus speed required
+ */
 void ed64_bios_sdio_speed(u8 speed) {
 
     if (speed == ED64_SDIO_SPEED_LOW) {
@@ -317,9 +333,20 @@ void ed64_bios_sdio_speed(u8 speed) {
 
     ed64_bios_reg_wr(REG_SD_STATUS, ed64_bios_sd_cfg);
 }
-u16 ed64_bios_old_sd_mode;
-/* this function gives time for setting stable values on open bus */
 
+/**
+ * @brief Depricated: gives time for setting stable values on open bus
+ *
+ */
+u16 ed64_bios_old_sd_mode;
+
+/**
+ * @brief Switches the SDIO speed
+ * 
+ * @param[in]  mode
+ *             LOW or High
+ *
+ */
 void ed64_bios_sd_switch_mode(u16 mode) {
 
     if (ed64_bios_old_sd_mode == mode)return;
@@ -332,6 +359,10 @@ void ed64_bios_sd_switch_mode(u16 mode) {
     ed64_bios_reg_wr(REG_SD_STATUS, old_sd_cfg);
 }
 
+/**
+ * @brief Writes the SDIO bit length
+ * 
+ */
 void ed64_bios_sdio_bitlength(u8 val) {
 
     ed64_bios_sd_cfg &= ~SD_CFG_BITLEN;
@@ -339,16 +370,30 @@ void ed64_bios_sdio_bitlength(u8 val) {
     ed64_bios_reg_wr(REG_SD_STATUS, ed64_bios_sd_cfg);
 }
 
+/**
+ * @brief Checks if the SD Card is busy
+ * 
+ */
 void ed64_bios_sd_busy() {
     while ((ed64_bios_reg_rd(REG_SD_STATUS) & SD_STA_BUSY) != 0);
 }
 
+/**
+ * @brief Writes a command to SDIO
+ * 
+ */
 void ed64_bios_sdio_cmd_write(u8 val) {
     ed64_bios_sd_switch_mode(REG_SD_CMD_WR);
     ed64_bios_reg_wr(REG_SD_CMD_WR, val);
     ed64_bios_sd_busy();
 }
 
+/**
+ * @brief Reads a command from SDIO
+ * 
+ * 
+ * @return the result of the command read
+ */
 u8 ed64_bios_sdio_cmd_read() {
 
     ed64_bios_sd_switch_mode(REG_SD_CMD_RD);
@@ -357,12 +402,22 @@ u8 ed64_bios_sdio_cmd_read() {
     return ed64_bios_reg_rd(REG_SD_CMD_RD);
 }
 
+/**
+ * @brief Writes data to SDIO
+ * 
+ */
 void ed64_bios_sdio_data_write(u8 val) {
     ed64_bios_sd_switch_mode(REG_SD_DAT_WR);
     ed64_bios_reg_wr(REG_SD_DAT_WR, 0x00ff | (val << 8));
     //ed64_bios_sd_busy();
 }
 
+/**
+ * @brief Reads data from SDIO
+ * 
+ * 
+ * @return the result of the data read
+ */
 u8 ed64_bios_sd_data_read() {
 
     ed64_bios_sd_switch_mode(REG_SD_DAT_RD);
@@ -371,6 +426,15 @@ u8 ed64_bios_sd_data_read() {
     return ed64_bios_reg_rd(REG_SD_DAT_RD);
 }
 
+/**
+ * @brief Reads memory from the SD card to RAM space
+ * 
+ * @param[in]  dst
+ *             Destination pointer to write to
+ * @param[in]  slen
+ *             Length in bytes to copy
+ *
+ */
 u8 ed64_bios_sdio_to_ram(void *dst, u16 slen) {
 
     u16 i;
@@ -405,6 +469,17 @@ u8 ed64_bios_sdio_to_ram(void *dst, u16 slen) {
     return 0;
 }
 
+
+/**
+ * @brief Reads memory from the SD card to ROM space
+ *
+ * @param[in]  dst
+ *             Source pointer to copy from
+ * @param[in]  slen
+ *             Length in bytes to copy
+ *
+ * @return 0 on successful or other value on failure
+ */
 u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen) {
 
     u16 resp = DMA_STA_BUSY;
@@ -422,6 +497,16 @@ u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen) {
     return 0;
 }
 
+/**
+ * @brief Writes memory from RAM to the SD card
+ *
+ * @param[in]  src
+ *             Source pointer to copy from
+ * @param[in]  slen
+ *             Length in bytes to copy
+ *
+ * @return 0 on successful or other value on failure
+ */
 u8 ed64_bios_ram_to_sdio(void *src, u16 slen) {
 
     u8 resp;
@@ -472,6 +557,14 @@ u8 ed64_bios_ram_to_sdio(void *src, u16 slen) {
     return 0;
 }
 
+/**
+ * @brief CRC for SD
+ * 
+ * @param[in]  src
+ *             Source pointer to read
+ * @param[out]  crc_out
+ *             Destination pointer containing the CRC value
+ */
 void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
 
     u16 i;
@@ -601,14 +694,27 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
 
 }
 
-/******************************************************************************/
+/******************************************************************************
+* Misc functions
+******************************************************************************/
 
+/**
+ * @brief Sets the save type on the ED64 cart
+ *
+ * @param[in]  type
+ *             The save type to set
+ */
 void ed64_bios_rom_savetype_set(u8 type) {
 
     ed64_bios_reg_wr(REG_GAM_CFG, type);
 }
 
-/* swaps bytes copied from SD card. only affects reads to ROM area */
+/**
+ * @brief Allows swapping bytes copied from SD card. Only affects reads to ROM area
+ *
+ * @param[in]  swap_on
+ *             Swaps bytes if true
+ */
 void ed64_bios_write_endian_swap(u8 swap_on) {
 
     if (swap_on) {
@@ -618,6 +724,11 @@ void ed64_bios_write_endian_swap(u8 swap_on) {
     }
 }
 
+/**
+ * @brief Identifies the ED64 cartridge
+ *
+ * @return the cartridge ID
+ */
 u32 ed64_bios_get_cart_id() {
 
     return ed64_bios_reg_rd(REG_EDID);
