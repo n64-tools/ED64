@@ -6,27 +6,27 @@
 #include "everdrive.h"
 
 
-#define CMD0  0x40    // software reset
-#define CMD1  0x41    // brings card out of idle state
-#define CMD8  0x48    // Reserved
-#define CMD12 0x4C    // stop transmission on multiple block read
-#define CMD17 0x51    // read single block
-#define CMD18 0x52    // read multiple block
-#define CMD58 0x7A    // reads the OCR register
+#define CMD0  0x40    /* software reset */
+#define CMD1  0x41    /* brings card out of idle state */
+#define CMD8  0x48    /* Reserved */
+#define CMD12 0x4C    /* stop transmission on multiple block read */
+#define CMD17 0x51    /* read single block */
+#define CMD18 0x52    /* read multiple block */
+#define CMD58 0x7A    /* reads the OCR register */
 #define CMD55 0x77
 #define CMD41 0x69
-#define CMD24 0x58    // writes a single block
-#define CMD25 0x59    // writes a multi block
+#define CMD24 0x58    /* writes a single block */
+#define CMD25 0x59    /* writes a multi block */
 #define	ACMD41 0x69
 #define	ACMD6 0x46
 #define SD_V2 2
 #define SD_HC 1
 
-#define CMD2 0x42 //read cid
-#define CMD3 0x43 //read rca
+#define CMD2 0x42 /*read cid */
+#define CMD3 0x43 /*read rca */
 #define CMD7 0x47
 #define CMD9 0x49
-#define CMD6 0x46 //set hi speed
+#define CMD6 0x46 /*set hi speed */
 
 #define R1 1
 #define R2 2
@@ -53,7 +53,9 @@ u32 disk_cur_addr;
 u8 disk_card_type;
 u8 disk_mode;
 
-//****************************************************************************** disk base
+/******************************************************************************
+* sdcard disk base functions
+*******************************************************************************/
 
 u8 sd_disk_init() {
 
@@ -221,7 +223,9 @@ u32 crc7(u8 *buff, u32 len) {
     return (crc & 0xfe);
 }
 
-//****************************************************************************** read op
+/******************************************************************************
+* sdcard read functions
+*******************************************************************************/
 
 u8 sd_disk_open_read(u32 saddr) {
 
@@ -275,7 +279,10 @@ u8 sd_disk_read(void *dst, u32 saddr, u32 slen) {
         return sd_disk_read_to_rom(saddr, ((u32) dst) & 0x3FFFFFF, slen);
     }
 }
-//****************************************************************************** var
+
+/******************************************************************************
+* sdcard var functions
+*******************************************************************************/
 
 u8 sd_disk_close_rw() {
 
@@ -303,7 +310,9 @@ u8 sd_disk_close_rw() {
     return 0;
 }
 
-//****************************************************************************** write op
+/******************************************************************************
+* sdcard write functions
+*******************************************************************************/
 
 u8 sd_disk_open_write(u32 saddr) {
 
@@ -334,5 +343,3 @@ u8 sd_disk_write(void *src, u32 saddr, u32 slen) {
 
     return 0;
 }
-
-//******************************************************************************
