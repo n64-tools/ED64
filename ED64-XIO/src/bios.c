@@ -87,8 +87,8 @@
 
 #define REG_ADDR(reg)   (KSEG1 | REG_BASE | (reg))
 
-u32 ed64_bios_reg_rd(u16 reg);
-void ed64_bios_reg_wr(u16 reg, u32 val);
+u32 ed64_bios_register_read(u16 reg);
+void ed64_bios_register_write(u16 reg, u32 val);
 void ed64_bios_usb_init();
 u8 ed64_bios_usb_busy();
 
@@ -107,15 +107,15 @@ void ed64_bios_init() {
     IO_WRITE(PI_BSD_DOM1_PWD_REG, 0x0C);
 
     /* unlock regs */
-    ed64_bios_reg_wr(REG_KEY, 0xAA55);
+    ed64_bios_register_write(REG_KEY, 0xAA55);
 
-    ed64_bios_reg_wr(REG_SYS_CFG, 0);
+    ed64_bios_register_write(REG_SYS_CFG, 0);
 
     /* flush usb */
     ed64_bios_usb_init();
 
     ed64_bios_sd_cfg = 0;
-    ed64_bios_reg_wr(REG_SD_STATUS, ed64_bios_sd_cfg);
+    ed64_bios_register_write(REG_SD_STATUS, ed64_bios_sd_cfg);
 
     /* turn off backup ram */
     ed64_bios_rom_savetype_set(ED64_SAVE_OFF);
@@ -133,7 +133,7 @@ void ed64_bios_init() {
  *             The value of the register
  *
  */
-void ed64_bios_reg_wr(u16 reg, u32 val) {
+void ed64_bios_register_write(u16 reg, u32 val) {
 
     sys_n64_pi_write(&val, REG_ADDR(reg), 4);
 }
@@ -143,7 +143,7 @@ void ed64_bios_reg_wr(u16 reg, u32 val) {
  *
  * @return Value of the register
  */
-u32 ed64_bios_reg_rd(u16 reg) {
+u32 ed64_bios_register_read(u16 reg) {
 
     u32 val;
     sys_n64_pi_read(&val, REG_ADDR(reg), 4);
@@ -164,7 +164,7 @@ void ed64_bios_usb_init() {
 
     u8 buff[512];
     u8 resp;
-    ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_RD_NOP); /* turn off usb r/w activity */
+    ed64_bios_register_write(REG_USB_CFG, USB_CMD_RD_NOP); /* turn off usb r/w activity */
 
     /* flush fifo buffer */
     while (ed64_bios_usb_can_read()) {
@@ -180,7 +180,7 @@ void ed64_bios_usb_init() {
  */
 u8 ed64_bios_usb_can_read() {
 
-    u32 status = ed64_bios_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
+    u32 status = ed64_bios_register_read(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
@@ -192,7 +192,7 @@ u8 ed64_bios_usb_can_read() {
  */
 u8 ed64_bios_usb_can_write() {
 
-    u32 status = ed64_bios_reg_rd(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
+    u32 status = ed64_bios_register_read(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
@@ -206,10 +206,10 @@ u8 ed64_bios_usb_busy() {
 
     u32 tout = 0;
 
-    while ((ed64_bios_reg_rd(REG_USB_CFG) & USB_STA_ACT) != 0) {
+    while ((ed64_bios_register_read(REG_USB_CFG) & USB_STA_ACT) != 0) {
 
         if (tout++ != 8192)continue;
-        ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_RD_NOP);
+        ed64_bios_register_write(REG_USB_CFG, USB_CMD_RD_NOP);
         return ED64_ERR_USB_TOUT;
     }
 
@@ -238,7 +238,7 @@ u8 ed64_bios_usb_read(void *dst, u32 len) {
         baddr = 512 - blen; /* address in fpga internal buffer. requested data length equal to 512-int buffer addr */
 
 
-        ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_RD | baddr); /* usb read request. fpga will receive usb bytes until the buffer address reaches 512 */
+        ed64_bios_register_write(REG_USB_CFG, USB_CMD_RD | baddr); /* usb read request. fpga will receive usb bytes until the buffer address reaches 512 */
 
         resp = ed64_bios_usb_busy(); /* wait until requested data amount will be transferred to the internal buffer */
         if (resp)break; /* timeout */
@@ -267,7 +267,7 @@ u8 ed64_bios_usb_write(void *src, u32 len) {
     u8 resp = 0;
     u16 blen, baddr;
 
-    ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_WR_NOP);
+    ed64_bios_register_write(REG_USB_CFG, USB_CMD_WR_NOP);
 
     while (len) {
 
@@ -278,7 +278,7 @@ u8 ed64_bios_usb_write(void *src, u32 len) {
         sys_n64_pi_write(src, REG_ADDR(REG_USB_DAT + baddr), blen); /* copy data to the internal buffer */
         src += 512;
 
-        ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_WR | baddr); /* usb write request */
+        ed64_bios_register_write(REG_USB_CFG, USB_CMD_WR | baddr); /* usb write request */
 
         resp = ed64_bios_usb_busy(); /* wait until the requested data amount is transferred */
         if (resp)break; /* timeout */
@@ -295,7 +295,7 @@ u8 ed64_bios_usb_write(void *src, u32 len) {
  */
 void ed64_bios_usb_read_start() {
 
-    ed64_bios_reg_wr(REG_USB_CFG, USB_CMD_RD | 512);
+    ed64_bios_register_write(REG_USB_CFG, USB_CMD_RD | 512);
 }
 
 /**
@@ -331,7 +331,7 @@ void ed64_bios_sdio_speed(u8 speed) {
         ed64_bios_sd_cfg |= SD_CFG_SPD;
     }
 
-    ed64_bios_reg_wr(REG_SD_STATUS, ed64_bios_sd_cfg);
+    ed64_bios_register_write(REG_SD_STATUS, ed64_bios_sd_cfg);
 }
 
 /**
@@ -354,9 +354,9 @@ void ed64_bios_sd_switch_mode(u16 mode) {
 
     u16 old_sd_cfg = ed64_bios_sd_cfg;
     ed64_bios_sdio_bitlength(0);
-    ed64_bios_reg_wr(mode, 0xffff);
+    ed64_bios_register_write(mode, 0xffff);
     ed64_bios_sd_cfg = old_sd_cfg;
-    ed64_bios_reg_wr(REG_SD_STATUS, old_sd_cfg);
+    ed64_bios_register_write(REG_SD_STATUS, old_sd_cfg);
 }
 
 /**
@@ -367,7 +367,7 @@ void ed64_bios_sdio_bitlength(u8 val) {
 
     ed64_bios_sd_cfg &= ~SD_CFG_BITLEN;
     ed64_bios_sd_cfg |= (val & SD_CFG_BITLEN);
-    ed64_bios_reg_wr(REG_SD_STATUS, ed64_bios_sd_cfg);
+    ed64_bios_register_write(REG_SD_STATUS, ed64_bios_sd_cfg);
 }
 
 /**
@@ -375,7 +375,7 @@ void ed64_bios_sdio_bitlength(u8 val) {
  * 
  */
 void ed64_bios_sd_busy() {
-    while ((ed64_bios_reg_rd(REG_SD_STATUS) & SD_STA_BUSY) != 0);
+    while ((ed64_bios_register_read(REG_SD_STATUS) & SD_STA_BUSY) != 0);
 }
 
 /**
@@ -384,7 +384,7 @@ void ed64_bios_sd_busy() {
  */
 void ed64_bios_sdio_cmd_write(u8 val) {
     ed64_bios_sd_switch_mode(REG_SD_CMD_WR);
-    ed64_bios_reg_wr(REG_SD_CMD_WR, val);
+    ed64_bios_register_write(REG_SD_CMD_WR, val);
     ed64_bios_sd_busy();
 }
 
@@ -397,9 +397,9 @@ void ed64_bios_sdio_cmd_write(u8 val) {
 u8 ed64_bios_sdio_cmd_read() {
 
     ed64_bios_sd_switch_mode(REG_SD_CMD_RD);
-    ed64_bios_reg_wr(REG_SD_CMD_RD, 0xffff);
+    ed64_bios_register_write(REG_SD_CMD_RD, 0xffff);
     ed64_bios_sd_busy();
-    return ed64_bios_reg_rd(REG_SD_CMD_RD);
+    return ed64_bios_register_read(REG_SD_CMD_RD);
 }
 
 /**
@@ -408,7 +408,7 @@ u8 ed64_bios_sdio_cmd_read() {
  */
 void ed64_bios_sdio_data_write(u8 val) {
     ed64_bios_sd_switch_mode(REG_SD_DAT_WR);
-    ed64_bios_reg_wr(REG_SD_DAT_WR, 0x00ff | (val << 8));
+    ed64_bios_register_write(REG_SD_DAT_WR, 0x00ff | (val << 8));
     //ed64_bios_sd_busy();
 }
 
@@ -421,9 +421,9 @@ void ed64_bios_sdio_data_write(u8 val) {
 u8 ed64_bios_sd_data_read() {
 
     ed64_bios_sd_switch_mode(REG_SD_DAT_RD);
-    ed64_bios_reg_wr(REG_SD_DAT_RD, 0xffff);
+    ed64_bios_register_write(REG_SD_DAT_RD, 0xffff);
     //ed64_bios_sd_busy();
-    return ed64_bios_reg_rd(REG_SD_DAT_RD);
+    return ed64_bios_register_read(REG_SD_DAT_RD);
 }
 
 /**
@@ -484,12 +484,12 @@ u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen) {
 
     u16 resp = DMA_STA_BUSY;
 
-    ed64_bios_reg_wr(REG_DMA_ADDR, dst);
-    ed64_bios_reg_wr(REG_DMA_LEN, slen);
+    ed64_bios_register_write(REG_DMA_ADDR, dst);
+    ed64_bios_register_write(REG_DMA_LEN, slen);
 
     ed64_bios_sd_switch_mode(REG_SD_DAT_RD);
     while ((resp & DMA_STA_BUSY)) {
-        resp = ed64_bios_reg_rd(REG_DMA_STA);
+        resp = ed64_bios_register_read(REG_DMA_STA);
     }
 
     if ((resp & DMA_STA_ERROR))return 1;
@@ -706,7 +706,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
  */
 void ed64_bios_rom_savetype_set(u8 type) {
 
-    ed64_bios_reg_wr(REG_GAM_CFG, type);
+    ed64_bios_register_write(REG_GAM_CFG, type);
 }
 
 /**
@@ -718,9 +718,9 @@ void ed64_bios_rom_savetype_set(u8 type) {
 void ed64_bios_write_endian_swap(u8 swap_on) {
 
     if (swap_on) {
-        ed64_bios_reg_wr(REG_SYS_CFG, CFG_SWAP_ON);
+        ed64_bios_register_write(REG_SYS_CFG, CFG_SWAP_ON);
     } else {
-        ed64_bios_reg_wr(REG_SYS_CFG, 0);
+        ed64_bios_register_write(REG_SYS_CFG, 0);
     }
 }
 
@@ -731,5 +731,5 @@ void ed64_bios_write_endian_swap(u8 swap_on) {
  */
 u32 ed64_bios_get_cart_id() {
 
-    return ed64_bios_reg_rd(REG_EDID);
+    return ed64_bios_register_read(REG_EDID);
 }
