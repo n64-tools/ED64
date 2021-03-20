@@ -4,6 +4,8 @@
 */
 
 #include "edbios.h"
+#include "edtypes.h"
+#include "sys.h"
 
 
 #define REG_BASE        0x1F800000

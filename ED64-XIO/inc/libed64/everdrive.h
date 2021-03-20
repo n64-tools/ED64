@@ -13,8 +13,8 @@ extern "C" {
 #include "edtypes.h"
 #include "edbios.h"
 #include "edsdio.h"
-#include "ff.h"
 #include "sys.h"
+#include "ff.h"
 
 
 #ifdef __cplusplus

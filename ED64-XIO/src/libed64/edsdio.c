@@ -3,7 +3,9 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#include "everdrive.h"
+#include "edbios.h"
+#include "edsdio.h"
+#include "edtypes.h"
 
 
 #define CMD0  0x40    /* software reset */

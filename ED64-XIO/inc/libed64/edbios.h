@@ -10,7 +10,6 @@
 extern "C" {
 #endif
 
-#include "sys.h"
 
 #define ED64_SIZE_ROM 0x4000000 /*rom size */
 #define ED64_SIZE_BRM 0x20000   // backup ram size */

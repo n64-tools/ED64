@@ -4,6 +4,7 @@
 */
 
 #include "sys.h"
+#include "edtypes.h"
 
 typedef struct PI_regs_s {
     /** @brief Uncached address in RAM where data should be found */
