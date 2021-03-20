@@ -43,7 +43,8 @@ unsigned char main_display_menu() {
         MENU_USB_TERMINAL,
         MENU_USB_LOADER,
         MENU_EDID,
-        MENU_SIZE
+        MENU_SIZE,
+        MENU_RTC
     };
 //#if LIBDRAGON_SYS
     struct controller_data cd;
@@ -59,6 +60,7 @@ unsigned char main_display_menu() {
     menu[MENU_USB_TERMINAL] = "USB Terminal";
     menu[MENU_USB_LOADER] = "USB ROM Loader";
     menu[MENU_EDID] = "ED64 Hardware Rev ID";
+    menu[MENU_RTC] = "ED64 Real Time Clock";
 
     for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
@@ -125,6 +127,11 @@ unsigned char main_display_menu() {
         /* everdrive hardware identification */
         if (selector == MENU_EDID) {
             main_display_edid();
+        }
+
+        /* everdrive RTC */
+        if (selector == MENU_RTC) {
+            menu_display_rtc();
         }
 
     }
