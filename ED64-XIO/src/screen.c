@@ -16,6 +16,8 @@ u8 screen_last_y;
 u16 screen_buffer[TV_SCREEN_W * TV_SCREEN_H];
 
 extern u8 font[];
+extern Screen screen;  /* this is also defined in sys.c */
+static vu32 *vregs = (vu32 *) 0xa4400000; /* this is also defined in sys.c */
 
 u16 pal[16] = {
     RGB(0, 0, 0), RGB(31, 31, 31), RGB(16, 16, 16), RGB(28, 28, 2),

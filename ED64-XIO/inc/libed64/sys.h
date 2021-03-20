@@ -90,8 +90,6 @@ typedef struct {
   u16 *bgr_ptr;
 } Screen;
 
-static vu32 *vregs = (vu32 *) 0xa4400000;
-
 void sys_n64_init();
 void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len);
 void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len);
