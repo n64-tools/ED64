@@ -76,13 +76,6 @@ BootStrap *sys_boot_strap = (BootStrap *) 0x80000300;
 
 Screen screen;
 
-u16 pal[16] = {
-    RGB(0, 0, 0), RGB(31, 31, 31), RGB(16, 16, 16), RGB(28, 28, 2),
-    RGB(8, 8, 8), RGB(31, 0, 0), RGB(0, 31, 0), RGB(12, 12, 12),
-    0x0000, 0x0000, 0x0000, 0x0000,
-    0x0000, 0x0000, 0x0000, 0x0aa0
-};
-
 void sys_n64_init() {
 
     disable_interrupts();

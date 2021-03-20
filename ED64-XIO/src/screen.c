@@ -18,6 +18,13 @@ u16 screen_buffer[TV_SCREEN_W * TV_SCREEN_H];
 
 extern u8 font[];
 
+u16 pal[16] = {
+    RGB(0, 0, 0), RGB(31, 31, 31), RGB(16, 16, 16), RGB(28, 28, 2),
+    RGB(8, 8, 8), RGB(31, 0, 0), RGB(0, 31, 0), RGB(12, 12, 12),
+    0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0aa0
+};
+
 void screen_draw_char_8X8(u32 val, u32 x, u32 y) {
 
     u64 tmp;
