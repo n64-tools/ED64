@@ -29,9 +29,12 @@ void usb_terminal() {
     for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
         screen_vsync();
+//#if LIBDRAGON_SYS
         controller_scan();
         cd = get_keys_down();
         if (cd.c[0].B)return;
+//#else
+//#endif
 
         if (!ed64_bios_usb_can_read())continue;
 
@@ -53,7 +56,10 @@ void usb_load_rom() {
 
     unsigned char resp, usb_cmd;
     unsigned char cmd[16];
+//#if LIBDRAGON_SYS
     struct controller_data cd;
+//#else
+//#endif
 
     screen_clear();
     screen_print("Waiting for ROM data...");
@@ -63,9 +69,12 @@ void usb_load_rom() {
     for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
         screen_vsync();
+//#if LIBDRAGON_SYS
         controller_scan();
         cd = get_keys_down();
         if (cd.c[0].B)return;
+//#else
+//#endif
 
         if (!ed64_bios_usb_can_read())continue;
 

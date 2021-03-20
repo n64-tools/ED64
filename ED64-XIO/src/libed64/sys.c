@@ -77,13 +77,14 @@ BootStrap *sys_boot_strap = (BootStrap *) 0x80000300;
 Screen screen;
 
 void sys_n64_init() {
-
+//#if LIBDRAGON_SYS
     disable_interrupts();
     set_AI_interrupt(0);
     set_VI_interrupt(0, 0);
     set_PI_interrupt(0);
     set_DP_interrupt(0);
-
+//#else
+//#endif
 
     IO_WRITE(PI_STATUS_REG, 3);
     IO_WRITE(PI_BSD_DOM1_LAT_REG, 0x40);
@@ -103,7 +104,10 @@ void sys_n64_init() {
     IO_WRITE(PI_BSD_DOM2_PGS_REG, 0x07);
     IO_WRITE(PI_BSD_DOM2_RLS_REG, 0x03);*/
 
+//#if LIBDRAGON_SYS
     rdp_init();
+//#else
+//#endif
 
     screen.buff_sw = 0;
     screen.buff[0] = (unsigned short *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
@@ -121,7 +125,10 @@ void sys_n64_region_init() {
     unsigned long *v_setup;
     unsigned long region = *(unsigned long *) 0x80000300;
 
+//#if LIBDRAGON_SYS
     disable_interrupts();
+//#else
+//#endif
 
 
     screen.w = 40;
@@ -146,41 +153,58 @@ void sys_n64_region_init() {
     vregs[13] = v_setup[13];
     vregs[0] = v_setup[0];
 
-
+//#if LIBDRAGON_SYS
     enable_interrupts();
+//#else
+//#endif
 }
 
 void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
+//#if LIBDRAGON_SYS
     data_cache_hit_writeback_invalidate(ram, len);
     disable_interrupts();
+//#else
+//#endif
 
+//#if LIBDRAGON_SYS
     while (dma_busy());
+//#else
+//#endif
     IO_WRITE(PI_STATUS_REG, 3);
     PI_regs->ram_address = ram;
     PI_regs->pi_address = pi_address; //(pi_address | 0x10000000) & 0x1FFFFFFF;
     PI_regs->write_length = len - 1;
+//#if LIBDRAGON_SYS
     while (dma_busy());
 
     enable_interrupts();
+//#else
+//#endif
 }
 
 void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
 
+//#if LIBDRAGON_SYS
     data_cache_hit_writeback(ram, len);
     disable_interrupts();
 
     while (dma_busy());
+//#else
+//#endif
     IO_WRITE(PI_STATUS_REG, 3);
     PI_regs->ram_address = ram;
     PI_regs->pi_address = pi_address; //(pi_address | 0x10000000) & 0x1FFFFFFF;
     PI_regs->read_length = len - 1;
+
+//#if LIBDRAGON_SYS
     while (dma_busy());
 
     enable_interrupts();
-
+//#else
+//#endif
 }

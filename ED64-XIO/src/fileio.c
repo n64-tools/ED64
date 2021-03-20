@@ -103,12 +103,15 @@ unsigned char fm_file_write() {
     screen_repaint();
     for ( ;; ) { /* forever [equivalent to: "while (1)"] */
         screen_vsync();
+//#if LIBDRAGON_SYS
         controller_scan();
         cd = get_keys_down();
 
         if (cd.c[0].B) {
             break;
         }
+//#else
+//#endif
     }
 
     return 0;

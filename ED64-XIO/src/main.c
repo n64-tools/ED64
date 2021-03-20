@@ -45,8 +45,10 @@ unsigned char main_display_menu() {
         MENU_EDID,
         MENU_SIZE
     };
-
+//#if LIBDRAGON_SYS
     struct controller_data cd;
+//#else
+//#endif
     unsigned char * menu[MENU_SIZE];
     unsigned long selector = 0;
     unsigned char resp;
@@ -73,8 +75,11 @@ unsigned char main_display_menu() {
         }
 
         screen_repaint();
+//#if LIBDRAGON_SYS
         controller_scan();
         cd = get_keys_down();
+//#else
+//#endif
 
         if (cd.c[0].up) {
             if (selector != 0)selector--;
@@ -126,8 +131,10 @@ unsigned char main_display_menu() {
 }
 
 void main_display_edid() {
-
+//#if LIBDRAGON_SYS
     struct controller_data cd;
+//#else
+//#endif
     unsigned long id = ed64_bios_get_cart_id();
 
     screen_clear();
@@ -159,8 +166,11 @@ void main_display_edid() {
     screen_repaint();
     for ( ;; ) { /* forever [equivalent to: "while (1)"] */
         screen_vsync();
+//#if LIBDRAGON_SYS
         controller_scan();
         cd = get_keys_down();
+//#else
+//#endif
 
         if (cd.c[0].B) {
 

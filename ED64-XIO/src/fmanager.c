@@ -41,10 +41,13 @@ unsigned char fmanager_display() {
         for ( ;; ) { /* forever [equivalent to: "while (1)"] */
 
             screen_vsync();
+//#if LIBDRAGON_SYS
             controller_scan();
             cd = get_keys_down();
 
             if (cd.c[0].B)return 0;
+//#else
+//#endif
 
             if (cd.c[0].up) {
                 if (selector != 0)selector--;
