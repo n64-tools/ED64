@@ -1,13 +1,14 @@
 
 #include "main.h"
+#include "libdragon.h"
 //#include "regsinternal.h"
 
 static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000;
 static void * const PIF_RAM = (void *) 0x1fc007c0;
-/** @brief SI DMA busy */
-#define SI_STATUS_DMA_BUSY  ( 1 << 0 )
-/** @brief SI IO busy */
-#define SI_STATUS_IO_BUSY   ( 1 << 1 )
+// /** @brief SI DMA busy */
+// #define SI_STATUS_DMA_BUSY  ( 1 << 0 )
+// /** @brief SI IO busy */
+// #define SI_STATUS_IO_BUSY   ( 1 << 1 )
 
 // static void __SI_DMA_wait(void) {
 //     while (SI_regs->status & (SI_STATUS_DMA_BUSY | SI_STATUS_IO_BUSY));
