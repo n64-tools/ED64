@@ -1,9 +1,39 @@
 
 #include "main.h"
-#include "libdragon.h"
 
-extern static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000;
-extern static void * const PIF_RAM = (void *) 0x1fc007c0;
+
+typedef struct PI_regs_s {
+    /** @brief Uncached address in RAM where data should be found */
+    void * ram_address;
+    /** @brief Address of data on peripheral */
+    unsigned long pi_address;
+    /** @brief How much data to read from RAM into the peripheral */
+    unsigned long read_length;
+    /** @brief How much data to write to RAM from the peripheral */
+    unsigned long write_length;
+    /** @brief Status of the PI, including DMA busy */
+    unsigned long status;
+} PI_regs_s;
+
+typedef struct SI_regs_s {
+    /** @brief Uncached address in RAM where data should be found */
+    volatile void * DRAM_addr;
+    /** @brief Address to read when copying from PIF RAM */
+    volatile void * PIF_addr_read;
+    /** @brief Reserved word */
+    uint32_t reserved1;
+    /** @brief Reserved word */
+    uint32_t reserved2;
+    /** @brief Address to write when copying to PIF RAM */
+    volatile void * PIF_addr_write;
+    /** @brief Reserved word */
+    uint32_t reserved3;
+    /** @brief SI status, including DMA busy and IO busy */
+    uint32_t status;
+} SI_regs_t;
+
+static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000;
+static void * const PIF_RAM = (void *) 0x1fc007c0;
 /** @brief SI DMA busy */
 #define SI_STATUS_DMA_BUSY  ( 1 << 0 )
 /** @brief SI IO busy */
