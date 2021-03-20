@@ -2,8 +2,8 @@
 #include "main.h"
 //#include "regsinternal.h"
 
-static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000;
-static void * const PIF_RAM = (void *) 0x1fc007c0;
+extern static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000;
+extern static void * const PIF_RAM = (void *) 0x1fc007c0;
 /** @brief SI DMA busy */
 #define SI_STATUS_DMA_BUSY  ( 1 << 0 )
 /** @brief SI IO busy */
@@ -68,7 +68,7 @@ int rtc_status() {
 
 }
 
-void rtc_read(u8 block, u8 *data) {
+void rtc_read(unsigned char block, unsigned char *data) {
 
     static unsigned long long SI_eeprom_read_block[8] = {
         0x0000000002080400, // LSB is block
@@ -92,22 +92,22 @@ void rtc_read(u8 block, u8 *data) {
 
 void menu_display_rtc() {
 
-    // u8 w = 18;
-    // u8 h = 10;
+    // unsigned char w = 18;
+    // unsigned char h = 10;
     // u16 y;
     // u16 x = (g_screen_w - w) / 2 + 1;
-    // u8 min = 0;
-    // u8 sec = 0;
-    // u8 hour = 0;
-    // u8 day_ow = 0;
-    // u8 day_om = 0;
-    // u8 year = 0;
-    // u8 month = 0;
-    // u8 rtc_data[9];
-    // u8 rtc_edit = 0;
-    // u8 key_zero = 0;
-    // u8 selector = 0;
-    // u8 sub_sel = 0;
+    // unsigned char min = 0;
+    // unsigned char sec = 0;
+    // unsigned char hour = 0;
+    // unsigned char day_ow = 0;
+    // unsigned char day_om = 0;
+    // unsigned char year = 0;
+    // unsigned char month = 0;
+    // unsigned char rtc_data[9];
+    // unsigned char rtc_edit = 0;
+    // unsigned char key_zero = 0;
+    // unsigned char selector = 0;
+    // unsigned char sub_sel = 0;
 
     //ed_bios_reg_mode_io(); //set i2c reg?
 

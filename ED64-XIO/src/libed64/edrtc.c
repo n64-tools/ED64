@@ -13,7 +13,7 @@
 //     ed_bios_reg_wr(5);
 // }
 
-// void ed_i2c_write_bit(u8 val) {
+// void ed_i2c_write_bit(unsigned char val) {
 
 //     val &= 1;
 //     ed_bios_reg_wr(val);
@@ -21,10 +21,10 @@
 //     ed_bios_reg_wr(val);
 // }
 
-// void ed_i2c_write_byte(u8 val) {
+// void ed_i2c_write_byte(unsigned char val) {
 
 //     u32 i;
-//     u8 bit;
+//     unsigned char bit;
 
 //     for (i = 0; i < 8; i++) {
 //         bit = val >> (7 - i);
@@ -37,10 +37,10 @@
 //     ed_bios_reg_wr(1);
 // }
 
-// u8 ed_i2c_read_byte() {
+// unsigned char ed_i2c_read_byte() {
 
 //     u32 i;
-//     u8 val = 0;
+//     unsigned char val = 0;
 
 //     for (i = 0; i < 8; i++) {
 
@@ -57,9 +57,9 @@
 //     return val;
 // }
 
-// u8 ed_i2c_read_byte(u8 addr) {
+// unsigned char ed_i2c_read_byte(unsigned char addr) {
 
-//     u8 val;
+//     unsigned char val;
 //     ed_i2c_start();
 //     ed_i2c_write_byte(0xD0);
 //     ed_i2c_write_byte(addr);
@@ -74,7 +74,7 @@
 //     return val;
 // }
 
-// u8 ed_i2c_write_byte(u8 addr, u8 val) {
+// unsigned char ed_i2c_write_byte(unsigned char addr, unsigned char val) {
 
 //     ed_i2c_start();
 //     ed_i2c_write_byte(0xD0);
@@ -85,7 +85,7 @@
 //     return val;
 // }
 
-// void ed_rtc_set_date(u16 year, u8 month, u8 date, u8 day) {
+// void ed_rtc_set_date(u16 year, unsigned char month, unsigned char date, unsigned char day) {
 
 //     ed_i2c_write_byte(3, day);
 
@@ -97,14 +97,14 @@
 
 // }
 
-// void ed_rtc_set_time(u8 hours, u8 mins, u8 sec) {
+// void ed_rtc_set_time(unsigned char hours, unsigned char mins, unsigned char sec) {
 
 //     ed_i2c_write_byte(0, sec);
 //     ed_i2c_write_byte(1, mins);
 //     ed_i2c_write_byte(2, hours);
 // }
 
-// void ed_rtc_set_datetime(u16 year, u8 month, u8 day_of_mo, u8 day_of_we, u8 hours, u8 mins, u8 sec) {
+// void ed_rtc_set_datetime(u16 year, unsigned char month, unsigned char day_of_mo, unsigned char day_of_we, unsigned char hours, unsigned char mins, unsigned char sec) {
 
 //     u16 i;
 //     for (i = 7; i < 16; i++)ed_i2c_write_byte(i, 0);
@@ -120,62 +120,62 @@
 //     ed_i2c_write_byte(6, year);
 // }
 
-// void ed_rtc_set_datetime_asread(u8 *rtc_data) {
+// void ed_rtc_set_datetime_asread(unsigned char *rtc_data) {
 
 //     u16 i;
 //     for (i = 0; i < 16; i++) ed_i2c_write_byte(i, rtc_data[i]);
 // }
 
-// void ed_rtc_get_datetime(u8 *rtc_data) {
+// void ed_rtc_get_datetime(unsigned char *rtc_data) {
 
-//     u8 i;
+//     unsigned char i;
 //     for (i = 0; i < 7; i++)rtc_data[i] = ed_i2c_read_byte(i);
 
 // }
 
-// u8 ed_rtc_read_hex(u8 reg) {
-//     u8 val;
+// unsigned char ed_rtc_read_hex(unsigned char reg) {
+//     unsigned char val;
 //     val = ed_i2c_read_byte(reg);
 //     if (reg == 2 || reg == 5)val &= 0x7f;
 //     val = (val & 0x0f) + (val >> 4) * 10;
 //     return val;
 // }
 
-// u8 ed_rtc_get_hour() {
+// unsigned char ed_rtc_get_hour() {
 //     return ed_rtc_read_hex(2);
 // }
 
-// u8 ed_rtc_get_min() {
+// unsigned char ed_rtc_get_min() {
 
 //     return ed_rtc_read_hex(1);
 // }
 
-// u8 ed_rtc_get_sec() {
+// unsigned char ed_rtc_get_sec() {
 
 //     return ed_rtc_read_hex(0);
 // }
 
-// u8 ed_rtc_get_dayofweek() {
+// unsigned char ed_rtc_get_dayofweek() {
 
 //     return ed_rtc_read_hex(3);
 // }
 
-// u8 ed_rtc_get_dayofmonth() {
+// unsigned char ed_rtc_get_dayofmonth() {
 
 //     return ed_rtc_read_hex(4);
 // }
 
-// u8 ed_rtc_get_month() {
+// unsigned char ed_rtc_get_month() {
 
 //     return ed_rtc_read_hex(5);
 // }
 
-// u8 ed_rtc_get_year() {
+// unsigned char ed_rtc_get_year() {
 
 //     return ed_rtc_read_hex(6);
 // }
 
-// u8 *days[] = {
+// unsigned char *days[] = {
 //     "???",
 //     "Monday",
 //     "Tuesday",
