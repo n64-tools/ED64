@@ -85,13 +85,14 @@ void rtc_read(unsigned char block, unsigned char *data) {
     SI_eeprom_read_block[0] = 0x0000000002090700 | block;
     __controller_exec_PIF(SI_eeprom_read_block, output);
 
-    memcopy(&output[1], data, 9);
+    memcpy(&output[1], data, 9);
 
 
 }
 
 void menu_display_rtc() {
     struct controller_data cd;
+    unsigned char data[128];
     // unsigned char w = 18;
     // unsigned char h = 10;
     // u16 y;
@@ -124,7 +125,7 @@ void menu_display_rtc() {
 
         screen_print("rtc_rd: ");
         rtc_read(2, data);
-        for (i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             screen_append_hex8_print(data[i]);
         }
 
