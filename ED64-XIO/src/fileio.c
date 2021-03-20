@@ -5,14 +5,14 @@
 
 #include "main.h"
 
-u8 fm_file_read() {
+unsigned char fm_file_read() {
 
-    u8 *path = "ED64/OS64.v64"; /* this file is garanteed to exist! */
+    unsigned char *path = "ED64/OS64.v64"; /* this file is garanteed to exist! */
     struct controller_data cd;
-    u8 buff[256];
+    unsigned char buff[256];
     FIL f;
     UINT br;
-    u8 resp;
+    unsigned char resp;
 
     screen_clear();
     screen_repaint();
@@ -58,15 +58,15 @@ u8 fm_file_read() {
     return 0;
 }
 
-u8 fm_file_write() {
+unsigned char fm_file_write() {
 
-    u8 *path = "test.txt";
-    u8 *msg = "This is an example to show text can be written to a file!";
+    unsigned char *path = "test.txt";
+    unsigned char *msg = "This is an example to show text can be written to a file!";
     struct controller_data cd;
     FIL f;
     UINT bw;
-    u8 resp;
-    u32 str_len;
+    unsigned char resp;
+    unsigned long str_len;
 
     screen_clear();
     screen_repaint();

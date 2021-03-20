@@ -52,9 +52,9 @@ extern "C" {
 #define PI_BSD_DOM2_PGS_REG (PI_BASE_REG + 0x2C) /*   page size */
 #define PI_BSD_DOM2_RLS_REG (PI_BASE_REG + 0x30) /*   release duration */
 
-#define PHYS_TO_K1(x) ((u32)(x) | KSEG1) /* physical to kseg1 */
-#define IO_WRITE(addr, data) (*(vu32 *)PHYS_TO_K1(addr) = (u32)(data))
-#define IO_READ(addr) (*(vu32 *)PHYS_TO_K1(addr))
+#define PHYS_TO_K1(x) ((unsigned long)(x) | KSEG1) /* physical to kseg1 */
+#define IO_WRITE(addr, data) (*(volatile unsigned long *)PHYS_TO_K1(addr) = (unsigned long)(data))
+#define IO_READ(addr) (*(volatile unsigned long *)PHYS_TO_K1(addr))
 
 #define PI_STATUS_REG (PI_BASE_REG + 0x10)
 #define PI_BASE_REG 0x04600000
@@ -67,27 +67,27 @@ extern "C" {
 #define RGB(r, g, b) ((r << 11) | (g << 6) | (b << 1))
 
 typedef struct {
-  vu32 region;
-  vu32 rom_type;
-  vu32 base_addr;
-  vu32 rst_type;
-  vu32 cic_type;
-  vu32 os_ver;
-  vu32 ram_size;
-  vu32 app_buff;
+  volatile unsigned long region;
+  volatile unsigned long rom_type;
+  volatile unsigned long base_addr;
+  volatile unsigned long rst_type;
+  volatile unsigned long cic_type;
+  volatile unsigned long os_ver;
+  volatile unsigned long ram_size;
+  volatile unsigned long app_buff;
 } BootStrap;
 
 typedef struct {
-  u32 w;
-  u32 h;
-  u32 pixel_w;
-  u32 pixel_h;
-  u32 char_h;
-  u32 buff_len;
-  u32 buff_sw;
-  u16 *buff[2];
-  u16 *current;
-  u16 *bgr_ptr;
+  unsigned long w;
+  unsigned long h;
+  unsigned long pixel_w;
+  unsigned long pixel_h;
+  unsigned long char_h;
+  unsigned long buff_len;
+  unsigned long buff_sw;
+  unsigned short *buff[2];
+  unsigned short *current;
+  unsigned short *bgr_ptr;
 } Screen;
 
 void sys_n64_init();

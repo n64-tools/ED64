@@ -33,15 +33,15 @@ extern "C" {
 #define REGION_PAL_RB 0x0500
 
 void screen_clear();
-void screen_print(u8 *str);
-void screen_set_xy_pos(u8 x, u8 y);
-void screen_set_pal(u16 pal);
-void screen_append_str_print(u8 *str);
-void screen_append_char_print(u8 chr);
-void screen_append_hex8_print(u8 val);
-void screen_append_hex16_print(u16 val);
-void screen_append_hex32_print(u32 val);
-void screen_append_hex32_print(u32 val);
+void screen_print(unsigned char *str);
+void screen_set_xy_pos(unsigned char x, unsigned char y);
+void screen_set_pal(unsigned short pal);
+void screen_append_str_print(unsigned char *str);
+void screen_append_char_print(unsigned char chr);
+void screen_append_hex8_print(unsigned char val);
+void screen_append_hex16_print(unsigned short val);
+void screen_append_hex32_print(unsigned long val);
+void screen_append_hex32_print(unsigned long val);
 void screen_repaint();
 void screen_vsync();
 

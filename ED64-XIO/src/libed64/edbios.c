@@ -4,7 +4,6 @@
 */
 
 #include "edbios.h"
-#include "edtypes.h"
 #include "sys.h"
 
 
@@ -89,12 +88,12 @@
 
 #define REG_ADDR(reg)   (KSEG1 | REG_BASE | (reg))
 
-u32 ed64_bios_register_read(u16 reg);
-void ed64_bios_register_write(u16 reg, u32 val);
+unsigned long ed64_bios_register_read(unsigned short reg);
+void ed64_bios_register_write(unsigned short reg, unsigned long val);
 void ed64_bios_usb_init();
-u8 ed64_bios_usb_busy();
+unsigned char ed64_bios_usb_busy();
 
-u16 ed64_bios_sd_cfg;
+unsigned short ed64_bios_sd_cfg;
 
 
 /**
@@ -135,7 +134,7 @@ void ed64_bios_init() {
  *             The value of the register
  *
  */
-void ed64_bios_register_write(u16 reg, u32 val) {
+void ed64_bios_register_write(unsigned short reg, unsigned long val) {
 
     sys_n64_pi_write(&val, REG_ADDR(reg), 4);
 }
@@ -145,9 +144,9 @@ void ed64_bios_register_write(u16 reg, u32 val) {
  *
  * @return Value of the register
  */
-u32 ed64_bios_register_read(u16 reg) {
+unsigned long ed64_bios_register_read(unsigned short reg) {
 
-    u32 val;
+    unsigned long val;
     sys_n64_pi_read(&val, REG_ADDR(reg), 4);
     return val;
 }
@@ -164,8 +163,8 @@ u32 ed64_bios_register_read(u16 reg) {
  */
 void ed64_bios_usb_init() {
 
-    u8 buff[512];
-    u8 resp;
+    unsigned char buff[512];
+    unsigned char resp;
     ed64_bios_register_write(REG_USB_CFG, USB_CMD_RD_NOP); /* turn off usb r/w activity */
 
     /* flush fifo buffer */
@@ -180,9 +179,9 @@ void ed64_bios_usb_init() {
  *
  * @return 0 on successful or 1 on failure
  */
-u8 ed64_bios_usb_can_read() {
+unsigned char ed64_bios_usb_can_read() {
 
-    u32 status = ed64_bios_register_read(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
+    unsigned long status = ed64_bios_register_read(REG_USB_CFG) & (USB_STA_PWR | USB_STA_RXF);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
@@ -192,9 +191,9 @@ u8 ed64_bios_usb_can_read() {
  *
  * @return 0 on successful or 1 on failure
  */
-u8 ed64_bios_usb_can_write() {
+unsigned char ed64_bios_usb_can_write() {
 
-    u32 status = ed64_bios_register_read(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
+    unsigned long status = ed64_bios_register_read(REG_USB_CFG) & (USB_STA_PWR | USB_STA_TXE);
     if (status == USB_STA_PWR)return 1;
     return 0;
 }
@@ -204,9 +203,9 @@ u8 ed64_bios_usb_can_write() {
  *
  * @return 0 on successful or other value on failure
  */
-u8 ed64_bios_usb_busy() {
+unsigned char ed64_bios_usb_busy() {
 
-    u32 tout = 0;
+    unsigned long tout = 0;
 
     while ((ed64_bios_register_read(REG_USB_CFG) & USB_STA_ACT) != 0) {
 
@@ -228,10 +227,10 @@ u8 ed64_bios_usb_busy() {
  *
  * @return 0 on successful or other value on failure
  */
-u8 ed64_bios_usb_read(void *dst, u32 len) {
+unsigned char ed64_bios_usb_read(void *dst, unsigned long len) {
 
-    u8 resp = 0;
-    u16 blen, baddr;
+    unsigned char resp = 0;
+    unsigned short blen, baddr;
 
     while (len) {
 
@@ -264,10 +263,10 @@ u8 ed64_bios_usb_read(void *dst, u32 len) {
  *
  * @return 0 on successful or other value on failure
  */
-u8 ed64_bios_usb_write(void *src, u32 len) {
+unsigned char ed64_bios_usb_write(void *src, unsigned long len) {
 
-    u8 resp = 0;
-    u16 blen, baddr;
+    unsigned char resp = 0;
+    unsigned short blen, baddr;
 
     ed64_bios_register_write(REG_USB_CFG, USB_CMD_WR_NOP);
 
@@ -305,9 +304,9 @@ void ed64_bios_usb_read_start() {
  *
  * @return 0 on successful or other value on failure
  */
-u8 ed64_bios_usb_read_end(void *dst) {
+unsigned char ed64_bios_usb_read_end(void *dst) {
 
-    u8 resp = ed64_bios_usb_busy();
+    unsigned char resp = ed64_bios_usb_busy();
     if (resp)return resp;
 
     sys_n64_pi_read(dst, REG_ADDR(REG_USB_DAT), 512);
@@ -317,7 +316,7 @@ u8 ed64_bios_usb_read_end(void *dst) {
 /******************************************************************************
 * sdio functions
 ******************************************************************************/
-void ed64_bios_sd_crc16(void *src, u16 *crc_out);
+void ed64_bios_sd_crc16(void *src, unsigned short *crc_out);
 
 /**
  * @brief Sets the SDIO bus speed
@@ -325,7 +324,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out);
  * @param[in]  speed
  *             the bus speed required
  */
-void ed64_bios_sdio_speed(u8 speed) {
+void ed64_bios_sdio_speed(unsigned char speed) {
 
     if (speed == ED64_SDIO_SPEED_LOW) {
         ed64_bios_sd_cfg &= ~SD_CFG_SPD;
@@ -340,7 +339,7 @@ void ed64_bios_sdio_speed(u8 speed) {
  * @brief Depricated: gives time for setting stable values on open bus
  *
  */
-u16 ed64_bios_old_sd_mode;
+unsigned short ed64_bios_old_sd_mode;
 
 /**
  * @brief Switches the SDIO speed
@@ -349,12 +348,12 @@ u16 ed64_bios_old_sd_mode;
  *             LOW or High
  *
  */
-void ed64_bios_sd_switch_mode(u16 mode) {
+void ed64_bios_sd_switch_mode(unsigned short mode) {
 
     if (ed64_bios_old_sd_mode == mode)return;
     ed64_bios_old_sd_mode = mode;
 
-    u16 old_sd_cfg = ed64_bios_sd_cfg;
+    unsigned short old_sd_cfg = ed64_bios_sd_cfg;
     ed64_bios_sdio_bitlength(0);
     ed64_bios_register_write(mode, 0xffff);
     ed64_bios_sd_cfg = old_sd_cfg;
@@ -365,7 +364,7 @@ void ed64_bios_sd_switch_mode(u16 mode) {
  * @brief Writes the SDIO bit length
  * 
  */
-void ed64_bios_sdio_bitlength(u8 val) {
+void ed64_bios_sdio_bitlength(unsigned char val) {
 
     ed64_bios_sd_cfg &= ~SD_CFG_BITLEN;
     ed64_bios_sd_cfg |= (val & SD_CFG_BITLEN);
@@ -384,7 +383,7 @@ void ed64_bios_sd_busy() {
  * @brief Writes a command to SDIO
  * 
  */
-void ed64_bios_sdio_cmd_write(u8 val) {
+void ed64_bios_sdio_cmd_write(unsigned char val) {
     ed64_bios_sd_switch_mode(REG_SD_CMD_WR);
     ed64_bios_register_write(REG_SD_CMD_WR, val);
     ed64_bios_sd_busy();
@@ -396,7 +395,7 @@ void ed64_bios_sdio_cmd_write(u8 val) {
  * 
  * @return the result of the command read
  */
-u8 ed64_bios_sdio_cmd_read() {
+unsigned char ed64_bios_sdio_cmd_read() {
 
     ed64_bios_sd_switch_mode(REG_SD_CMD_RD);
     ed64_bios_register_write(REG_SD_CMD_RD, 0xffff);
@@ -408,7 +407,7 @@ u8 ed64_bios_sdio_cmd_read() {
  * @brief Writes data to SDIO
  * 
  */
-void ed64_bios_sdio_data_write(u8 val) {
+void ed64_bios_sdio_data_write(unsigned char val) {
     ed64_bios_sd_switch_mode(REG_SD_DAT_WR);
     ed64_bios_register_write(REG_SD_DAT_WR, 0x00ff | (val << 8));
     //ed64_bios_sd_busy();
@@ -420,7 +419,7 @@ void ed64_bios_sdio_data_write(u8 val) {
  * 
  * @return the result of the data read
  */
-u8 ed64_bios_sd_data_read() {
+unsigned char ed64_bios_sd_data_read() {
 
     ed64_bios_sd_switch_mode(REG_SD_DAT_RD);
     ed64_bios_register_write(REG_SD_DAT_RD, 0xffff);
@@ -437,11 +436,11 @@ u8 ed64_bios_sd_data_read() {
  *             Length in bytes to copy
  *
  */
-u8 ed64_bios_sdio_to_ram(void *dst, u16 slen) {
+unsigned char ed64_bios_sdio_to_ram(void *dst, unsigned short slen) {
 
-    u16 i;
-    u8 crc[8];
-    u32 old_pwd = IO_READ(PI_BSD_DOM1_PWD_REG);
+    unsigned short i;
+    unsigned char crc[8];
+    unsigned long old_pwd = IO_READ(PI_BSD_DOM1_PWD_REG);
     IO_WRITE(PI_BSD_DOM1_PWD_REG, 0x09);
 
 
@@ -482,9 +481,9 @@ u8 ed64_bios_sdio_to_ram(void *dst, u16 slen) {
  *
  * @return 0 on successful or other value on failure
  */
-u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen) {
+unsigned char ed64_bios_sdio_to_rom(unsigned long dst, unsigned short slen) {
 
-    u16 resp = DMA_STA_BUSY;
+    unsigned short resp = DMA_STA_BUSY;
 
     ed64_bios_register_write(REG_DMA_ADDR, dst);
     ed64_bios_register_write(REG_DMA_LEN, slen);
@@ -509,10 +508,10 @@ u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen) {
  *
  * @return 0 on successful or other value on failure
  */
-u8 ed64_bios_ram_to_sdio(void *src, u16 slen) {
+unsigned char ed64_bios_ram_to_sdio(void *src, unsigned short slen) {
 
-    u8 resp;
-    u16 crc[4];
+    unsigned char resp;
+    unsigned short crc[4];
 
     while (slen--) {
 
@@ -567,18 +566,18 @@ u8 ed64_bios_ram_to_sdio(void *src, u16 slen) {
  * @param[out]  crc_out
  *             Destination pointer containing the CRC value
  */
-void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
+void ed64_bios_sd_crc16(void *src, unsigned short *crc_out) {
 
-    u16 i;
-    u16 u;
-    u8 *src8;
-    u8 val[4];
-    u16 crc_table[4];
-    u16 tmp1;
-    u8 dat;
+    unsigned short i;
+    unsigned short u;
+    unsigned char *src8;
+    unsigned char val[4];
+    unsigned short crc_table[4];
+    unsigned short tmp1;
+    unsigned char dat;
 
 
-    static const u8 crc_bit_table[256] = {
+    static const unsigned char crc_bit_table[256] = {
         0x00, 0x01, 0x04, 0x05, 0x10, 0x11, 0x14, 0x15, 0x40, 0x41, 0x44, 0x45, 0x50, 0x51, 0x54, 0x55,
         0x02, 0x03, 0x06, 0x07, 0x12, 0x13, 0x16, 0x17, 0x42, 0x43, 0x46, 0x47, 0x52, 0x53, 0x56, 0x57,
         0x08, 0x09, 0x0C, 0x0D, 0x18, 0x19, 0x1C, 0x1D, 0x48, 0x49, 0x4C, 0x4D, 0x58, 0x59, 0x5C, 0x5D,
@@ -597,7 +596,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
         0xAA, 0xAB, 0xAE, 0xAF, 0xBA, 0xBB, 0xBE, 0xBF, 0xEA, 0xEB, 0xEE, 0xEF, 0xFA, 0xFB, 0xFE, 0xFF,
     };
 
-    static const u16 crc_16_table[] = {
+    static const unsigned short crc_16_table[] = {
         0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
         0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
         0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
@@ -634,7 +633,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
 
 
     for (i = 0; i < 4; i++)crc_table[i] = 0;
-    src8 = (u8 *) src;
+    src8 = (unsigned char *) src;
 
     for (i = 0; i < 128; i++) {
 
@@ -706,7 +705,7 @@ void ed64_bios_sd_crc16(void *src, u16 *crc_out) {
  * @param[in]  type
  *             The save type to set
  */
-void ed64_bios_rom_savetype_set(u8 type) {
+void ed64_bios_rom_savetype_set(unsigned char type) {
 
     ed64_bios_register_write(REG_GAM_CFG, type);
 }
@@ -717,7 +716,7 @@ void ed64_bios_rom_savetype_set(u8 type) {
  * @param[in]  swap_on
  *             Swaps bytes if true
  */
-void ed64_bios_write_endian_swap(u8 swap_on) {
+void ed64_bios_write_endian_swap(unsigned char swap_on) {
 
     if (swap_on) {
         ed64_bios_register_write(REG_SYS_CFG, CFG_SWAP_ON);
@@ -731,7 +730,7 @@ void ed64_bios_write_endian_swap(u8 swap_on) {
  *
  * @return the cartridge ID
  */
-u32 ed64_bios_get_cart_id() {
+unsigned long ed64_bios_get_cart_id() {
 
     return ed64_bios_register_read(REG_EDID);
 }

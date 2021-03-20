@@ -5,14 +5,14 @@
 
 #include "main.h"
 
-u8 usb_cmd_resp(u8 resp);
-void usb_cmd_cmem_fill(u8 *cmd);
-u8 usb_cmd_rom_wr(u8 *cmd);
+unsigned char usb_cmd_resp(unsigned char resp);
+void usb_cmd_cmem_fill(unsigned char *cmd);
+unsigned char usb_cmd_rom_wr(unsigned char *cmd);
 
 void usb_terminal() {
 
-    u8 data[4 + 1];
-    u8 tout;
+    unsigned char data[4 + 1];
+    unsigned char tout;
     struct controller_data cd;
 
     screen_clear();
@@ -51,8 +51,8 @@ void usb_terminal() {
 
 void usb_load_rom() {
 
-    u8 resp, usb_cmd;
-    u8 cmd[16];
+    unsigned char resp, usb_cmd;
+    unsigned char cmd[16];
     struct controller_data cd;
 
     screen_clear();
@@ -104,9 +104,9 @@ void usb_load_rom() {
 
 }
 
-u8 usb_cmd_resp(u8 resp) {
+unsigned char usb_cmd_resp(unsigned char resp) {
 
-    u8 buff[16];
+    unsigned char buff[16];
     buff[0] = 'c';
     buff[1] = 'm';
     buff[2] = 'd';
@@ -115,13 +115,13 @@ u8 usb_cmd_resp(u8 resp) {
     return ed64_bios_usb_write(buff, sizeof (buff));
 }
 
-void usb_cmd_cmem_fill(u8 *cmd) {
+void usb_cmd_cmem_fill(unsigned char *cmd) {
 
-    u16 i;
-    u32 addr = *(u32 *) & cmd[4];
-    u32 slen = *(u32 *) & cmd[8];
-    u32 val = *(u32 *) & cmd[12];
-    u32 buff[512 / 4];
+    unsigned short i;
+    unsigned long addr = *(unsigned long *) & cmd[4];
+    unsigned long slen = *(unsigned long *) & cmd[8];
+    unsigned long val = *(unsigned long *) & cmd[12];
+    unsigned long buff[512 / 4];
 
     for (i = 0; i < 512 / 4; i++) {
         buff[i] = val;
@@ -133,12 +133,12 @@ void usb_cmd_cmem_fill(u8 *cmd) {
     }
 }
 
-u8 usb_cmd_rom_wr(u8 *cmd) {
+unsigned char usb_cmd_rom_wr(unsigned char *cmd) {
 
-    u8 resp;
-    u8 buff[512];
-    u32 addr = *(u32 *) & cmd[4]; /* destination address */
-    u32 slen = *(u32 *) & cmd[8]; /* size in sectors (512B) */
+    unsigned char resp;
+    unsigned char buff[512];
+    unsigned long addr = *(unsigned long *) & cmd[4]; /* destination address */
+    unsigned long slen = *(unsigned long *) & cmd[8]; /* size in sectors (512B) */
 
     if (slen == 0)return 0;
 

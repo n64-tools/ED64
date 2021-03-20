@@ -17,13 +17,13 @@ extern "C" {
 #define DISK_ERR_WR1 0xD3 /* command timeout */
 #define DISK_ERR_WR2 0xD3 /* IO error */
 
-u8 sd_disk_init();
-u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen);
-u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen);
-u8 sd_disk_read(void *dst, u32 saddr, u32 slen);
-u8 sd_disk_write(void *src, u32 saddr, u32 slen);
-u8 sd_disk_close_rw();
-// u8 sd_disk_stop();
+unsigned char sd_disk_init();
+unsigned char sd_disk_read_to_ram(unsigned long sd_addr, void *dst, unsigned short slen);
+unsigned char sd_disk_read_to_rom(unsigned long sd_addr, unsigned long dst, unsigned short slen);
+unsigned char sd_disk_read(void *dst, unsigned long saddr, unsigned long slen);
+unsigned char sd_disk_write(void *src, unsigned long saddr, unsigned long slen);
+unsigned char sd_disk_close_rw();
+// unsigned char sd_disk_stop();
 
 #ifdef __cplusplus
 }

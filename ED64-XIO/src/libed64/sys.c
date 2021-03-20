@@ -4,7 +4,6 @@
 */
 
 #include "sys.h"
-#include "edtypes.h"
 
 typedef struct PI_regs_s {
     /** @brief Uncached address in RAM where data should be found */
@@ -37,7 +36,7 @@ typedef struct SI_regs_s {
 } SI_regs_t;
 
 
-const u32 ntsc_320[] = {
+const unsigned long ntsc_320[] = {
     0x00013002, 0x00000000, 0x00000140, 0x00000200,
     0x00000000, 0x03e52239, 0x0000020d, 0x00000c15,
     0x0c150c15, 0x006c02ec, 0x002501ff, 0x000e0204,
@@ -45,14 +44,14 @@ const u32 ntsc_320[] = {
 };
 
 
-const u32 mpal_320[] = {
+const unsigned long mpal_320[] = {
     0x00013002, 0x00000000, 0x00000140, 0x00000200,
     0x00000000, 0x04651e39, 0x0000020d, 0x00040c11,
     0x0c190c1a, 0x006c02ec, 0x002501ff, 0x000e0204,
     0x00000200, 0x00000400
 };
 
-const u32 pal_320[] = {
+const unsigned long pal_320[] = {
     0x00013002, 0x00000000, 0x00000140, 0x00000200,
     0x00000000, 0x0404233a, 0x00000271, 0x00150c69,
     0x0c6f0c6e, 0x00800300, 0x005f0239, 0x0009026b,
@@ -72,7 +71,7 @@ void sysPI_wr_safe(void *ram, unsigned long pi_address, unsigned long len);
 static volatile struct PI_regs_s * const PI_regs = (struct PI_regs_s *) 0xa4600000;
 //static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000; //Un-used in sample
 //static void * const PIF_RAM = (void *) 0x1fc007c0; //Un-used in sample
-static vu32 *vregs = (vu32 *) 0xa4400000;
+static volatile unsigned long *vregs = (volatile unsigned long *) 0xa4400000;
 BootStrap *sys_boot_strap = (BootStrap *) 0x80000300;
 
 Screen screen;
@@ -107,8 +106,8 @@ void sys_n64_init() {
     rdp_init();
 
     screen.buff_sw = 0;
-    screen.buff[0] = (u16 *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
-    screen.buff[1] = (u16 *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
+    screen.buff[0] = (unsigned short *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
+    screen.buff[1] = (unsigned short *) malloc(SYS_MAX_PIXEL_W * SYS_MAX_PIXEL_H * 2);
     screen.current = screen.buff[screen.buff_sw];
     screen.bgr_ptr = 0;
 
@@ -118,9 +117,9 @@ void sys_n64_init() {
 
 void sys_n64_region_init() {
 
-    u32 i;
-    u32 *v_setup;
-    u32 region = *(u32 *) 0x80000300;
+    unsigned long i;
+    unsigned long *v_setup;
+    unsigned long region = *(unsigned long *) 0x80000300;
 
     disable_interrupts();
 
@@ -131,12 +130,12 @@ void sys_n64_region_init() {
     screen.pixel_h = 240;
     screen.buff_len = screen.pixel_w * screen.pixel_h;
     screen.char_h = 8;
-    v_setup = region == REGION_NTSC ? (u32*) ntsc_320 : region == REGION_PAL ? (u32*) pal_320 : (u32*) mpal_320;
+    v_setup = region == REGION_NTSC ? (unsigned long*) ntsc_320 : region == REGION_PAL ? (unsigned long*) pal_320 : (unsigned long*) mpal_320;
 
     while (IO_READ(VI_CURRENT_REG) > 10);
     IO_WRITE(VI_CONTROL_REG, 0);
 
-    vregs[1] = (vu32) screen.current;
+    vregs[1] = (volatile unsigned long) screen.current;
     vregs[2] = v_setup[2];
     for (i = 5; i < 9; i++)vregs[i] = v_setup[i];
     vregs[9] = v_setup[9]; //bnack

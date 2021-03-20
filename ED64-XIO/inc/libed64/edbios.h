@@ -57,26 +57,26 @@ HIGH speed should be used for all other functions.
 #define ED64_SAVE_DD64 0x0010
 
 void ed64_bios_init();
-u8 ed64_bios_usb_can_read();
-u8 ed64_bios_usb_can_write();
-u8 ed64_bios_usb_read(void *dst, u32 len);
-u8 ed64_bios_usb_write(void *src, u32 len);
+unsigned char ed64_bios_usb_can_read();
+unsigned char ed64_bios_usb_can_write();
+unsigned char ed64_bios_usb_read(void *dst, unsigned long len);
+unsigned char ed64_bios_usb_write(void *src, unsigned long len);
 void ed64_bios_usb_read_start();
-u8 ed64_bios_usb_read_end(void *dst);
+unsigned char ed64_bios_usb_read_end(void *dst);
 
-void ed64_bios_sdio_speed(u8 speed);
-void ed64_bios_sdio_bitlength(u8 val);
-u8 ed64_bios_sdio_cmd_read();
-void ed64_bios_sdio_cmd_write(u8 val);
-u8 ed64_bios_sd_data_read();
-void ed64_bios_sdio_data_write(u8 val);
-u8 ed64_bios_sdio_to_ram(void *dst, u16 slen);
-u8 ed64_bios_sdio_to_rom(u32 dst, u16 slen);
-u8 ed64_bios_ram_to_sdio(void *src, u16 slen);
+void ed64_bios_sdio_speed(unsigned char speed);
+void ed64_bios_sdio_bitlength(unsigned char val);
+unsigned char ed64_bios_sdio_cmd_read();
+void ed64_bios_sdio_cmd_write(unsigned char val);
+unsigned char ed64_bios_sd_data_read();
+void ed64_bios_sdio_data_write(unsigned char val);
+unsigned char ed64_bios_sdio_to_ram(void *dst, unsigned short slen);
+unsigned char ed64_bios_sdio_to_rom(unsigned long dst, unsigned short slen);
+unsigned char ed64_bios_ram_to_sdio(void *src, unsigned short slen);
 
-void ed64_bios_rom_savetype_set(u8 type); /* set save type */
-void ed64_bios_write_endian_swap(u8 swap_on);
-u32 ed64_bios_get_cart_id();
+void ed64_bios_rom_savetype_set(unsigned char type); /* set save type */
+void ed64_bios_write_endian_swap(unsigned char swap_on);
+unsigned long ed64_bios_get_cart_id();
 
 #ifdef __cplusplus
 }

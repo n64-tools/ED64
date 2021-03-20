@@ -14,12 +14,12 @@ extern "C" {
 #include "screen.h"
 
 
-void rom_boot_simulator(u8 cic);
-u8 fmanager_display();
+void rom_boot_simulator(unsigned char cic);
+unsigned char fmanager_display();
 void usb_terminal();
 void usb_load_rom();
-u8 fm_file_read();
-u8 fm_file_write();
+unsigned char fm_file_read();
+unsigned char fm_file_write();
 
 #ifdef __cplusplus
 }

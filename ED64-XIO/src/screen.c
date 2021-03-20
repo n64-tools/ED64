@@ -8,38 +8,38 @@
 /****************************************************************************** 
  * screen graphics
 ******************************************************************************/
-u16 *screen_display_ptr;
-u16 screen_cur_pal;
-u16 screen_cons_ptr;
-u8 screen_last_x;
-u8 screen_last_y;
-u16 screen_buffer[TV_SCREEN_W * TV_SCREEN_H];
+unsigned short *screen_display_ptr;
+unsigned short screen_cur_pal;
+unsigned short screen_cons_ptr;
+unsigned char screen_last_x;
+unsigned char screen_last_y;
+unsigned short screen_buffer[TV_SCREEN_W * TV_SCREEN_H];
 
-extern u8 font[];
+extern unsigned char font[];
 extern Screen screen;  /* this is also defined in sys.c */
-static vu32 *vregs = (vu32 *) 0xa4400000; /* this is also defined in sys.c */
+static volatile unsigned long *vregs = (volatile unsigned long *) 0xa4400000; /* this is also defined in sys.c */
 
-u16 pal[16] = {
+unsigned short pal[16] = {
     RGB(0, 0, 0), RGB(31, 31, 31), RGB(16, 16, 16), RGB(28, 28, 2),
     RGB(8, 8, 8), RGB(31, 0, 0), RGB(0, 31, 0), RGB(12, 12, 12),
     0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0aa0
 };
 
-void screen_draw_char_8X8(u32 val, u32 x, u32 y) {
+void screen_draw_char_8X8(unsigned long val, unsigned long x, unsigned long y) {
 
-    u64 tmp;
-    u32 font_val;
-    u8 *font_ptr = &font[(val & 0xff) * 8];
-    u64 *ptr = (u64 *) & screen.current[ (x * 8 + y * 8 * screen.pixel_w)];
-    u64 pal_bgr = pal[(val >> 8) & 0x0f];
-    u64 pal_txt = pal[val >> 12];
+    unsigned long long tmp;
+    unsigned long font_val;
+    unsigned char *font_ptr = &font[(val & 0xff) * 8];
+    unsigned long long *ptr = (unsigned long long *) & screen.current[ (x * 8 + y * 8 * screen.pixel_w)];
+    unsigned long long pal_bgr = pal[(val >> 8) & 0x0f];
+    unsigned long long pal_txt = pal[val >> 12];
 
     for (int i = 0; i < 4; i++) {
         pal_bgr = (pal_bgr << 16) | pal_bgr;
     }
 
-    for (u32 i = 0; i < 8; i++) {
+    for (unsigned long i = 0; i < 8; i++) {
 
         font_val = *font_ptr++;
 
@@ -63,14 +63,14 @@ void screen_draw_char_8X8(u32 val, u32 x, u32 y) {
 
 void screen_repaint() {
 
-    u16 *chr_ptr = screen_buffer;
+    unsigned short *chr_ptr = screen_buffer;
 
     screen.buff_sw = (screen.buff_sw ^ 1) & 1;
     screen.current = screen.buff[screen.buff_sw];
 
 
-    for (u32 y = 0; y < screen.h; y++) {
-        for (u32 x = 0; x < screen.w; x++) {
+    for (unsigned long y = 0; y < screen.h; y++) {
+        for (unsigned long x = 0; x < screen.w; x++) {
 
             screen_draw_char_8X8(*chr_ptr++, x, y);
         }
@@ -78,7 +78,7 @@ void screen_repaint() {
 
     data_cache_hit_writeback(screen.current, screen.buff_len * 2);
     screen_vsync();
-    vregs[1] = (vu32) screen.current;
+    vregs[1] = (volatile unsigned long) screen.current;
 
 }
 
@@ -89,7 +89,7 @@ void screen_vsync() {
 }
 
 
-void screen_append_hex4_print(u8 val);
+void screen_append_hex4_print(unsigned char val);
 
 void screen_clear() {
 
@@ -99,45 +99,45 @@ void screen_clear() {
     screen_set_pal(REGION_PAL_B1);
 }
 
-void screen_set_pal(u16 pal) {
+void screen_set_pal(unsigned short pal) {
     screen_cur_pal = pal;
 }
 
-void screen_append_str_print(u8 *str) {
+void screen_append_str_print(unsigned char *str) {
     while (*str != 0)*screen_display_ptr++ = *str++ + screen_cur_pal;
 }
 
-void screen_append_char_print(u8 chr) {
+void screen_append_char_print(unsigned char chr) {
 
     *screen_display_ptr++ = chr + screen_cur_pal;
 }
 
-void screen_append_hex4_print(u8 val) {
+void screen_append_hex4_print(unsigned char val) {
 
     val += (val < 10 ? '0' : '7');
     *screen_display_ptr++ = val + screen_cur_pal;
 }
 
-void screen_append_hex8_print(u8 val) {
+void screen_append_hex8_print(unsigned char val) {
 
     screen_append_hex4_print(val >> 4);
     screen_append_hex4_print(val & 15);
 }
 
-void screen_append_hex16_print(u16 val) {
+void screen_append_hex16_print(unsigned short val) {
 
     screen_append_hex8_print(val >> 8);
     screen_append_hex8_print(val);
 }
 
-void screen_append_hex32_print(u32 val) {
+void screen_append_hex32_print(unsigned long val) {
 
     screen_append_hex16_print(val >> 16);
     screen_append_hex16_print(val);
 
 }
 
-void screen_set_xy_pos(u8 x, u8 y) {
+void screen_set_xy_pos(unsigned char x, unsigned char y) {
 
     screen_cons_ptr = x + y * TV_SCREEN_W;
     screen_display_ptr = &screen_buffer[screen_cons_ptr];
@@ -145,7 +145,7 @@ void screen_set_xy_pos(u8 x, u8 y) {
     screen_last_y = y;
 }
 
-void screen_print(u8 *str) {
+void screen_print(unsigned char *str) {
 
     screen_display_ptr = &screen_buffer[screen_cons_ptr];
     screen_cons_ptr += TV_SCREEN_W;

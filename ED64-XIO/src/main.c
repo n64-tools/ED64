@@ -6,12 +6,12 @@
 #include "main.h"
 
 void main_display_edid();
-void main_display_error(u8 err);
-u8 main_display_menu();
+void main_display_error(unsigned char err);
+unsigned char main_display_menu();
 
 int main(void) {
 
-    u8 resp;
+    unsigned char resp;
     FATFS fs;
 
     sys_n64_init();
@@ -34,7 +34,7 @@ int main(void) {
 
 }
 
-u8 main_display_menu() {
+unsigned char main_display_menu() {
 
     enum {
         MENU_FILE_MANAGER,
@@ -47,9 +47,9 @@ u8 main_display_menu() {
     };
 
     struct controller_data cd;
-    u8 * menu[MENU_SIZE];
-    u32 selector = 0;
-    u8 resp;
+    unsigned char * menu[MENU_SIZE];
+    unsigned long selector = 0;
+    unsigned char resp;
 
     menu[MENU_FILE_MANAGER] = "File Explorer";
     menu[MENU_FILE_READ] = "File Read (\"SD:/ED64/OS64.v64\")";
@@ -128,7 +128,7 @@ u8 main_display_menu() {
 void main_display_edid() {
 
     struct controller_data cd;
-    u32 id = ed64_bios_get_cart_id();
+    unsigned long id = ed64_bios_get_cart_id();
 
     screen_clear();
     screen_print("ED64 H/W Rev ID:   ");
@@ -170,7 +170,7 @@ void main_display_edid() {
 
 }
 
-void main_display_error(u8 err) {
+void main_display_error(unsigned char err) {
 
     screen_clear();
     screen_print("error: ");
@@ -180,11 +180,11 @@ void main_display_error(u8 err) {
     while (1);
 }
 
-void rom_boot_simulator(u8 cic) {
+void rom_boot_simulator(unsigned char cic) {
 
 
-    static u16 cheats_on; /* 0 = off, 1 = select, 2 = all */
-    static u8 rom_cic;
+    static unsigned short cheats_on; /* 0 = off, 1 = select, 2 = all */
+    static unsigned char rom_cic;
 
     rom_cic = cic;
     cheats_on = 0;

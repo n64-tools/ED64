@@ -5,7 +5,6 @@
 
 #include "edbios.h"
 #include "edsdio.h"
-#include "edtypes.h"
 
 
 #define CMD0  0x40    /* software reset */
@@ -43,17 +42,17 @@
 
 
 
-u32 crc7(u8 *buff, u32 len);
+unsigned long crc7(unsigned char *buff, unsigned long len);
 
-u8 sd_disk_cmd(u8 cmd, u32 arg);
-u8 sd_disk_read_resp(u8 cmd);
-u8 sd_disk_open_read(u32 saddr);
-u8 sd_disk_close_rw();
+unsigned char sd_disk_cmd(unsigned char cmd, unsigned long arg);
+unsigned char sd_disk_read_resp(unsigned char cmd);
+unsigned char sd_disk_open_read(unsigned long saddr);
+unsigned char sd_disk_close_rw();
 
-u8 sd_resp_buff[18];
-u32 disk_cur_addr;
-u8 disk_card_type;
-u8 disk_mode;
+unsigned char sd_resp_buff[18];
+unsigned long disk_cur_addr;
+unsigned char disk_card_type;
+unsigned char disk_mode;
 
 /******************************************************************************
 * sdcard disk base functions
@@ -64,12 +63,12 @@ u8 disk_mode;
  *
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_init() {
+unsigned char sd_disk_init() {
 
-    u16 i;
-    volatile u8 resp = 0;
-    u32 rca;
-    u32 wait_max = 1024;
+    unsigned short i;
+    volatile unsigned char resp = 0;
+    unsigned long rca;
+    unsigned long wait_max = 1024;
 
     disk_card_type = 0;
     disk_mode = DISK_MODE_NOP;
@@ -168,13 +167,13 @@ u8 sd_disk_init() {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_cmd(u8 cmd, u32 arg) {
+unsigned char sd_disk_cmd(unsigned char cmd, unsigned long arg) {
 
 
-    u8 p = 0;
-    u8 buff[6];
+    unsigned char p = 0;
+    unsigned char buff[6];
 
-    u8 crc;
+    unsigned char crc;
     buff[p++] = cmd;
     buff[p++] = (arg >> 24);
     buff[p++] = (arg >> 16);
@@ -207,11 +206,11 @@ u8 sd_disk_cmd(u8 cmd, u32 arg) {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_read_resp(u8 cmd) {
+unsigned char sd_disk_read_resp(unsigned char cmd) {
 
-    u16 i;
+    unsigned short i;
 
-    u8 resp_len = cmd == CMD2 || cmd == CMD9 ? 17 : 6;
+    unsigned char resp_len = cmd == CMD2 || cmd == CMD9 ? 17 : 6;
 
     i = 0;
     sd_resp_buff[0] = ed64_bios_sdio_cmd_read();
@@ -235,9 +234,9 @@ u8 sd_disk_read_resp(u8 cmd) {
 }
 
 
-u32 crc7(u8 *buff, u32 len) {
+unsigned long crc7(unsigned char *buff, unsigned long len) {
 
-    u32 a, crc = 0;
+    unsigned long a, crc = 0;
 
     while (len--) {
         crc ^= *buff++;
@@ -262,9 +261,9 @@ u32 crc7(u8 *buff, u32 len) {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_open_read(u32 saddr) {
+unsigned char sd_disk_open_read(unsigned long saddr) {
 
-    u8 resp;
+    unsigned char resp;
     if (disk_mode == DISK_MODE_RD && saddr == disk_cur_addr)return 0;
 
     sd_disk_close_rw();
@@ -292,9 +291,9 @@ u8 sd_disk_open_read(u32 saddr) {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
+unsigned char sd_disk_read_to_ram(unsigned long sd_addr, void *dst, unsigned short slen) {
 
-    u8 resp = 0;
+    unsigned char resp = 0;
 
     resp = sd_disk_open_read(sd_addr);
     if (resp)return DISK_ERR_RD1;
@@ -320,9 +319,9 @@ u8 sd_disk_read_to_ram(u32 sd_addr, void *dst, u16 slen) {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
+unsigned char sd_disk_read_to_rom(unsigned long sd_addr, unsigned long dst, unsigned short slen) {
 
-    u8 resp = 0;
+    unsigned char resp = 0;
 
     resp = sd_disk_open_read(sd_addr);
     if (resp)return DISK_ERR_RD1;
@@ -348,12 +347,12 @@ u8 sd_disk_read_to_rom(u32 sd_addr, u32 dst, u16 slen) {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_read(void *dst, u32 saddr, u32 slen) {
+unsigned char sd_disk_read(void *dst, unsigned long saddr, unsigned long slen) {
 
-    if (((u32) dst & 0x1FFFFFFF) < 0x800000) {
+    if (((unsigned long) dst & 0x1FFFFFFF) < 0x800000) {
         return sd_disk_read_to_ram(saddr, dst, slen);
     } else {
-        return sd_disk_read_to_rom(saddr, ((u32) dst) & 0x3FFFFFF, slen);
+        return sd_disk_read_to_rom(saddr, ((unsigned long) dst) & 0x3FFFFFF, slen);
     }
 }
 
@@ -366,10 +365,10 @@ u8 sd_disk_read(void *dst, u32 saddr, u32 slen) {
  *
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_close_rw() {
+unsigned char sd_disk_close_rw() {
 
-    u8 resp;
-    u16 i;
+    unsigned char resp;
+    unsigned short i;
 
     if (disk_mode == DISK_MODE_NOP)return 0;
 
@@ -404,9 +403,9 @@ u8 sd_disk_close_rw() {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_open_write(u32 saddr) {
+unsigned char sd_disk_open_write(unsigned long saddr) {
 
-    u8 resp;
+    unsigned char resp;
     if (disk_mode == DISK_MODE_WR && saddr == disk_cur_addr)return 0;
 
     sd_disk_close_rw();
@@ -434,9 +433,9 @@ u8 sd_disk_open_write(u32 saddr) {
  * 
  * @return 0 on successful or a other value on failure.
  */
-u8 sd_disk_write(void *src, u32 saddr, u32 slen) {
+unsigned char sd_disk_write(void *src, unsigned long saddr, unsigned long slen) {
 
-    u8 resp;
+    unsigned char resp;
 
     resp = sd_disk_open_write(saddr);
     if (resp)return DISK_ERR_WR1;

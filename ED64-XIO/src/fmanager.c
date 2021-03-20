@@ -5,18 +5,18 @@
 
 #include "main.h"
 
-u8 fm_load_dir(u8 *path, FILINFO *inf, u32 max_items);
-u8 fm_load_rom(u8 *path);
+unsigned char fm_load_dir(unsigned char *path, FILINFO *inf, unsigned long max_items);
+unsigned char fm_load_rom(unsigned char *path);
 
 #define MAX_DIR_SIZE    20
 #define MAX_STR_LEN     36
 
-u8 fmanager_display() {
+unsigned char fmanager_display() {
 
     FILINFO inf[MAX_DIR_SIZE];
-    u32 selector = 0;
+    unsigned long selector = 0;
     struct controller_data cd;
-    u8 resp;
+    unsigned char resp;
 
     /* open root dir */
     resp = fm_load_dir("", inf, MAX_DIR_SIZE);
@@ -29,7 +29,7 @@ u8 fmanager_display() {
         screen_clear();
         for (int i = 0; i < MAX_DIR_SIZE && inf[i].fname[0]; i++) {
             screen_print(selector == i ? ">" : " ");
-            u8 tmp = inf[i].fname[MAX_STR_LEN];
+            unsigned char tmp = inf[i].fname[MAX_STR_LEN];
             inf[i].fname[MAX_STR_LEN] = 0; /* make sure that the printed string doesn't exceed max len */
             screen_append_str_print(inf[i].fname);
             inf[i].fname[MAX_STR_LEN] = tmp;
@@ -74,9 +74,9 @@ u8 fmanager_display() {
     return 0;
 }
 
-u8 fm_load_dir(u8 *path, FILINFO *inf, u32 max_items) {
+unsigned char fm_load_dir(unsigned char *path, FILINFO *inf, unsigned long max_items) {
 
-    u8 resp;
+    unsigned char resp;
     DIR dir;
 
     resp = f_opendir(&dir, path);
@@ -96,13 +96,13 @@ u8 fm_load_dir(u8 *path, FILINFO *inf, u32 max_items) {
     return 0;
 }
 
-u8 fm_load_rom(u8 *path) {
+unsigned char fm_load_rom(unsigned char *path) {
 
     FIL f;
-    u8 resp;
-    u8 header[8];
+    unsigned char resp;
+    unsigned char header[8];
     UINT br;
-    u32 fsize;
+    unsigned long fsize;
 
     resp = f_open(&f, path, FA_READ);
     if (resp)return resp;
