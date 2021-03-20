@@ -9,9 +9,9 @@ static void * const PIF_RAM = (void *) 0x1fc007c0;
 /** @brief SI IO busy */
 #define SI_STATUS_IO_BUSY   ( 1 << 1 )
 
-static void __SI_DMA_wait(void) {
-    while (SI_regs->status & (SI_STATUS_DMA_BUSY | SI_STATUS_IO_BUSY));
-}
+// static void __SI_DMA_wait(void) {
+//     while (SI_regs->status & (SI_STATUS_DMA_BUSY | SI_STATUS_IO_BUSY));
+// }
 
 static void __controller_exec_PIF(void *inblock, void *outblock) {
     volatile uint64_t inblock_temp[8];
