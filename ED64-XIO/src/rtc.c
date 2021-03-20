@@ -91,7 +91,7 @@ void rtc_read(unsigned char block, unsigned char *data) {
 }
 
 void menu_display_rtc() {
-
+    struct controller_data cd;
     // unsigned char w = 18;
     // unsigned char h = 10;
     // u16 y;
@@ -119,16 +119,16 @@ void menu_display_rtc() {
         screen_print("Press (B) to exit");
         screen_repaint();
 
-        screen_print("rtc status: ", 4, 8);
+        screen_print("rtc status: ");
         screen_append_hex32_print(rtc_status());
 
-        screen_print("rtc_rd: ", 4, 10);
+        screen_print("rtc_rd: ");
         rtc_read(2, data);
         for (i = 0; i < 9; i++) {
             screen_append_hex8_print(data[i]);
         }
 
-        screen_print("rtc_rd: ", 4, 12);
+        screen_print("rtc_rd: ");
         rtc_read(0, data);
         for (i = 0; i < 9; i++) {
             screen_append_hex8_print(data[i]);
@@ -311,5 +311,5 @@ void menu_display_rtc() {
             //     sub_sel = sub_sel == 2 ? 0 : sub_sel + 1;
             // }
         //}
-    }
+    //}
 }

@@ -20,6 +20,7 @@ void usb_terminal();
 void usb_load_rom();
 unsigned char fm_file_read();
 unsigned char fm_file_write();
+void menu_display_rtc();
 
 #ifdef __cplusplus
 }
