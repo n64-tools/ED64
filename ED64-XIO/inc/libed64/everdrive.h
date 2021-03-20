@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+#include "edtypes.h"
 #include "edbios.h"
 #include "edsdio.h"
 #include "ff.h"
