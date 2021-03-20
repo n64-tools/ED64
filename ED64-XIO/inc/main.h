@@ -10,10 +10,7 @@
 extern "C" {
 #endif
 
-#include "bios.h"
-#include "disk.h"
-#include "ff.h"
-#include "sys.h"
+#include "everdrive.h"
 
 
 void rom_boot_simulator(u8 cic);

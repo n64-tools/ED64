@@ -3,7 +3,7 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#include "bios.h"
+#include "edbios.h"
 
 
 #define REG_BASE        0x1F800000

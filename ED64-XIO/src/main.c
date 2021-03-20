@@ -3,7 +3,7 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#include "everdrive.h"
+#include "main.h"
 
 void main_display_edid();
 void main_display_error(u8 err);

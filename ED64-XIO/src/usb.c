@@ -3,7 +3,7 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#include "everdrive.h"
+#include "main.h"
 
 u8 usb_cmd_resp(u8 resp);
 void usb_cmd_cmem_fill(u8 *cmd);

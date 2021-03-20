@@ -3,7 +3,7 @@
 * See LICENSE file in the project root for full license information.
 */
 
-#include "everdrive.h"
+#include "main.h"
 
 u8 fm_load_dir(u8 *path, FILINFO *inf, u32 max_items);
 u8 fm_load_rom(u8 *path);
