@@ -15,6 +15,8 @@ u8 screen_last_x;
 u8 screen_last_y;
 u16 screen_buffer[TV_SCREEN_W * TV_SCREEN_H];
 
+extern u8 font[];
+
 void screen_draw_char_8X8(u32 val, u32 x, u32 y) {
 
     u64 tmp;

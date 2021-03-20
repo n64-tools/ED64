@@ -74,7 +74,6 @@ static volatile struct PI_regs_s * const PI_regs = (struct PI_regs_s *) 0xa46000
 static vu32 *vregs = (vu32 *) 0xa4400000;
 BootStrap *sys_boot_strap = (BootStrap *) 0x80000300;
 
-extern u8 font[];
 Screen screen;
 
 u16 pal[16] = {

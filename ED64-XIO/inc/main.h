@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #include "everdrive.h"
+#include "screen.h"
 
 
 void rom_boot_simulator(u8 cic);
