@@ -1,5 +1,6 @@
 
 #include "main.h"
+#include "sys.h"
 
 extern SI_regs_s* const SI_regs;
 //extern static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000;
