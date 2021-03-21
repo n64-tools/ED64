@@ -4,7 +4,7 @@
 */
 
 #include "screen.h"
-#include "string.h"
+//#include "string.h"
 
 /****************************************************************************** 
  * screen graphics
