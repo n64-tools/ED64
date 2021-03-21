@@ -11,8 +11,6 @@ extern "C" {
 #endif
 
 #include "everdrive.h"
-#include "stdlib.h"
-#include "string.h"
 
 #define TV_SCREEN_W 40 /* screen width (horizontal) */
 #define TV_SCREEN_H 30 /* screen height (vertical) */
