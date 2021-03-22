@@ -1,0 +1,1 @@
+%~dp0\..\..\usb64\usb64.exe -extra=Rtc -rom=%1 -start
