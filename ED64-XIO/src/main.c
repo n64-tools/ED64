@@ -4,7 +4,7 @@
 */
 
 #include "main.h"
-#include "string.h"
+#include <string.h>
 
 void main_display_edid();
 void main_display_error(unsigned char err);

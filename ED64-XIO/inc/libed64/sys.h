@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#include "libdragon.h"
+#include <libdragon.h>
 
 #define CIC_6101 1
 #define CIC_6102 2

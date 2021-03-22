@@ -4,8 +4,8 @@
 */
 
 #include "sys.h"
-#include "stdlib.h"
-#include "regsinternal.h" /* used for libdragon registers */
+#include <stdlib.h>
+#include <regsinternal.h> /* used for libdragon registers */
 
 const unsigned long ntsc_320[] = {
     0x00013002, 0x00000000, 0x00000140, 0x00000200,
