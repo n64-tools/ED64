@@ -18,6 +18,7 @@
 #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
 //extern SD_HandleTypeDef hsd;
+
 /*-----------------------------------------------------------------------*/
 /* Get Drive Status                                                      */
 

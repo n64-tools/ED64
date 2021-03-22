@@ -46,7 +46,7 @@ HIGH speed should be used for all other functions.
 #define ED64_CART_ID_X7 0xED640013
 #define ED64_CART_ID_X5 0xED640014
 
-/* rom cfg register flags */
+/* rom config save register flags */
 #define ED64_SAVE_OFF 0x0000
 #define ED64_SAVE_EEP4K 0x0001
 #define ED64_SAVE_EEP16K 0x0002

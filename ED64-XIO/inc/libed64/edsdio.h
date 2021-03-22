@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+/* Definitions for the SDIO interface. */
 #define DISK_ERR_INIT 0xD0 /* command initialization error */
 #define DISK_ERR_CTO 0xD1 /* command CTO error */
 #define DISK_ERR_RD1 0xD2 /* command timeout */

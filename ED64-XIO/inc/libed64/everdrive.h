@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+/* Include files for the full everdrive library. */
 #include "edbios.h"
 #include "edsdio.h"
 #include "sys.h"

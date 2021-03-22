@@ -30,6 +30,7 @@ extern "C" {
 #define KSEG0 0x80000000
 #define KSEG1 0xA0000000
 
+/*   Video Interface macros */
 #define VI_BASE_REG 0x04400000
 #define VI_CONTROL (VI_BASE_REG + 0x00)
 #define VI_FRAMEBUFFER (VI_BASE_REG + 0x04)
@@ -45,6 +46,7 @@ extern "C" {
 #define VI_H_SCALE (VI_BASE_REG + 0x2C)
 #define VI_VSCALE (VI_BASE_REG + 0x30)
 
+/* Peripheral Interface macros */
 #define PI_BSD_DOM1_LAT_REG (PI_BASE_REG + 0x14)
 #define PI_BSD_DOM1_PWD_REG (PI_BASE_REG + 0x18)
 #define PI_BSD_DOM1_PGS_REG (PI_BASE_REG + 0x1C) /*   page size */
@@ -69,6 +71,7 @@ extern "C" {
 
 #define RGB(r, g, b) ((r << 11) | (g << 6) | (b << 1))
 
+/* Definition for the interfacing with the firmware bootstrap. */
 typedef struct BootStrap {
   volatile unsigned long region;
   volatile unsigned long rom_type;
@@ -80,6 +83,7 @@ typedef struct BootStrap {
   volatile unsigned long app_buff;
 } BootStrap;
 
+/* Definition for the interfacing with the Screen. */
 typedef struct Screen {
   unsigned long w;
   unsigned long h;
@@ -93,6 +97,7 @@ typedef struct Screen {
   unsigned short *bgr_ptr;
 } Screen;
 
+/* Register definition for the Peripheral Interface. */
 typedef struct PI_regs_s {
     /** @brief Uncached address in RAM where data should be found */
     void * ram_address;
@@ -106,6 +111,7 @@ typedef struct PI_regs_s {
     unsigned long status;
 } PI_regs_s;
 
+/* Register definition for the SI interface. */
 typedef struct SI_regs_s {
     /** @brief Uncached address in RAM where data should be found */
     volatile void * DRAM_addr;
