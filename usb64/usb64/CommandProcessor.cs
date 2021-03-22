@@ -194,7 +194,7 @@ namespace ed64usb
                         FillCartridgeRomSpace(romBytes.ToArray().Length, fillValue);
 
                         //we can deal with save types, RTC and region here!
-                        if (saveType != DeveloperRom.SaveType.None)
+                        if (saveType != DeveloperRom.SaveType.None && rtcOrRegionType != DeveloperRom.ExtraInfo.Off)
                         {
                             romBytes[0x3c] = (byte)'E';
                             romBytes[0x3d] = (byte)'D';

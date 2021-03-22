@@ -69,6 +69,11 @@ int rtc_status() {
 
 }
 
+// https://discordapp.com/channels/205520502922543113/768169699564453910/814634570964140052
+// 0x03 = EEPROM read
+// 0x04 = EEPROM write
+// 0x05 = RTC read
+// 0x06 = RTC write
 void rtc_read(unsigned char block, unsigned char *data) {
 
     static unsigned long long SI_eeprom_read_block[8] = {
