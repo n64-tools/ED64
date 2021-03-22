@@ -1,7 +1,7 @@
 
 #include "main.h"
 #include "sys.h"
-#include <stdio.h>
+#include <string.h>
 
 static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000; /* defined in sys.h */
 static void * const PIF_RAM = (void *) 0x1fc007c0;

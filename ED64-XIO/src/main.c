@@ -44,8 +44,8 @@ unsigned char main_display_menu() {
         MENU_USB_TERMINAL,
         MENU_USB_LOADER,
         MENU_EDID,
-        MENU_SIZE,
-        MENU_RTC
+        MENU_RTC,
+        MENU_SIZE /* Must be last entry to inform menu size count */
     };
 //#if LIBDRAGON_SYS
     struct controller_data cd;
