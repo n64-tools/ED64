@@ -5,6 +5,7 @@
 
 #include "sys.h"
 #include "stdlib.h"
+#include "regsinternal.h" /* used for libdragon registers */
 
 const unsigned long ntsc_320[] = {
     0x00013002, 0x00000000, 0x00000140, 0x00000200,
@@ -38,8 +39,8 @@ void sysPI_rd_safe(void *ram, unsigned long pi_address, unsigned long len);
 void sysPI_wr_safe(void *ram, unsigned long pi_address, unsigned long len);
 
 
-static volatile struct PI_regs_s * const PI_regs = (struct PI_regs_s *) 0xa4600000;
-static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000; //Un-used in sample
+static volatile struct PI_regs_s * const PI_regs = (struct PI_regs_s *) 0xa4600000; /* defined in regsinternal.h */
+//static volatile struct SI_regs_s * const SI_regs = (struct SI_regs_s *) 0xa4800000; /* defined in regsinternal.h */ //Un-used in sample
 //static void * const PIF_RAM = (void *) 0x1fc007c0; //Un-used in sample
 static volatile unsigned long *vregs = (volatile unsigned long *) 0xa4400000;
 BootStrap *sys_boot_strap = (BootStrap *) 0x80000300;

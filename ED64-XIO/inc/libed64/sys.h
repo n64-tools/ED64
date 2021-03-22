@@ -90,35 +90,35 @@ typedef struct Screen {
   unsigned short *bgr_ptr;
 } Screen;
 
-typedef struct PI_regs_s {
-    /** @brief Uncached address in RAM where data should be found */
-    void * ram_address;
-    /** @brief Address of data on peripheral */
-    unsigned long pi_address;
-    /** @brief How much data to read from RAM into the peripheral */
-    unsigned long read_length;
-    /** @brief How much data to write to RAM from the peripheral */
-    unsigned long write_length;
-    /** @brief Status of the PI, including DMA busy */
-    unsigned long status;
-} PI_regs_s;
+// typedef struct PI_regs_s {
+//     /** @brief Uncached address in RAM where data should be found */
+//     void * ram_address;
+//     /** @brief Address of data on peripheral */
+//     unsigned long pi_address;
+//     /** @brief How much data to read from RAM into the peripheral */
+//     unsigned long read_length;
+//     /** @brief How much data to write to RAM from the peripheral */
+//     unsigned long write_length;
+//     /** @brief Status of the PI, including DMA busy */
+//     unsigned long status;
+// } PI_regs_s;
 
-typedef struct SI_regs_s {
-    /** @brief Uncached address in RAM where data should be found */
-    volatile void * DRAM_addr;
-    /** @brief Address to read when copying from PIF RAM */
-    volatile void * PIF_addr_read;
-    /** @brief Reserved word */
-    uint32_t reserved1;
-    /** @brief Reserved word */
-    uint32_t reserved2;
-    /** @brief Address to write when copying to PIF RAM */
-    volatile void * PIF_addr_write;
-    /** @brief Reserved word */
-    uint32_t reserved3;
-    /** @brief SI status, including DMA busy and IO busy */
-    uint32_t status;
-} SI_regs_t;
+// typedef struct SI_regs_s {
+//     /** @brief Uncached address in RAM where data should be found */
+//     volatile void * DRAM_addr;
+//     /** @brief Address to read when copying from PIF RAM */
+//     volatile void * PIF_addr_read;
+//     /** @brief Reserved word */
+//     uint32_t reserved1;
+//     /** @brief Reserved word */
+//     uint32_t reserved2;
+//     /** @brief Address to write when copying to PIF RAM */
+//     volatile void * PIF_addr_write;
+//     /** @brief Reserved word */
+//     uint32_t reserved3;
+//     /** @brief SI status, including DMA busy and IO busy */
+//     uint32_t status;
+// } SI_regs_t;
 
 void sys_n64_init();
 void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len);
