@@ -4,7 +4,6 @@
 */
 
 #include "sys.h"
-//#include <stdlib.h>
 
 const unsigned long ntsc_320[] = {
     0x00013002, 0x00000000, 0x00000140, 0x00000200,
@@ -129,6 +128,20 @@ void sys_n64_region_init() {
 //#endif
 }
 
+
+// this function could probably be converted to: https://github.com/DragonMinded/libdragon/blob/89d17be8563a44a9b95873d436832a1222757cdc/src/dma.c#L55
+/**
+ * @brief Read from a peripheral
+ *
+ * This function should be used when reading from the cartridge.
+ *
+ * @param[out] ram
+ *             Pointer to a buffer to place read data
+ * @param[in]  pi_address
+ *             Memory address of the peripheral to read from
+ * @param[in]  len
+ *             Length in bytes to read into ram_address
+ */
 void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;
@@ -155,6 +168,19 @@ void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len) {
 //#endif
 }
 
+// this function could probably be converted to: https://github.com/DragonMinded/libdragon/blob/89d17be8563a44a9b95873d436832a1222757cdc/src/dma.c#L96
+/**
+ * @brief Write to a peripheral
+ *
+ * This function should be used when writing to the cartridge.
+ *
+ * @param[in] ram
+ *            Pointer to a buffer to read data from
+ * @param[in] pi_address
+ *            Memory address of the peripheral to write to
+ * @param[in] len
+ *            Length in bytes to write to peripheral
+ */
 void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
 
     pi_address &= 0x1FFFFFFF;

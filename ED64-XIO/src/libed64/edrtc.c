@@ -1,6 +1,7 @@
-
-
-// /* */
+/*
+* Copyright (c) Krikzz and Contributors.
+* See LICENSE file in the project root for full license information.
+*/
 
 // void ed_i2c_start() {
 //     ed_bios_reg_wr(5);
