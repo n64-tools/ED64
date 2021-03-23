@@ -96,6 +96,77 @@ void rtc_read(unsigned char block, unsigned char *data) {
 
 }
 
+
+void display_rtc() {
+
+    u32 rtc_stat __attribute__((unused));
+    //u16 i;
+    //u16 u;
+    //u8 tmp;
+    //u8 rtc_data[8];
+    u8 g_rtc_data[9];
+
+    u8 sec = 0;
+    u8 min = 0;
+    u8 hou = 0;
+    //u8 day_ow __attribute__((unused)) = 0;
+    u8 day_om = 0;
+    u8 year = 0;
+    u8 month = 0;
+
+    //ed64_set_save_type(SAVE_TYPE_OFF);
+
+    //for (i = 0;; i++) {
+
+        // ed64_gpio_mode_rtc();
+        // ed64_sleep(100);
+        rtc_stat = rtc_status() >> 8;
+        rtc_read(2, g_rtc_data);
+
+        // ed64_gpio_mode_io();
+        // rtcGetDateTime(rtc_data);
+
+        g_rtc_data[2] &= 0x7f;
+        //rtc_data[2] &= 0x7f;
+        g_rtc_data[5] &= 0x7f;
+        //rtc_data[5] &= 0x7f;
+
+        // tmp = g_rtc_data[3];
+        // g_rtc_data[3] = g_rtc_data[4];
+        // g_rtc_data[4] = tmp;
+
+        // for (u = 0; u < 6; u++) {
+        //     if (rtc_data[u] != g_rtc_data[u])break;
+        // }
+
+        // if (u == 6)break;
+        // if (u != 6 && i > 8)return u + 0x10;
+
+    //}
+
+    sec = g_rtc_data[0];
+    min = g_rtc_data[1];
+    hou = g_rtc_data[2] & 0x7f;
+    day_om = g_rtc_data[3];
+    //day_ow = g_rtc_data[4];
+    month = g_rtc_data[5] & 0x7f;
+    year = g_rtc_data[6];
+
+
+    screen_append_hex8_print(year);
+    screen_append_str_print("-");
+    screen_append_hex8_print(month);
+    screen_append_str_print("-");
+    screen_append_hex8_print(day_om);
+    screen_append_str_print("T");
+    screen_append_hex8_print(hou);
+    screen_append_str_print(":");
+    screen_append_hex8_print(min);
+    screen_append_str_print(":");
+    screen_append_hex8_print(sec);
+
+}
+
 void menu_display_rtc() {
     struct controller_data cd;
     unsigned char data[128];
@@ -114,17 +185,19 @@ void menu_display_rtc() {
             case ED64_CART_ID_X7:
                 screen_append_hex32_print(rtc_status());
 
-                screen_print("rtc_rd: ");
+                screen_print("rtc_rd block 2: ");
                 rtc_read(2, data);
                 for (int i = 0; i < 9; i++) {
                     screen_append_hex8_print(data[i]);
                 }
 
-                screen_print("rtc_rd: ");
-                rtc_read(0, data);
-                for (int i = 0; i < 9; i++) {
-                    screen_append_hex8_print(data[i]);
-                }
+                // screen_print("rtc_rd block 0: ");
+                // rtc_read(0, data);
+                // for (int i = 0; i < 9; i++) {
+                //     screen_append_hex8_print(data[i]);
+                // }
+                screen_print("rtc time: ");
+                display_rtc();
                 break;
             default:
                 screen_append_str_print("RTC unavailable on this cart type!");
