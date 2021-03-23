@@ -99,20 +99,20 @@ void rtc_read(unsigned char block, unsigned char *data) {
 
 void display_rtc() {
 
-    u32 rtc_stat __attribute__((unused));
-    //u16 i;
-    //u16 u;
-    //u8 tmp;
-    //u8 rtc_data[8];
-    u8 g_rtc_data[9];
+    unsigned long rtc_stat __attribute__((unused));
+    //unsigned short i;
+    //unsigned short u;
+    //unsigned char tmp;
+    //unsigned char rtc_data[8];
+    unsigned char g_rtc_data[9];
 
-    u8 sec = 0;
-    u8 min = 0;
-    u8 hou = 0;
-    //u8 day_ow __attribute__((unused)) = 0;
-    u8 day_om = 0;
-    u8 year = 0;
-    u8 month = 0;
+    unsigned char sec = 0;
+    unsigned char min = 0;
+    unsigned char hou = 0;
+    //unsigned char day_ow __attribute__((unused)) = 0;
+    unsigned char day_om = 0;
+    unsigned char year = 0;
+    unsigned char month = 0;
 
     //ed64_set_save_type(SAVE_TYPE_OFF);
 
