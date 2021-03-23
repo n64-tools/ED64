@@ -69,11 +69,7 @@ int rtc_status() {
 
 }
 
-// https://discordapp.com/channels/205520502922543113/768169699564453910/814634570964140052
-// 0x03 = EEPROM read
-// 0x04 = EEPROM write
-// 0x05 = RTC read
-// 0x06 = RTC write
+
 void rtc_read(unsigned char block, unsigned char *data) {
 
     static unsigned long long SI_eeprom_read_block[8] = {
@@ -100,10 +96,6 @@ void rtc_read(unsigned char block, unsigned char *data) {
 void display_rtc() {
 
     unsigned long rtc_stat __attribute__((unused));
-    //unsigned short i;
-    //unsigned short u;
-    //unsigned char tmp;
-    //unsigned char rtc_data[8];
     unsigned char g_rtc_data[9];
 
     unsigned char sec = 0;
@@ -114,35 +106,13 @@ void display_rtc() {
     unsigned char year = 0;
     unsigned char month = 0;
 
-    //ed64_set_save_type(SAVE_TYPE_OFF);
+    rtc_stat = rtc_status() >> 8;
+    rtc_read(2, g_rtc_data);
 
-    //for (i = 0;; i++) {
 
-        // ed64_gpio_mode_rtc();
-        // ed64_sleep(100);
-        rtc_stat = rtc_status() >> 8;
-        rtc_read(2, g_rtc_data);
+    g_rtc_data[2] &= 0x7f;
+    g_rtc_data[5] &= 0x7f;
 
-        // ed64_gpio_mode_io();
-        // rtcGetDateTime(rtc_data);
-
-        g_rtc_data[2] &= 0x7f;
-        //rtc_data[2] &= 0x7f;
-        g_rtc_data[5] &= 0x7f;
-        //rtc_data[5] &= 0x7f;
-
-        // tmp = g_rtc_data[3];
-        // g_rtc_data[3] = g_rtc_data[4];
-        // g_rtc_data[4] = tmp;
-
-        // for (u = 0; u < 6; u++) {
-        //     if (rtc_data[u] != g_rtc_data[u])break;
-        // }
-
-        // if (u == 6)break;
-        // if (u != 6 && i > 8)return u + 0x10;
-
-    //}
 
     sec = g_rtc_data[0];
     min = g_rtc_data[1];
@@ -177,12 +147,14 @@ void menu_display_rtc() {
         screen_clear();
         screen_print("Real Time Clock");
         screen_print("Press (B) to exit");
+        screen_print("");
         screen_print("rtc status: ");
 
         unsigned long id = ed64_bios_get_cart_id();
         switch (id) {
             case ED64_CART_ID_V3:
             case ED64_CART_ID_X7:
+            //TODO: Should ensure EEPROM save is off!
                 screen_append_hex32_print(rtc_status());
 
                 screen_print("rtc_rd block 2: ");
@@ -191,11 +163,17 @@ void menu_display_rtc() {
                     screen_append_hex8_print(data[i]);
                 }
 
-                // screen_print("rtc_rd block 0: ");
-                // rtc_read(0, data);
-                // for (int i = 0; i < 9; i++) {
-                //     screen_append_hex8_print(data[i]);
-                // }
+                screen_print("rtc_rd block 1: ");
+                rtc_read(1, data);
+                for (int i = 0; i < 9; i++) {
+                    screen_append_hex8_print(data[i]);
+                }
+
+                screen_print("rtc_rd block 0: ");
+                rtc_read(0, data);
+                for (int i = 0; i < 9; i++) {
+                    screen_append_hex8_print(data[i]);
+                }
                 screen_print("rtc time: ");
                 display_rtc();
                 break;
