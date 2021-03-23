@@ -93,15 +93,15 @@ void rtc_read(unsigned char block, unsigned char *data) {
 }
 
 
-void display_rtc() {
+void display_rtc_current_dt() {
 
-    unsigned long rtc_stat __attribute__((unused));
+    unsigned long rtc_stat; // __attribute__((unused));
     unsigned char g_rtc_data[9];
 
     unsigned char sec = 0;
     unsigned char min = 0;
     unsigned char hou = 0;
-    //unsigned char day_ow __attribute__((unused)) = 0;
+    unsigned char day_ow __attribute__((unused)) = 0;
     unsigned char day_om = 0;
     unsigned char year = 0;
     unsigned char month = 0;
@@ -118,11 +118,20 @@ void display_rtc() {
     min = g_rtc_data[1];
     hou = g_rtc_data[2] & 0x7f;
     day_om = g_rtc_data[3];
-    //day_ow = g_rtc_data[4];
+    day_ow = g_rtc_data[4];
     month = g_rtc_data[5] & 0x7f;
     year = g_rtc_data[6];
 
+    screen_print("rtc status: ");
+    screen_append_hex32_print(rtc_stat);
 
+    screen_print("rtc_rd block 2: ");
+    for (int i = 0; i < 9; i++) {
+        screen_append_hex8_print(g_rtc_data[i]);
+    }
+    screen_print("Current RTC (ISO 8601) timestamp: ");
+
+    screen_print("    20");
     screen_append_hex8_print(year);
     screen_append_str_print("-");
     screen_append_hex8_print(month);
@@ -137,6 +146,7 @@ void display_rtc() {
 
 }
 
+
 void menu_display_rtc() {
     struct controller_data cd;
     unsigned char data[128];
@@ -148,34 +158,13 @@ void menu_display_rtc() {
         screen_print("Real Time Clock");
         screen_print("Press (B) to exit");
         screen_print("");
-        screen_print("rtc status: ");
 
         unsigned long id = ed64_bios_get_cart_id();
         switch (id) {
             case ED64_CART_ID_V3:
             case ED64_CART_ID_X7:
-            //TODO: Should ensure EEPROM save is off!
-                screen_append_hex32_print(rtc_status());
-
-                screen_print("rtc_rd block 2: ");
-                rtc_read(2, data);
-                for (int i = 0; i < 9; i++) {
-                    screen_append_hex8_print(data[i]);
-                }
-
-                screen_print("rtc_rd block 1: ");
-                rtc_read(1, data);
-                for (int i = 0; i < 9; i++) {
-                    screen_append_hex8_print(data[i]);
-                }
-
-                screen_print("rtc_rd block 0: ");
-                rtc_read(0, data);
-                for (int i = 0; i < 9; i++) {
-                    screen_append_hex8_print(data[i]);
-                }
-                screen_print("rtc time: ");
-                display_rtc();
+                //TODO: Should ensure EEPROM save is off!
+                display_rtc_current_dt();
                 break;
             default:
                 screen_append_str_print("RTC unavailable on this cart type!");
@@ -200,8 +189,8 @@ void menu_display_rtc() {
 //     unsigned char data[128];
 //     // unsigned char w = 18;
 //     // unsigned char h = 10;
-//     // u16 y;
-//     // u16 x = (g_screen_w - w) / 2 + 1;
+//     // unsigned short y;
+//     // unsigned short x = (g_screen_w - w) / 2 + 1;
 //     // unsigned char min = 0;
 //     // unsigned char sec = 0;
 //     // unsigned char hour = 0;
