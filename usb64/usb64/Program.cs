@@ -204,7 +204,7 @@ namespace ed64usb
 
                 if (loadRom)
                 {
-                    Console.Writeline($"loading ROM with args: {romFilePath}, {saveType}, {extraInfo}, {forceRom}");
+                    Console.WriteLine($"loading ROM with args: {romFilePath}, {saveType}, {extraInfo}, {forceRom}");
                     CommandProcessor.LoadRom(romFilePath, saveType, extraInfo, forceRom);
                 }
                 if (startRom)
