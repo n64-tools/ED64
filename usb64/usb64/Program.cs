@@ -139,7 +139,7 @@ namespace ed64usb
                             break;
 
                         case string x when x.StartsWith("-extra"):
-                            Console.Write("Configuring ROM Save, ");
+                            Console.Write("Configuring ROM Extra Details, ");
                             extraInfo = (DeveloperRom.ExtraInfo)Enum.Parse(typeof(DeveloperRom.ExtraInfo), ExtractSubArg(arg));
 
                             break;
@@ -204,11 +204,12 @@ namespace ed64usb
 
                 if (loadRom)
                 {
+                    Console.Writeline($"loading ROM with args: {romFilePath}, {saveType}, {extraInfo}, {forceRom}");
                     CommandProcessor.LoadRom(romFilePath, saveType, extraInfo, forceRom);
                 }
                 if (startRom)
                 {
-                    if (!string.IsNullOrEmpty(startFileName))
+                    if (!string.IsNullOrEmpty(startFileName)) //THB: start roms should be with args, not load!
                     {
                         CommandProcessor.StartRom(startFileName);
                     }
