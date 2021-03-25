@@ -142,7 +142,7 @@ namespace ed64usb
                         case string x when x.StartsWith("-extra"):
                             Console.Write("Configuring ROM Extra Details... ");
                             extraInfo = (DeveloperRom.ExtraInfo)Enum.Parse(typeof(DeveloperRom.ExtraInfo), ExtractSubArg(arg));
-                            Console.Write(extraInfo);
+                            Console.WriteLine(extraInfo);
                             break;
 
                         case string x when x.StartsWith("-rom"):
@@ -156,7 +156,7 @@ namespace ed64usb
                         case string x when x.StartsWith("-forcerom"):
                             Console.Write("Configuring unknown ROM type to Write..., "); //Stops loader thinking that the ROM is for an emulator. Useful for 64DD tests.
                             romFilePath = ExtractSubArg(arg);
-                            Console.Write(romFilePath);
+                            Console.WriteLine(romFilePath);
                             forceRom = true;
                             loadRom = true;
                             break;

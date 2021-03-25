@@ -98,6 +98,9 @@ void display_rtc_current_dt() {
     unsigned long rtc_stat; // __attribute__((unused));
     unsigned char g_rtc_data[9];
 
+    unsigned char g_rtc0_data[9]; //tmp
+    unsigned char g_rtc1_data[9]; //tmp
+
     unsigned char sec = 0;
     unsigned char min = 0;
     unsigned char hou = 0;
@@ -129,6 +132,20 @@ void display_rtc_current_dt() {
     for (int i = 0; i < 9; i++) {
         screen_append_hex8_print(g_rtc_data[i]);
     }
+//--------------------------------- temp
+    rtc_read(0, g_rtc_data);
+    screen_print("rtc_rd block 0: ");
+    for (int x = 0; x < 9; x++) {
+        screen_append_hex8_print(g_rtc_data[x]);
+    }
+
+    rtc_read(1, g_rtc_data);
+    screen_print("rtc_rd block 1: ");
+    for (int y = 0; y < 9; y++) {
+        screen_append_hex8_print(g_rtc_data[y]);
+    }
+//----------------------------------temp
+    
     screen_print("Current RTC (ISO 8601) timestamp: ");
 
     screen_print("    20");
@@ -164,7 +181,8 @@ void menu_display_rtc() {
             case ED64_CART_ID_V3:
             case ED64_CART_ID_X7:
                 //TODO: Should ensure EEPROM save is off and RTC is on!
-                screen_print("NOTE: this will only work if the ROM was loaded with RTC=ON"); //-extra=Rtc
+                screen_print("NOTE: to use RTC sucessfully: "); //-extra=Rtc
+                screen_print("  Set RTC to on using the developer ID or USB"); //this should only work if the ROM was loaded with RTC=ON"
                 //(and Flash/Sra Ram Savetype?
                 screen_print("");
                 display_rtc_current_dt();
