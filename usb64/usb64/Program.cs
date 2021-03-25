@@ -37,9 +37,9 @@ namespace ed64usb
             Console.WriteLine("-drom=<filename> (Dumps loaded ROM to PC).");
             Console.WriteLine("-screen=<filename> (Dumps framebuffer as BMP to PC).");
             //Console.WriteLine("-unfdebug (Runs the unf Debugger).");
-            Console.WriteLine("-save=/"<savetype>/" (Runs the ROM with a save type when not matched in the internal database)");
+            Console.WriteLine("-save=\"<savetype>\" (Runs the ROM with a save type when not matched in the internal database)");
             Console.WriteLine("      Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k].");
-            Console.WriteLine("-extra=/"<RTC-RegionType>/" (Runs the ROM with RTC or forced region)");
+            Console.WriteLine("-extra=\"<RTC-RegionType>\" (Runs the ROM with RTC or forced region)");
             Console.WriteLine("      Options: [Off,Rtc,NoRegion,All].");
             Console.WriteLine();
 
