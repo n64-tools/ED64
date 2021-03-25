@@ -165,11 +165,11 @@ void menu_display_rtc() {
         switch (id) {
             case ED64_CART_ID_V3:
             case ED64_CART_ID_X7:
-                //TODO: Should ensure EEPROM save is off and RTC is on!
-                screen_print("NOTE: to use RTC sucessfully: "); //-extra=Rtc
+                //TODO: Should test/ensure EEPROM save is off and RTC is on!
+                screen_print("NOTE: to use RTC successfully: "); 
                 screen_print("  Set RTC to on using the");
-                screen_print("  developer ID or save DB"); //this should only work if the ROM was loaded with RTC=ON"
-                //(and Flash/Sra Ram Savetype?
+                screen_print("  developer ID or save DB"); /* USB64 arg: -extra="Rtc" (see source for how it is set) */
+                //(and Flash/Sra Ram Savetype? //Since it still fails to work?!
                 screen_print("");
                 display_rtc_current_dt();
                 break;
