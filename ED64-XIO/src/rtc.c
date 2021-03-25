@@ -123,9 +123,9 @@ void display_rtc_current_dt() {
     year = rtc_data[6];
 
     screen_print("rtc status: ");
-    screen_append_hex32_print(rtc_stat);
+    screen_append_hex32_print(rtc_stat); // Interestingly, this sometimes displays a second count?!
 
-    screen_print("rtc_rd block 2: ");
+    screen_print("EEPROM block 2: ");
     for (int i = 0; i < 9; i++) {
         screen_append_hex8_print(rtc_data[i]);
     }
@@ -150,8 +150,8 @@ void display_rtc_current_dt() {
 
 
 void menu_display_rtc() {
+    unsigned long id = ed64_bios_get_cart_id();
     struct controller_data cd;
-    unsigned char data[128];
 
     for (;;) {
 
@@ -161,7 +161,6 @@ void menu_display_rtc() {
         screen_print("Press (B) to exit");
         screen_print("");
 
-        unsigned long id = ed64_bios_get_cart_id();
         switch (id) {
             case ED64_CART_ID_V3:
             case ED64_CART_ID_X7:
