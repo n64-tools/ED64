@@ -148,7 +148,7 @@ namespace ed64usb
                         case string x when x.StartsWith("-rom"):
                             Console.Write("Configuring ROM to Write... ");
                             romFilePath = ExtractSubArg(arg);
-                            Console.Write(romFilePath);
+                            Console.WriteLine(romFilePath);
                             loadRom = true;
 
                             break;
@@ -204,7 +204,7 @@ namespace ed64usb
                             break;
                     }
                 }
-
+                Debug.WriteLine(); // Ensure a new line for next output.
                 if (loadRom)
                 {
                     Debug.WriteLine($"loading ROM with args: {romFilePath}, {saveType}, {extraInfo}, {forceRom}");
