@@ -204,7 +204,7 @@ namespace ed64usb
                             break;
                     }
                 }
-                Debug.WriteLine(); // Ensure a new line for next output.
+                Debug.WriteLine(""); // Ensure a new line for next output.
                 if (loadRom)
                 {
                     Debug.WriteLine($"loading ROM with args: {romFilePath}, {saveType}, {extraInfo}, {forceRom}");
