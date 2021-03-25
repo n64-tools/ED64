@@ -35,10 +35,10 @@ HEADERDIR :=$(ROOTDIR)/mips64-elf/lib
 HEADERNAME = header
 HEADERTITLE = $(PROG_NAME)
 
-LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -ldragonsys -Tn64.ld
+LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -ldragonsys -Tn64.ld --gc-sections
 
 ASFLAGS := -mtune=vr4300 -march=vr4300
-CCFLAGS := -std=gnu99 $(ASFLAGS) $(OPTIMIZE_FLAG) -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB)
+CCFLAGS := -std=gnu99 $(ASFLAGS) $(OPTIMIZE_FLAG) -ffunction-sections -fdata-sections -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB)
 
 SOURCES_ASM := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
