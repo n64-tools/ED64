@@ -96,10 +96,7 @@ void rtc_read(unsigned char block, unsigned char *data) {
 void display_rtc_current_dt() {
 
     unsigned long rtc_stat; // __attribute__((unused));
-    unsigned char g_rtc_data[9];
-
-    unsigned char g_rtc0_data[9]; //tmp
-    unsigned char g_rtc1_data[9]; //tmp
+    unsigned char rtc_data[9];
 
     unsigned char sec = 0;
     unsigned char min = 0;
@@ -110,41 +107,29 @@ void display_rtc_current_dt() {
     unsigned char month = 0;
 
     rtc_stat = rtc_status() >> 8;
-    rtc_read(2, g_rtc_data);
+    rtc_read(2, rtc_data);
 
 
-    g_rtc_data[2] &= 0x7f;
-    g_rtc_data[5] &= 0x7f;
+    rtc_data[2] &= 0x7f;
+    rtc_data[5] &= 0x7f;
 
 
-    sec = g_rtc_data[0];
-    min = g_rtc_data[1];
-    hou = g_rtc_data[2] & 0x7f;
-    day_om = g_rtc_data[3];
-    day_ow = g_rtc_data[4];
-    month = g_rtc_data[5] & 0x7f;
-    year = g_rtc_data[6];
+    sec = rtc_data[0];
+    min = rtc_data[1];
+    hou = rtc_data[2] & 0x7f;
+    day_om = rtc_data[3];
+    day_ow = rtc_data[4];
+    month = rtc_data[5] & 0x7f;
+    year = rtc_data[6];
 
     screen_print("rtc status: ");
     screen_append_hex32_print(rtc_stat);
 
     screen_print("rtc_rd block 2: ");
     for (int i = 0; i < 9; i++) {
-        screen_append_hex8_print(g_rtc_data[i]);
-    }
-//--------------------------------- temp
-    rtc_read(0, g_rtc_data);
-    screen_print("rtc_rd block 0: ");
-    for (int x = 0; x < 9; x++) {
-        screen_append_hex8_print(g_rtc_data[x]);
+        screen_append_hex8_print(rtc_data[i]);
     }
 
-    rtc_read(1, g_rtc_data);
-    screen_print("rtc_rd block 1: ");
-    for (int y = 0; y < 9; y++) {
-        screen_append_hex8_print(g_rtc_data[y]);
-    }
-//----------------------------------temp
     
     screen_print("Current RTC (ISO 8601) timestamp: ");
 
@@ -182,7 +167,8 @@ void menu_display_rtc() {
             case ED64_CART_ID_X7:
                 //TODO: Should ensure EEPROM save is off and RTC is on!
                 screen_print("NOTE: to use RTC sucessfully: "); //-extra=Rtc
-                screen_print("  Set RTC to on using the developer ID or USB"); //this should only work if the ROM was loaded with RTC=ON"
+                screen_print("  Set RTC to on using the");
+                screen_print("  developer ID or save DB"); //this should only work if the ROM was loaded with RTC=ON"
                 //(and Flash/Sra Ram Savetype?
                 screen_print("");
                 display_rtc_current_dt();
