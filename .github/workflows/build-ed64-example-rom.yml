@@ -18,9 +18,10 @@ jobs:
           # cd ./.libdragon
           # ls
           # sed -z 's/CFLAGS= /CFLAGS= -NDEBUG '
-          libdragon exec bash -c 'export N64_CFLAGS="NDEBUG"'
+          #libdragon exec bash -c 'export N64_CFLAGS="NDEBUG"'
           #cd ..
-          libdragon N64_CFLAGS="NDEBUG" install
+          libdragon exec bash -c N64_CFLAGS="NDEBUG"
+          libdragon install
 
       - name: Setup Build environment
         run: |
