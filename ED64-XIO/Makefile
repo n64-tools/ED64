@@ -38,7 +38,7 @@ HEADERTITLE = $(PROG_NAME)
 LINK_FLAGS = -L$(ROOTDIR)/lib -L$(ROOTDIR)/mips64-elf/lib -ldragon -lc -lm -ldragonsys -Tn64.ld
 
 ASFLAGS := -mtune=vr4300 -march=vr4300
-CCFLAGS := -std=gnu99 $(ASFLAGS) $(OPTIMIZE_FLAG) -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB) -NDEBUG
+CCFLAGS := -std=gnu99 $(ASFLAGS) $(OPTIMIZE_FLAG) -Wall -Wno-pointer-sign -I$(ROOTDIR)/mips64-elf/include -I$(SRCDIR_FFLIB) -I$(INCDIR) -I$(INCDIR_EDLIB) #-NDEBUG
 
 SOURCES_ASM := $(wildcard $(SRCDIR)/*.s)
 SOURCES := $(wildcard $(SRCDIR)/*.c)
@@ -48,7 +48,7 @@ SOURCES_EDLIB := $(wildcard $(SRCDIR_EDLIB)/*.c)
 OBJECTS_ASM := $(SOURCES_ASM:$(SRCDIR)/%.s=$(OBJDIR)/%.o)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 OBJECTS_EDLIB := $(SOURCES_EDLIB:$(SRCDIR_EDLIB)/%.c=$(OBJDIR)/%.o)
-O#BJECTS_FFLIB := $(SOURCES_FFLIB:$(SRCDIR_FFLIB)/%.c=$(OBJDIR)/%.o)
+#OBJECTS_FFLIB := $(SOURCES_FFLIB:$(SRCDIR_FFLIB)/%.c=$(OBJDIR)/%.o)
 
 
 $(PROG_NAME).v64: $ $(PROG_NAME).elf
