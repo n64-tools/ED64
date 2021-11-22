@@ -21,7 +21,7 @@ jobs:
           --mount type=bind,source=$(pwd),target=/libdragon \
           --workdir=/libdragon \
           ghcr.io/dragonminded/libdragon:latest \
-          make libdragon -NDEBUG
+          make libdragon NDEBUG
 
 
       - name: Setup Build environment
