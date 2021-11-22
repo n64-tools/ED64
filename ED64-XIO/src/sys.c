@@ -165,12 +165,12 @@ void sys_n64_pi_read(void *ram, unsigned long pi_address, unsigned long len) {
     data_cache_hit_writeback_invalidate(ram, len);
     disable_interrupts();
 
-    while (dma_busy());
+    while (dma_wait());
     IO_WRITE(PI_STATUS_REG, 3);
     PI_regs->ram_address = ram;
     PI_regs->pi_address = pi_address; //(pi_address | 0x10000000) & 0x1FFFFFFF;
     PI_regs->write_length = len - 1;
-    while (dma_busy());
+    while (dma_wait());
 
     enable_interrupts();
 }
@@ -182,12 +182,12 @@ void sys_n64_pi_write(void *ram, unsigned long pi_address, unsigned long len) {
     data_cache_hit_writeback(ram, len);
     disable_interrupts();
 
-    while (dma_busy());
+    while (dma_wait());
     IO_WRITE(PI_STATUS_REG, 3);
     PI_regs->ram_address = ram;
     PI_regs->pi_address = pi_address; //(pi_address | 0x10000000) & 0x1FFFFFFF;
     PI_regs->read_length = len - 1;
-    while (dma_busy());
+    while (dma_wait());
 
     enable_interrupts();
 

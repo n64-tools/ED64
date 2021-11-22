@@ -121,7 +121,7 @@ void ed64_bios_init() {
     ed64_bios_rom_savetype_set(ED64_SAVE_OFF);
 
     /* Always successful for now */
-    return 0;
+    //return 0;
 }
 
 /**
