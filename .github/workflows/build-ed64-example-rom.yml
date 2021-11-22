@@ -15,7 +15,7 @@ jobs:
         run: |
           sudo npm install -g libdragon
           libdragon init
-          libdragon install
+          libdragon install -DNDEBUG
 
       - name: Setup Build environment
         run: |
