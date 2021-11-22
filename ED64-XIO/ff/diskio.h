@@ -26,12 +26,12 @@ typedef enum {
 /* Prototypes for disk control functions */
 
 
-DSTATUS disk_initialize (BYTE pdrv);
-DSTATUS disk_status (BYTE pdrv);
-DRESULT disk_read (BYTE pdrv, BYTE* buff, LBA_t sector, UINT count);
-DRESULT disk_write (BYTE pdrv, const BYTE* buff, LBA_t sector, UINT count);
-DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
-DWORD get_fattime (void);
+DSTATUS disk_initialize (BYTE pdrv) __attribute__((weak_import));
+DSTATUS disk_status (BYTE pdrv) __attribute__((weak_import));
+DRESULT disk_read (BYTE pdrv, BYTE* buff, LBA_t sector, UINT count) __attribute__((weak_import));
+DRESULT disk_write (BYTE pdrv, const BYTE* buff, LBA_t sector, UINT count) __attribute__((weak_import));
+DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff) __attribute__((weak_import));
+DWORD get_fattime (void) __attribute__((weak_import));
 
 
 /* Disk Status Bits (DSTATUS) */
