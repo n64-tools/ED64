@@ -16,10 +16,10 @@ jobs:
           sudo npm install -g libdragon
           libdragon init
           cd ./.libdragon
-          ls
+          #ls
           # sed -z 's/CFLAGS= /CFLAGS= -NDEBUG '
-          N64_CFLAGS:=-NDEBUG
-          cd ..
+          export N64_CFLAGS:="-NDEBUG"
+          #cd ..
           libdragon install
 
       - name: Setup Build environment
