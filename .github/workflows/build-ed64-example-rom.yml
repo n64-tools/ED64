@@ -11,23 +11,17 @@ jobs:
       - uses: actions/checkout@v2
         name: Checkout Code
 
-      - name: Install Toolchain Docker Container
+      - name: Install Libdragon container
         run: |
-          docker pull ghcr.io/dragonminded/libdragon:latest
-
-      - name: Setup Libdragon
-        run: |
-          docker run \
-          --mount type=bind,source=$(pwd),target=/libdragon \
-          --workdir=/libdragon \
-          ghcr.io/dragonminded/libdragon:latest \
-          make libdragon NDEBUG
-
+          sudo npm install -g libdragon
+          libdragon init
+          libdragon install
 
       - name: Setup Build environment
         run: |
           cd ${{ github.workspace }}/ED64-XIO/
           mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
+          libdragon start
 
       - name: Build ROM
         run: cd ${{ github.workspace }}/ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
