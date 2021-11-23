@@ -22,7 +22,7 @@ jobs:
           #cd ..
           #libdragon exec bash -c N64_CFLAGS="NDEBUG"
           #N64_CFLAGS="NDEBUG" && libdragon install
-          sed -z 's/CFLAGS=/CFLAGS=-NDEBUG /' ./libdragon/Makefile
+          sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS)/CFLAGS+=$(N64_CFLAGS) -NDEBUG /' ./libdragon/Makefile
           libdragon install
 
       - name: Setup Build environment
