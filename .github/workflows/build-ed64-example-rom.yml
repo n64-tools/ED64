@@ -20,8 +20,8 @@ jobs:
           #N64_CFLAGS="-DNDEBUG" && libdragon install
           sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS) /CFLAGS+=$(N64_CFLAGS) -DNDEBUG /' ./libdragon/Makefile
           
-          #cd ./libdragon/
-          cat > debug_h.patch << EOF
+          cd ./libdragon
+          cat > libdragon.patch << EOF
           diff --git a/include/debug.h b/include/debug.h
           index 1bc8404..9ceec9c 100644
           --- a/include/debug.h
@@ -76,8 +76,8 @@ jobs:
           #include <fcntl.h>
           EOF
 
-          patch < debug_h.patch
-          #cd ..
+          patch < libdragon.patch
+          cd ..
 
           libdragon install
 
