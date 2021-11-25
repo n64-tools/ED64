@@ -21,6 +21,7 @@ jobs:
           sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS) /CFLAGS+=$(N64_CFLAGS) -DNDEBUG /' ./libdragon/Makefile
           sed -z -i.bak 's/#define assertf(expr, msg, ...)    ({ })/#define assertf(expr, msg, ...)    ({ (void)(expr); })/' ./libdragon/include/debug.h
           sed -z -i.bak '1s/^/#undef NDEBUG\n/' ./libdragon/src/debug.c
+          cat ./libdragon/src/debug.c
           sed -z -i.bak 's/bool direction = (out<=in);/bool direction = (out<=in); (void)direction;/' ./libdragon/src/audio/libxm/context.c
           sed -z -i.bak 's/assert(sz == dec_size);/assert(sz == dec_size); (void)sz;/' ./libdragon/src/audio/libxm/play.c
           libdragon install
