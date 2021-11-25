@@ -19,7 +19,7 @@ jobs:
           #libdragon exec bash -c N64_CFLAGS="-DNDEBUG"
           #N64_CFLAGS="-DNDEBUG" && libdragon install
           sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS) /CFLAGS+=$(N64_CFLAGS) -DNDEBUG /' ./libdragon/Makefile
-          sed -z -i.bak 's/#define assertf(expr, msg, ...)/#define assertf(expr, msg, ...)    ({ (void)(expr); })/' ./libdragon/include/debug.h
+          sed -z -i.bak 's/#define assertf(expr, msg, ...)    ({ })/#define assertf(expr, msg, ...)    ({ (void)(expr); })/' ./libdragon/include/debug.h
           libdragon install
 
       - name: Setup Build environment
