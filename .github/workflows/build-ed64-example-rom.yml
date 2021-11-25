@@ -76,7 +76,7 @@ jobs:
           #include <fcntl.h>
           EOF
 
-          patch < libdragon.patch
+          patch -p1 < libdragon.patch
           cd ..
 
           libdragon install
