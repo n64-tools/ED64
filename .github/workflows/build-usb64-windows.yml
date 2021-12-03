@@ -1,6 +1,12 @@
 name: Build Windows Usb64 App
  
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '/**/usb64/*'
+  pull_request:
+    paths:
+      - '/**/usb64/*'
 
 jobs:
   build:

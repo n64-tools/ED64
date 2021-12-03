@@ -1,6 +1,13 @@
 name: Build ED64 Example ROM
  
-on: [push, pull_request]
+on: [push] //, pull_request]
+# on:
+#   push:
+#     paths:
+#       - '/**/ED64-XIO/*'
+#   pull_request:
+#     paths:
+#       - '/**/ED64-XIO/*'
 
 jobs:
   build:
@@ -30,12 +37,18 @@ jobs:
         working-directory: libdragon-repo
         run: |
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
+          ls
+
+      - name: check current work dir
+        working-directory: ${{ github.workspace }}
+        run: |
+          ls -d -- */
 
       - name: Buid libdragon and ROM
         working-directory: ${{ github.workspace }}/ED64/
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}/ED64/
+          --mount type=bind,source=$(pwd),target=/root/
           --workdir=/${{ github.workspace }}/ED64/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
