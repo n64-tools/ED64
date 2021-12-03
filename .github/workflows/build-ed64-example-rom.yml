@@ -59,15 +59,16 @@ jobs:
       - name: Setup Build environment
         working-directory: xio-sample-repo
         run: |
-          ls
           mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
+          cd ED64-XIO
+          ls
 
       - name: Build ROM
         working-directory: xio-sample-repo
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/xio-sample-repo/ED64-XIO/
-          --workdir=/xio-sample-repo/ED64-XIO/
+          --mount type=bind,source=$(pwd),target=/xio-sample-repo/ED64-XIO/ED64-XIO/
+          --workdir=/xio-sample-repo/ED64-XIO/ED64-XIO/
           ghcr.io/dragonminded/libdragon:latest
           ls && make ${{ matrix.releasetype }}
         #run: cd /ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
