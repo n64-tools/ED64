@@ -30,6 +30,7 @@ jobs:
           docker run
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
+          --env N64_INST
           ghcr.io/dragonminded/libdragon:latest
           make libdragon && make install
           make tools && make tools-install
