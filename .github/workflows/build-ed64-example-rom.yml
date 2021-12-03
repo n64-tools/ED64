@@ -1,6 +1,6 @@
 name: Build ED64 Example ROM
  
-on: [push] //, pull_request]
+on: [push] #, pull_request]
 # on:
 #   push:
 #     paths:
