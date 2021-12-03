@@ -32,16 +32,19 @@ jobs:
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
 
       - name: Buid libdragon and ROM
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}/ED64/
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=${{ github.workspace }}/
-          --workdir=${{ github.workspace }}/
+          --mount type=bind,source=$(pwd),target=/
+          --workdir=/
           ghcr.io/dragonminded/libdragon:latest
           cd libdragon &&
           make libdragon &&
           make tools &&
-          ls && cd ../ED64-XIO/ && ls && make ${{ matrix.releasetype }}
+          ls &&
+          cd ../ED64-XIO/ &&
+          ls &&
+          make ${{ matrix.releasetype }}
 
       #     sudo npm install -g libdragon
       #     libdragon init
