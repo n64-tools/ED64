@@ -1,10 +1,7 @@
 name: Build Linux Usb64 App
  
-  pull_request:
-  push:
-    branches:
-      - master
-      - develop
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
