@@ -11,29 +11,34 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
-        # with:
-        #   path: xio-sample-repo
+        with:
+          path: xio-sample-repo
       - name: Checkout libdragon repo
         uses: actions/checkout@v2
         with:
           repository: dragonminded/libdragon
-          #path: libdragon-repo
+          path: libdragon-repo
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
       - name: Setup Build environment
+        working-directory: xio-sample-repo
         run: |
+          ls
           mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
 
       - name: patch libdragon make (workaround ignore warnings as errors)
+        working-directory: libdragon-repo
         run: |
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
 
       - name: Buid libdragon and ROM
+        working-directory: ${{ github.workspace }}
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/libdragon
-          --workdir=/libdragon
+          --mount type=bind,source=$(pwd),target=${{ github.workspace }}/
+          --workdir=${{ github.workspace }}/
           ghcr.io/dragonminded/libdragon:latest
+          cd libdragon &&
           make libdragon &&
           make tools &&
           ls && cd ../ED64-XIO/ && ls && make ${{ matrix.releasetype }}
