@@ -21,8 +21,7 @@ jobs:
 
       - name: patch libdragon make (workaround ignore warnings as errors)
         run: |
-          ls
-          sed -z -i.bak 's/ -Wall -Werror / /' /libdragon/Makefile
+          sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
 
       - name: Install Libdragon container
         run: >-
