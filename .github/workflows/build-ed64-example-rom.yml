@@ -29,7 +29,7 @@ jobs:
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
           ghcr.io/dragonminded/libdragon:latest
-          make libdragon
+          make libdragon &&
           make tools
 
       #     sudo npm install -g libdragon
