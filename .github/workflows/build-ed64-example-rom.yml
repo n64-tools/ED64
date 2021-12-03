@@ -10,21 +10,35 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
+        # with:
+        #   path: code
+      - name: Checkout tools repo
+        uses: actions/checkout@v2
+        with:
+          repository: dragonminded/libdragon
+          path: libdragon
+          ref: '89d17be8563a44a9b95873d436832a1222757cdc'
+
 
       - name: Install Libdragon container
         run: |
-          sudo npm install -g libdragon
-          libdragon init
-          #libdragon exec bash -c 'export N64_CFLAGS="-DNDEBUG"'
-          #libdragon exec bash -c N64_CFLAGS="-DNDEBUG"
-          #N64_CFLAGS="-DNDEBUG" && libdragon install
-          sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS) /CFLAGS+=$(N64_CFLAGS) -DNDEBUG /' ./libdragon/Makefile
-          sed -z -i.bak 's/#define assertf(expr, msg, ...)    ({ })/#define assertf(expr, msg, ...)    ({ (void)(expr); })/' ./libdragon/include/debug.h
-          sed -z -i.bak '1s/^/#undef NDEBUG\n/' ./libdragon/src/debug.c
-          cat ./libdragon/src/debug.c
-          sed -z -i.bak 's/bool direction = (out<=in);/bool direction = (out<=in); (void)direction;/' ./libdragon/src/audio/libxm/context.c
-          sed -z -i.bak 's/assert(sz == dec_size);/assert(sz == dec_size); (void)sz;/' ./libdragon/src/audio/libxm/play.c
-          libdragon install
+          docker run \
+          --mount type=bind,source=$(pwd),target=/libdragon \
+          --workdir=/libdragon \
+          ghcr.io/dragonminded/libdragon:latest \
+          ./build.sh
+
+      #     sudo npm install -g libdragon
+      #     libdragon init
+      #     #libdragon exec bash -c 'export N64_CFLAGS="-DNDEBUG"'
+      #     #libdragon exec bash -c N64_CFLAGS="-DNDEBUG"
+      #     #N64_CFLAGS="-DNDEBUG" && libdragon install
+      #     sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS) /CFLAGS+=$(N64_CFLAGS) -DNDEBUG /' ./libdragon/Makefile
+      #     sed -z -i.bak 's/#define assertf(expr, msg, ...)    ({ })/#define assertf(expr, msg, ...)    ({ (void)(expr); })/' ./libdragon/include/debug.h
+      #     sed -z -i.bak '1s/^/#undef NDEBUG\n/' ./libdragon/src/debug.c
+      #     sed -z -i.bak 's/bool direction = (out<=in);/bool direction = (out<=in); (void)direction;/' ./libdragon/src/audio/libxm/context.c
+      #     sed -z -i.bak 's/assert(sz == dec_size);/assert(sz == dec_size); (void)sz;/' ./libdragon/src/audio/libxm/play.c
+      #     libdragon install
 
       - name: Setup Build environment
         run: |
