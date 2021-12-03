@@ -55,8 +55,8 @@ jobs:
         working-directory: ${{ github.workspace }}/ED64/
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}/
-          --workdir=/${{ github.workspace }}/
+          --mount type=bind,source=$(pwd),target=${{ github.workspace }}/
+          --workdir=${{ github.workspace }}/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
           cd ./libdragon-repo/ &&
