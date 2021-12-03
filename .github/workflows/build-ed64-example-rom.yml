@@ -43,20 +43,27 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           ls -d -- */
+          echo "swith to libdragon"
+          cd /libdragon-repo/libdragon
+          ls
+          echo "switch to XIO"
+          cd /../../xio-sample-repo/ED64/
+          ls
+
 
       - name: Buid libdragon and ROM
         working-directory: ${{ github.workspace }}/ED64/
         run: >-
           docker run
           --mount type=bind,source=$(pwd),target=/root/
-          --workdir=/${{ github.workspace }}/ED64/
+          --workdir=/${{ github.workspace }}/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
-          cd libdragon &&
+          cd /libdragon-repo/libdragon &&
           make libdragon &&
           make tools &&
           ls &&
-          cd ../ED64-XIO/ &&
+          cd ../../ED64-XIO/ &&
           ls &&
           make ${{ matrix.releasetype }}
 
