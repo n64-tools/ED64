@@ -44,10 +44,10 @@ jobs:
         run: |
           ls -d -- */
           echo "swith to libdragon"
-          cd /libdragon-repo/libdragon
+          cd /libdragon-repo/
           ls
           echo "switch to XIO"
-          cd /../../xio-sample-repo/ED64/
+          cd /../../xio-sample-repo/
           ls
 
 
@@ -59,11 +59,11 @@ jobs:
           --workdir=/${{ github.workspace }}/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
-          cd /libdragon-repo/libdragon &&
+          cd /libdragon-repo/ &&
           make libdragon &&
           make tools &&
           ls &&
-          cd ../../ED64-XIO/ &&
+          cd ../../xio-sample-repo/ED64-XIO/ &&
           ls &&
           make ${{ matrix.releasetype }}
 
