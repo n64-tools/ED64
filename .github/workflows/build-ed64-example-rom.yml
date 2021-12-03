@@ -1,6 +1,15 @@
 name: Build ED64 Example ROM
  
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+  push:
+    branches:
+      - master
+      - dev*
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -50,15 +59,15 @@ jobs:
       - name: Setup Build environment
         working-directory: xio-sample-repo
         run: |
-          cd /ED64-XIO/
-          mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
+          ls
+          mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
 
       - name: Build ROM
         working-directory: xio-sample-repo
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}
-          --workdir=/xio-sample/ED64-XIO
+          --mount type=bind,source=$(pwd),target=/xio-sample-repo/ED64-XIO/
+          --workdir=/xio-sample-repo/ED64-XIO/
           ghcr.io/dragonminded/libdragon:latest
           make ${{ matrix.releasetype }}
         #run: cd /ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
