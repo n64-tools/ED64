@@ -19,6 +19,8 @@ jobs:
           # path: libdragon
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
+      - name: patch libdragon make (workaround ignore warnings as errors)
+        run: sed -z -i.bak 's/ -Wall -Werror / /' ./libdragon/Makefile
 
       - name: Install Libdragon container
         run: |
@@ -26,7 +28,8 @@ jobs:
           --mount type=bind,source=$(pwd),target=/libdragon \
           --workdir=/libdragon \
           ghcr.io/dragonminded/libdragon:latest \
-          ./build.sh libdragon
+          make libdragon && make install &&\
+          make tools && make tools-install
 
       #     sudo npm install -g libdragon
       #     libdragon init
