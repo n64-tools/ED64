@@ -2,13 +2,10 @@ name: Build ED64 Example ROM
  
 on:
   pull_request:
-    branches:
-      - master
-      - dev
   push:
     branches:
       - master
-      #- dev*
+      - develop
 
 jobs:
   build:
