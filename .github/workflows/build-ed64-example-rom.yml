@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: dragonminded/libdragon
-          path: libdragon
+          # path: libdragon
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
 
@@ -26,7 +26,7 @@ jobs:
           --mount type=bind,source=$(pwd),target=/libdragon \
           --workdir=/libdragon \
           ghcr.io/dragonminded/libdragon:latest \
-          ./build.sh
+          ./build.sh libdragon
 
       #     sudo npm install -g libdragon
       #     libdragon init
@@ -39,12 +39,12 @@ jobs:
       #     sed -z -i.bak 's/bool direction = (out<=in);/bool direction = (out<=in); (void)direction;/' ./libdragon/src/audio/libxm/context.c
       #     sed -z -i.bak 's/assert(sz == dec_size);/assert(sz == dec_size); (void)sz;/' ./libdragon/src/audio/libxm/play.c
       #     libdragon install
+      #     libdragon start
 
       - name: Setup Build environment
         run: |
           cd ${{ github.workspace }}/ED64-XIO/
           mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
-          libdragon start
 
       - name: Build ROM
         run: cd ${{ github.workspace }}/ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
