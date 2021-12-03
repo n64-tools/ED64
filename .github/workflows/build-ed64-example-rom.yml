@@ -28,8 +28,9 @@ jobs:
           docker run
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
+          --env N64_INST="/n64_toolchain"
           ghcr.io/dragonminded/libdragon:latest
-          make libdragon && make install &&
+          make libdragon && make install
           make tools && make tools-install
 
       #     sudo npm install -g libdragon
