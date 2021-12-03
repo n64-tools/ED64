@@ -42,12 +42,12 @@ jobs:
       - name: check current work dir
         working-directory: ${{ github.workspace }}
         run: |
-          ls -d -- */
+          ls
           echo "swith to libdragon"
-          cd libdragon-repo/
+          cd ./libdragon-repo/
           ls
           echo "switch to XIO"
-          cd ../xio-sample-repo/
+          cd ./../xio-sample-repo/ED64-XIO/
           ls
 
 
@@ -55,15 +55,15 @@ jobs:
         working-directory: ${{ github.workspace }}/ED64/
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/root/
+          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}/
           --workdir=/${{ github.workspace }}/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
-          cd libdragon-repo/ &&
+          cd ./libdragon-repo/ &&
           make libdragon &&
           make tools &&
           ls &&
-          cd ../xio-sample-repo/ED64-XIO/ &&
+          cd ./../xio-sample-repo/ED64-XIO/ &&
           ls &&
           make ${{ matrix.releasetype }}
 
