@@ -57,6 +57,7 @@ jobs:
           docker run
           --mount type=bind,source=$(pwd),target=${{ github.workspace }}/
           --workdir=${{ github.workspace }}/
+          --env PATH:=$N64_INST/bin;/n64_toolchain
           ghcr.io/dragonminded/libdragon:latest
           ls &&
           cd ./libdragon-repo/ &&
