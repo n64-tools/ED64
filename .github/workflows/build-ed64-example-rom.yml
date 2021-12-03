@@ -29,7 +29,6 @@ jobs:
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
           ghcr.io/dragonminded/libdragon:latest
-          export N64_INST="/usr/local" &&
           make libdragon && make install &&
           make tools && make tools-install
 
