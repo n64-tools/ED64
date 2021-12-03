@@ -28,8 +28,8 @@ jobs:
         working-directory: ${{ github.workspace }}/libdragon
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}
-          --workdir=/libdragon
+          --mount type=bind,source=$(pwd),target=${{ github.workspace }}
+          --workdir=/libdragon/libdragon
           ghcr.io/dragonminded/libdragon:latest
           make libdragon &&
           make tools
@@ -58,7 +58,7 @@ jobs:
         run: >-
           docker run
           --mount type=bind,source=$(pwd),target=/${{ github.workspace }}
-          --workdir=/ED64-XIO
+          --workdir=/xio-sample/ED64-XIO
           ghcr.io/dragonminded/libdragon:latest
           make ${{ matrix.releasetype }}
         #run: cd /ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
