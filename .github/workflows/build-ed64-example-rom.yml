@@ -20,7 +20,7 @@ jobs:
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
       - name: patch libdragon make (workaround ignore warnings as errors)
-        run: sed -z -i.bak 's/ -Wall -Werror / /' ./libdragon/Makefile
+        run: sed -z -i.bak 's/ -Wall -Werror / /' ${{ github.workspace }}/libdragon/Makefile
 
       - name: Install Libdragon container
         run: |
