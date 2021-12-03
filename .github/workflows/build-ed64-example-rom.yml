@@ -44,10 +44,10 @@ jobs:
         run: |
           ls -d -- */
           echo "swith to libdragon"
-          cd /libdragon-repo/
+          cd libdragon-repo/
           ls
           echo "switch to XIO"
-          cd /../../xio-sample-repo/
+          cd ../../xio-sample-repo/
           ls
 
 
