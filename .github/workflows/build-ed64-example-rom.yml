@@ -10,23 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
-        # with:
-        #   path: code
-      - name: Checkout tools repo
+        with:
+          path: xio-sample
+      - name: Checkout libdragon repo
         uses: actions/checkout@v2
         with:
           repository: dragonminded/libdragon
-          # path: libdragon
+          path: libdragon
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
       - name: patch libdragon make (workaround ignore warnings as errors)
+        working-directory: ${{ github.workspace }}/libdragon
         run: |
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
 
-      - name: Install Libdragon container
+      - name: Buid libdragon
+        working-directory: ${{ github.workspace }}/libdragon
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/libdragon
+          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}
           --workdir=/libdragon
           ghcr.io/dragonminded/libdragon:latest
           make libdragon &&
@@ -46,16 +48,23 @@ jobs:
       #     libdragon start
 
       - name: Setup Build environment
+        working-directory: ${{ github.workspace }}/xio-sample
         run: |
-          #export N64_INST=${{ github.workspace }}/n64_toolchain
-          cd ${{ github.workspace }}/ED64-XIO/
+          cd /ED64-XIO/
           mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
 
       - name: Build ROM
-        run: cd ${{ github.workspace }}/ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
+        working-directory: xio-sample
+        run: >-
+          docker run
+          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}
+          --workdir=/ED64-XIO
+          ghcr.io/dragonminded/libdragon:latest
+          make ${{ matrix.releasetype }}
+        #run: cd /ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ED64-XIO-SAMPLE_N64_ROM-${{ matrix.releasetype }}
-          path: ${{ github.workspace }}/ED64-XIO/bin/${{ matrix.releasetype }}/ED64-XIO-SAMPLE.v64
+          path: ${{ github.workspace }}/**/ED64-XIO/bin/${{ matrix.releasetype }}/ED64-XIO-SAMPLE.v64
