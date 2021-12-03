@@ -22,13 +22,14 @@ jobs:
       - name: patch libdragon make (workaround ignore warnings as errors)
         run: |
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
+          mkdir -p /usr/local/n64_toolchain
+          export N64_INST=/usr/local/n64_toolchain
 
       - name: Install Libdragon container
         run: >-
           docker run
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
-          --env N64_INST="/n64_toolchain"
           ghcr.io/dragonminded/libdragon:latest
           make libdragon && make install
           make tools && make tools-install
