@@ -22,8 +22,8 @@ jobs:
       - name: patch libdragon make (workaround ignore warnings as errors)
         run: |
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
-          mkdir -p /usr/local/n64_toolchain
-          export N64_INST=/usr/local/n64_toolchain
+          mkdir -p ${{ github.workspace }}/n64_toolchain
+          export N64_INST=${{ github.workspace }}/n64_toolchain
 
       - name: Install Libdragon container
         run: >-
