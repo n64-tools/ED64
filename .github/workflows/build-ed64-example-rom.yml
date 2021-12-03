@@ -22,18 +22,18 @@ jobs:
       - name: patch libdragon make (workaround ignore warnings as errors)
         run: |
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
-          mkdir -p ${{ github.workspace }}/n64_toolchain
-          export N64_INST=${{ github.workspace }}/n64_toolchain
 
       - name: Install Libdragon container
         run: >-
           docker run
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
-          --env N64_INST
+          # --env N64_INST
           ghcr.io/dragonminded/libdragon:latest
-          make libdragon && make install
-          make tools && make tools-install
+          make libdragon
+          # && make install
+          make tools
+          # && make tools-install
 
       #     sudo npm install -g libdragon
       #     libdragon init
@@ -50,6 +50,7 @@ jobs:
 
       - name: Setup Build environment
         run: |
+          #export N64_INST=${{ github.workspace }}/n64_toolchain
           cd ${{ github.workspace }}/ED64-XIO/
           mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
 
