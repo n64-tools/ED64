@@ -69,7 +69,7 @@ jobs:
           --mount type=bind,source=$(pwd),target=/xio-sample-repo/ED64-XIO/
           --workdir=/xio-sample-repo/ED64-XIO/
           ghcr.io/dragonminded/libdragon:latest
-          make ${{ matrix.releasetype }}
+          ls && make ${{ matrix.releasetype }}
         #run: cd /ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
 
       - name: Upload Artifact
