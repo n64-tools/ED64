@@ -24,11 +24,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: dragonminded/libdragon
-          #path: ./ED64-XIO/libdragon
+          path: ./ED64/ED64-XIO/libdragon
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
       - name: Setup Build environment
-        #working-directory: xio-sample-repo
+        working-directory: ${{ github.workspace }}/ED64/
         run: |
           ls
           mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
