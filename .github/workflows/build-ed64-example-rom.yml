@@ -32,21 +32,24 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           ls
+          echo "switch to ED64-XIO"
+          cd ./ED64-XIO
+          ls
           echo "switch to libdragon"
           cd ./libdragon/
           ls
-          echo "switch to XIO"
+          echo "switch back to ED64-XIO"
           cd ./../ED64-XIO/
           ls
 
       - name: Setup Build environment
-        working-directory: ${{ github.workspace }}}/ED64/
+        working-directory: ${{ github.workspace }}}/
         run: |
           ls
           mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
 
       - name: patch libdragon make (workaround ignore warnings as errors)
-        working-directory: ${{ github.workspace }}/ED64/ED64-XIO/libdragon
+        working-directory: ${{ github.workspace }}/ED64-XIO/libdragon
         run: |
           ls
           sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
@@ -54,11 +57,11 @@ jobs:
 
 
       - name: Buid libdragon and ROM
-        working-directory: ${{ github.workspace }}/ED64/ED64-XIO/
+        working-directory: ${{ github.workspace }}/ED64-XIO/
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/libdragon/
-          --workdir=/libdragon/
+          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}/ED64-XIO/libdragon/
+          --workdir=/${{ github.workspace }}/ED64-XIO/libdragon/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
           make libdragon &&
