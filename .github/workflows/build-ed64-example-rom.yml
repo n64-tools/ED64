@@ -28,8 +28,9 @@ jobs:
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
       - name: Setup Build environment
-        #working-directory: ${{ github.workspace }}/ED64/
+        working-directory: ${{ github.workspace }}
         run: |
+          ls
           cd ./ED64-XIO/
           ls
           mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
@@ -37,8 +38,8 @@ jobs:
       - name: patch libdragon make (workaround ignore warnings as errors)
         working-directory: libdragon
         run: |
-          sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
           ls
+          sed -z -i.bak 's/ -Wall -Werror / /' ./ED64-XIO/libdragon/Makefile
 
       - name: check current work dir
         working-directory: ${{ github.workspace }}
