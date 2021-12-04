@@ -64,6 +64,8 @@ jobs:
           --workdir=/${{ github.workspace }}/ED64-XIO/libdragon/
           ghcr.io/dragonminded/libdragon:latest
           ls &&
+          cd libdragon &&
+          ls &&
           make libdragon &&
           make tools &&
           ls &&
