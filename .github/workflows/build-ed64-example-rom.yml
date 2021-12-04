@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: dragonminded/libdragon
-          path: ${{ github.workspace }}/ED64-XIO/
+          path: ${{ github.workspace }}/ED64-XIO/libdragon/
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
 
