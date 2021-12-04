@@ -1,6 +1,14 @@
 name: Build ED64 Example ROM
  
-on: [push, pull_request]
+on: [push] #, pull_request]
+# on:
+#   push:
+#     paths:
+#       - '/**/ED64-XIO/*'
+#   pull_request:
+#     paths:
+#       - '/**/ED64-XIO/*'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,27 +18,75 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
+        with:
+          path: ${{ github.workspace }}
+      - name: Checkout libdragon repo
+        uses: actions/checkout@v2
+        with:
+          repository: dragonminded/libdragon
+          path: ${{ github.workspace }}/ED64-XIO/libdragon/
+          ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
-      - name: Install Libdragon container
+
+      - name: check current work dir
+        working-directory: ${{ github.workspace }}
         run: |
-          sudo npm install -g libdragon
-          libdragon make
-          libdragon make install
-          libdragon make tools-install
-          # libdragon init
-          # libdragon install
+          ls
+          echo "switch to ED64-XIO"
+          cd ./ED64-XIO
+          ls
+          echo "switch to libdragon"
+          cd ./libdragon/
+          ls
+          echo "switch back to ED64-XIO"
+          cd ..
+          ls
 
       - name: Setup Build environment
+        working-directory: ${{ github.workspace }}
         run: |
-          cd ${{ github.workspace }}/ED64-XIO/
-          mkdir bin && mkdir bin/release && mkdir bin/debug && mkdir obj
-          libdragon start
+          ls
+          mkdir -p ED64-XIO/bin && mkdir -p ED64-XIO/bin/release && mkdir -p ED64-XIO/bin/debug && mkdir obj
 
-      - name: Build ROM
-        run: cd ${{ github.workspace }}/ED64-XIO/ && libdragon make ${{ matrix.releasetype }}
+      - name: patch libdragon make (workaround ignore warnings as errors)
+        working-directory: ${{ github.workspace }}/ED64-XIO/libdragon
+        run: |
+          ls
+          sed -z -i.bak 's/ -Wall -Werror / /' ./Makefile
+
+
+
+      - name: Buid libdragon and ROM
+        working-directory: ${{ github.workspace }}/ED64-XIO
+        run: >-
+          docker run
+          --mount type=bind,source=$(pwd),target=/libdragon
+          --workdir=/libdragon
+          ghcr.io/dragonminded/libdragon:latest
+          echo "ED64-XIO dir" && ls &&
+          cd libdragon &&
+          echo "libdragon dir" && ls &&
+          make libdragon && sudo make install &&
+          make tools && sudo make tools-install &&
+          cd .. &&
+          echo "ED64-XIO dir" && ls &&
+          make ${{ matrix.releasetype }}
+
+      #     sudo npm install -g libdragon
+      #     libdragon init
+      #     #libdragon exec bash -c 'export N64_CFLAGS="-DNDEBUG"'
+      #     #libdragon exec bash -c N64_CFLAGS="-DNDEBUG"
+      #     #N64_CFLAGS="-DNDEBUG" && libdragon install
+      #     sed -z -i.bak 's/CFLAGS+=$(N64_CFLAGS) /CFLAGS+=$(N64_CFLAGS) -DNDEBUG /' ./libdragon/Makefile
+      #     sed -z -i.bak 's/#define assertf(expr, msg, ...)    ({ })/#define assertf(expr, msg, ...)    ({ (void)(expr); })/' ./libdragon/include/debug.h
+      #     sed -z -i.bak '1s/^/#undef NDEBUG\n/' ./libdragon/src/debug.c
+      #     sed -z -i.bak 's/bool direction = (out<=in);/bool direction = (out<=in); (void)direction;/' ./libdragon/src/audio/libxm/context.c
+      #     sed -z -i.bak 's/assert(sz == dec_size);/assert(sz == dec_size); (void)sz;/' ./libdragon/src/audio/libxm/play.c
+      #     libdragon install
+      #     libdragon start
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: ED64-XIO-SAMPLE_N64_ROM-${{ matrix.releasetype }}
-          path: ${{ github.workspace }}/ED64-XIO/bin/${{ matrix.releasetype }}/ED64-XIO-SAMPLE.v64
+          path: ${{ github.workspace }}/**/ED64-XIO/bin/${{ matrix.releasetype }}/ED64-XIO-SAMPLE.v64
