@@ -39,7 +39,7 @@ jobs:
           cd ./libdragon/
           ls
           echo "switch back to ED64-XIO"
-          cd ./../ED64-XIO/
+          cd ..
           ls
 
       - name: Setup Build environment
@@ -67,7 +67,7 @@ jobs:
           make libdragon &&
           make tools &&
           ls &&
-          cd ./../ &&
+          cd .. &&
           ls &&
           make ${{ matrix.releasetype }}
 
