@@ -60,8 +60,8 @@ jobs:
         working-directory: ${{ github.workspace }}/ED64-XIO
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=${{ github.workspace }}/ED64-XIO
-          --workdir=${{ github.workspace }}/ED64-XIO
+          --mount type=bind,source=$(pwd),target=/libdragon
+          --workdir=/libdragon
           ghcr.io/dragonminded/libdragon:latest
           echo "ED64-XIO dir" && ls &&
           cd libdragon &&
