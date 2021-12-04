@@ -57,14 +57,12 @@ jobs:
 
 
       - name: Buid libdragon and ROM
-        working-directory: ${{ github.workspace }}/ED64-XIO/
+        working-directory: ${{ github.workspace }}/ED64-XIO/libdragon/
         run: >-
           docker run
           --mount type=bind,source=$(pwd),target=/libdragon
           --workdir=/libdragon
           ghcr.io/dragonminded/libdragon:latest
-          echo "ED64-XIO dir" && ls &&
-          cd libdragon &&
           echo "libdragon dir" && ls &&
           make libdragon && sudo make install &&
           make tools && sudo make tools-install &&
