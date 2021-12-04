@@ -18,13 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
-        with:
-          path: ${{ github.workspace }}
+        # with:
+        #   path: ${{ github.workspace }}
       - name: Checkout libdragon repo
         uses: actions/checkout@v2
         with:
           repository: dragonminded/libdragon
-          path: ./ED64-XIO/libdragon
+          #path: ./ED64-XIO/libdragon
           ref: '89d17be8563a44a9b95873d436832a1222757cdc'
 
       - name: Setup Build environment
