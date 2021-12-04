@@ -60,17 +60,16 @@ jobs:
         working-directory: ${{ github.workspace }}/ED64-XIO/
         run: >-
           docker run
-          --mount type=bind,source=$(pwd),target=/${{ github.workspace }}/ED64-XIO/libdragon/
-          --workdir=/${{ github.workspace }}/ED64-XIO/libdragon/
+          --mount type=bind,source=$(pwd),target=/libdragon/
+          --workdir=/libdragon/
           ghcr.io/dragonminded/libdragon:latest
-          ls &&
+          echo "ED64-XIO dir" && ls &&
           cd libdragon &&
-          ls &&
-          make libdragon &&
-          make tools &&
-          ls &&
+          echo "libdragon dir" && ls &&
+          make libdragon && sudo make install &&
+          make tools && sudo make tools-install
           cd .. &&
-          ls &&
+          echo "ED64-XIO dir" && ls &&
           make ${{ matrix.releasetype }}
 
       #     sudo npm install -g libdragon
