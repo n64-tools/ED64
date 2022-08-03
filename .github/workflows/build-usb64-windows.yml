@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         # dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net6.0' ]
-        dotnet: [ 'net45', 'netcoreapp3.1', 'net6.0' ]
+        dotnet: [ 'netcoreapp3.1', 'net6.0' ] # , 'Debug'
         configuration: ['Release']
     name: Build ${{ matrix.dotnet }} usb64 App
     steps:
@@ -33,5 +33,5 @@ jobs:
         with:
           name: usb64-${{ matrix.dotnet }}-app-windows
           path: |
-            ${{ github.workspace }}\usb64\usb64\bin\Release\${{ matrix.dotnet }}\usb64.exe
-            ${{ github.workspace }}\usb64\usb64\bin\Release\${{ matrix.dotnet }}\usb64.dll
+            ${{ github.workspace }}\usb64\usb64\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\usb64.exe
+            ${{ github.workspace }}\usb64\usb64\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\usb64.dll

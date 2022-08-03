@@ -2,14 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net40;net45;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>-->
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net45;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">netcoreapp3.1;net6.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netcoreapp3.1;net6.0</TargetFrameworks>
     <Authors>I. Golubovskiy, Robin Jones</Authors>
     <Company>Krikzz / NetworkFusion</Company>
     <Copyright>Copyright © Krikzz, NetworkFusion - 2020</Copyright>
     <PackageProjectUrl>https://github.com/krikzz/ED64/</PackageProjectUrl>
-    <AssemblyName>ed64usb</AssemblyName>
+    <AssemblyName>ED64CommsUtility</AssemblyName>
     <AssemblyVersion>2.0.0.5</AssemblyVersion>
     <FileVersion>2.0.0.5</FileVersion>
     <RootNamespace>Krikzz.EverDrive64.Utilities</RootNamespace>
@@ -22,22 +21,8 @@
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net40'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
-    <DefineConstants>NET40;NETFULL</DefineConstants>
-  </PropertyGroup>
 
 </Project>
