@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EverDrive64App", "usb64\EverDrive64App.csproj", "{72FEBDD2-077B-4F28-9049-69D4A84F3C1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EverDrive64App", "usb64\usb64.csproj", "{72FEBDD2-077B-4F28-9049-69D4A84F3C1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "UnitTests\Tests.csproj", "{7393DDEC-442A-4E65-8DD1-3390A6F8CDAB}"
 EndProject
