@@ -34,7 +34,7 @@ jobs:
         run: dotnet build ./usb64/usb64.sln --configuration Release --no-restore --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: usb64-${{ matrix.dotnet }}-app-windows
           path: |
