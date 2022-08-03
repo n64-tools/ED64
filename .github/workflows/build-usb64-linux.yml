@@ -6,17 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ 'netcoreapp3.1', 'net6.0' ]
+        dotnet: [ 'net6.0' ]
     name: Build ${{ matrix.dotnet }} usb64 Linux
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
      
-      - name: Setup .NET Core 3.1
-        if: matrix.dotnet == 'netcoreapp3.1'
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 3.1.x
       - name: Setup .NET Core 6.0
         if: matrix.dotnet == 'net6.0'
         uses: actions/setup-dotnet@v2
@@ -24,7 +19,7 @@ jobs:
           dotnet-version: 6.0.x
         
       - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.5
+        uses: NuGet/setup-nuget@latest
       
       - name: Restore NuGet Packages
         run: nuget restore ./usb64/usb64.sln
@@ -33,7 +28,7 @@ jobs:
         run: dotnet build ./usb64/usb64.sln --configuration Release --no-restore --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: usb64-${{ matrix.dotnet }}-app-linux
           path: |

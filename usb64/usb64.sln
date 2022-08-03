@@ -8,6 +8,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "UnitTests\Tests.csproj", "{7393DDEC-442A-4E65-8DD1-3390A6F8CDAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CDB66F63-FD72-4F09-B853-98EB893E602B}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build-usb64-linux.yml = ..\.github\workflows\build-usb64-linux.yml
+		..\.github\workflows\build-usb64-windows.yml = ..\.github\workflows\build-usb64-windows.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
