@@ -23,15 +23,9 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.0.x
-        
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.5
-      
-      - name: Restore NuGet Packages
-        run: nuget restore ./usb64/usb64.sln
-  
+          
       - name: Build App
-        run: dotnet build ./usb64/usb64.sln --configuration Release --no-restore --framework ${{ matrix.dotnet }}
+        run: dotnet build ./usb64/usb64.sln --configuration Release --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
