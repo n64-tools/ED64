@@ -9,9 +9,10 @@
     <Company>Krikzz / NetworkFusion</Company>
     <Copyright>Copyright © Krikzz, NetworkFusion - 2020</Copyright>
     <PackageProjectUrl>https://github.com/krikzz/ED64/</PackageProjectUrl>
-    <AssemblyVersion>2.0.0.4</AssemblyVersion>
-    <FileVersion>2.0.0.4</FileVersion>
-    <RootNamespace>ed64usb</RootNamespace>
+    <AssemblyName>ed64usb</AssemblyName>
+    <AssemblyVersion>2.0.0.5</AssemblyVersion>
+    <FileVersion>2.0.0.5</FileVersion>
+    <RootNamespace>Krikzz.EverDrive64.Utilities</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">

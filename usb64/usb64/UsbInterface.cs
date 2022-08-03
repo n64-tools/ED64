@@ -2,7 +2,7 @@
 using System.IO.Ports;
 using System.Text;
 
-namespace ed64usb
+namespace Krikzz.EverDrive64.Utilities.XSeries
 {
     public static class UsbInterface
     {

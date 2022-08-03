@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace ed64usb
+namespace Krikzz.EverDrive64.Utilities.XSeries
 {
     internal class Program
     {

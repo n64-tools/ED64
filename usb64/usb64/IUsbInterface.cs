@@ -1,4 +1,4 @@
-﻿namespace ed64usb
+﻿namespace Krikzz.EverDrive64.Utilities.XSeries
 {
     public static class IUsbInterface
     {

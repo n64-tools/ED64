@@ -3,7 +3,7 @@
 
 
 // TODO: this file is not yet used in anger!!!
-namespace ed64usb
+namespace Krikzz.EverDrive64.Utilities.XSeries
 {
 
     interface IStorageCopyOptions

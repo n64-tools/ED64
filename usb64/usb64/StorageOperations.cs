@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace ed64usb
+namespace Krikzz.EverDrive64.Utilities.XSeries
 {
     /// <summary>
     /// Operations for managing ED64 SD storage over USB

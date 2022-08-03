@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace ed64usb
+namespace Krikzz.EverDrive64.Utilities.XSeries
 {
     public class ImageUtilities
     {
