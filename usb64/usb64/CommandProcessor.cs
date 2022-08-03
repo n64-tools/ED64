@@ -11,7 +11,7 @@ namespace ed64usb
 
         public const uint ROM_BASE_ADDRESS = 0x10000000; //X-Series only
         public const uint RAM_BASE_ADDRESS = 0x80000000; //X-Series only
-        public const string MINIMUM_OS_VERSION = "3.05"; //TODO: now technically 3.07 due to storage operations. Could possibily handle (if we can interegate), but should be added to the comms test!.
+        public const string MINIMUM_OS_VERSION = "3.07"; //TODO: now technically 3.07 due to storage operations. Could possibily handle (if we can interegate), but should be added to the comms test!.
         public const int MAX_ROM_SIZE = 0x4000000;
         public const int MIN_ROM_SIZE = 0x101000;
 
@@ -94,6 +94,7 @@ namespace ed64usb
 
             for (int i = 0; i < 0x800000; i += writeBuffer.Length) //for each 8MB in an 64MB range
             {
+                Console.Write(".");
                 new Random().NextBytes(writeBuffer); //randomly fill the 8MB array
                 RomWrite(writeBuffer, ROM_BASE_ADDRESS);
                 readBuffer = RomRead(ROM_BASE_ADDRESS, writeBuffer.Length);
@@ -103,6 +104,7 @@ namespace ed64usb
                     if (writeBuffer[u] != readBuffer[u]) throw new Exception("USB diagnostics error: " + (i + u));
                 }
             }
+            Console.WriteLine(".");
         }
 
         /// <summary>
@@ -212,18 +214,20 @@ namespace ed64usb
 
                         //Loading a ROM generated with 'makemask' over USB less than 1MB in size doesn't seem to like `0xff` padding. 
                         //Lets remove them as a workaround!
-                        for (int i = romBytes.Count; i > 0; i--) //cycle backwards through the byte array
+                        if (romBytes.Count < 3000000)
                         {
-                            if (romBytes[i] == 0xff)
+                            for (int i = romBytes.Count - 1; i > 0; i--) //cycle backwards through the byte array
                             {
-                                romBytes.RemoveAt(i);
-                            }
-                            else //break on first chance.
-                            {
-                                return;
+                                if (romBytes[i] == 0xff)
+                                {
+                                    romBytes.RemoveAt(i);
+                                }
+                                else //break on first chance.
+                                {
+                                    break;
+                                }
                             }
                         }
-
                         RomWrite(romBytes.ToArray(), baseAddress);
                     }
                 }
@@ -303,14 +307,15 @@ namespace ed64usb
             {
                 throw new Exception("Filename exceeds the 256 character limit.");
             }
-            
-            CommandPacketTransmit(TransmitCommand.RomStart, 0, 0, 1);
-
-            if (fileName.Length <= 256 && fileName.Length >= 1)
+            else if (string.IsNullOrEmpty(fileName))
             {
-                
+                throw new Exception("Filename was not valid.");
+            }         
+            else
+            {   
                 var filenameBytes = Encoding.ASCII.GetBytes(fileName);
                 Array.Resize(ref filenameBytes, 256); //The packet must be 256 bytes in length, so resize it.
+                CommandPacketTransmit(TransmitCommand.RomStart, 0, 0, 1);
                 UsbInterface.Write(filenameBytes);
             }
 

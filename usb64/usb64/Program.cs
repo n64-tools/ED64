@@ -40,7 +40,7 @@ namespace ed64usb
             Console.WriteLine("      i.e. SD:\\<filepath> to C:\\<filepath> OR C:\\<filepath> to SD:\\<filepath>.");
             //Console.WriteLine("-unfdebug (Runs the unf Debugger).");
             Console.WriteLine("-save=<savetype> (Runs the ROM with a save type when not matched in the internal database)");
-            Console.WriteLine("      Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k].");
+            Console.WriteLine("      Options: [None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram1024k].");
             Console.WriteLine("-extra=<RTC-RegionType> (Runs the ROM with RTC or forced region)");
             Console.WriteLine("      Options: [Off,Rtc,NoRegion,All].");
             Console.WriteLine();
@@ -235,16 +235,19 @@ namespace ed64usb
                 {
                     if (!string.IsNullOrEmpty(startFileName))
                     {
+                        Console.WriteLine($"Starting: { startFileName }.");
                         CommandProcessor.StartRom(startFileName);
                     }
                     else if (!string.IsNullOrEmpty(romFilePath))
                     {
+                        Console.WriteLine($"Starting: { romFilePath }.");
                         CommandProcessor.StartRom(Path.GetFileName(romFilePath));
                     }
                     else
                     {
-                        //throw new Exception("Could not start ROM");
-                        CommandProcessor.StartRom();
+                        throw new Exception("Could not start ROM");
+                        //CommandProcessor.StartRom();
+                        //Console.WriteLine("Trying to start Cached ROM...");
                     }
 
                 }

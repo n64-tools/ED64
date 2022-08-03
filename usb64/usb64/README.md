@@ -45,7 +45,7 @@ Arg: `-forcerom=<filename>` ();
 #### Save Type
 Runs the ROM with a save type when not matched in the internal database
  Arg: `-save=<savetype>`
- Options: `[None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram128k]`
+ Options: `[None,Eeprom4k,Eeprom16k,Sram,Sram768k,FlashRam,Sram1024k]`
 
  #### Extra Info
  Runs the ROM with RTC or forced region

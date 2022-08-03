@@ -10,7 +10,7 @@
             Sram = 0x30,
             Sram768k = 0x40,
             FlashRam = 0x50,
-            Sram128k = 0x60
+            Sram12024k = 0x60
         }
 
         public enum ExtraInfo : byte
