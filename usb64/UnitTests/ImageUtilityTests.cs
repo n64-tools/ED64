@@ -1,7 +1,6 @@
 ﻿namespace UnitTests
 {
     [TestClass]
-{
     public class ImageUtilityTests
     {
         [TestMethod]
