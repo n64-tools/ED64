@@ -6,8 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ 'net6.0' ]
-        arch: [win-x86, linux-x64] # win-x64, win-arm, win-arm64, osx-x64, linux-arm, osx-x64, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
+        dotnet: [ 'netcoreapp3.1', 'net6.0' ]
+        arch: [win-x64, linux-x64, osx-x64] # win-x86, win-arm, win-arm64, linux-arm, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
         configuration: [ 'Release' ] # , 'Debug'
         contained: [self-contained, no-self-contained]
 
@@ -18,6 +18,7 @@ jobs:
                
       - name: Build App
         run: |
+          # note: we don''t use 'dotnet build' as it does not support '--runtime', but 'dotnet publish' does and still includes the build process.
           dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --${{ matrix.contained }}
   
       - name: Upload Artifact
