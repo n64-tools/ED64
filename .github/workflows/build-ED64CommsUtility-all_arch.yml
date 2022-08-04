@@ -15,11 +15,11 @@ jobs:
       - uses: actions/checkout@v2
         name: Checkout Code
      
-      - name: Setup .NET 6.0
-        if: matrix.dotnet == 'net6.0'
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.0.x
+      #- name: Setup .NET 6.0
+      #  if: matrix.dotnet == 'net6.0'
+      #  uses: actions/setup-dotnet@v2
+      #  with:
+      #    dotnet-version: 6.0.x
           
       - name: Build App
         run: |
@@ -31,5 +31,5 @@ jobs:
         with:
           name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-${{ matrix.arch }}
           path: |
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/*.dll
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/*.exe
+            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/*.dll
+            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/*.exe
