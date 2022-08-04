@@ -9,27 +9,21 @@ jobs:
         dotnet: [ 'net6.0' ]
         arch: [win-x86, linux-x64] # win-x64, win-arm, win-arm64, osx-x64, linux-arm, osx-x64, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
         configuration: [ 'Release' ] # , 'Debug'
+        contained: [self-contained, no-self-contained]
 
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
-     
-      #- name: Setup .NET 6.0
-      #  if: matrix.dotnet == 'net6.0'
-      #  uses: actions/setup-dotnet@v2
-      #  with:
-      #    dotnet-version: 6.0.x
-          
+               
       - name: Build App
         run: |
-          #dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }}
-          dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --self-contained
+          dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --${{ matrix.contained }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-${{ matrix.arch }}
+          name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-${{ matrix.arch }}-${{ matrix.contained }}
           path: |
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/*.dll
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/*.exe
+            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/**/*
+            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/**/*
