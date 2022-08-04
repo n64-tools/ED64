@@ -1,4 +1,4 @@
-name: Linux CI Build for ED64CommsUtility 
+name: CrossCompile CI Build for ED64CommsUtility 
  
 on: [push, pull_request]
 jobs:
@@ -22,7 +22,7 @@ jobs:
           dotnet-version: 6.0.x
           
       - name: Build App
-        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} #--self-contained
+        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --self-contained
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
