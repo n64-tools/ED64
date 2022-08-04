@@ -1,4 +1,4 @@
-name: Build Windows Usb64 App
+name: Windows CI Build for ED64CommsUtility
  
 on: [push, pull_request]
 jobs:
@@ -7,9 +7,9 @@ jobs:
     strategy:
       matrix:
         # dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net6.0' ]
-        dotnet: [ 'netcoreapp3.1', 'net6.0' ] # , 'Debug'
-        configuration: ['Release']
-    name: Build ${{ matrix.dotnet }} usb64 App
+        dotnet: [ 'netcoreapp3.1', 'net6.0' ]
+        configuration: ['Release'] # , 'Debug'
+    name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Windows
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
@@ -31,7 +31,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: usb64-${{ matrix.dotnet }}-app-windows
+          name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-X86_64-windows
           path: |
             ${{ github.workspace }}\usb64\usb64\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\*.exe
             ${{ github.workspace }}\usb64\usb64\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\*.dll

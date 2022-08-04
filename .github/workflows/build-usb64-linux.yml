@@ -1,4 +1,4 @@
-name: Build Linux Usb64 App
+name: Linux CI Build for ED64CommsUtility 
  
 on: [push, pull_request]
 jobs:
@@ -8,7 +8,7 @@ jobs:
       matrix:
         dotnet: [ 'netcoreapp3.1', 'net6.0' ]
         configuration: [ 'Release' ] # , 'Debug'
-    name: Build ${{ matrix.dotnet }} usb64 Linux
+    name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Linux
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
@@ -30,6 +30,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: usb64-${{ matrix.dotnet }}-app-linux
+          name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-X86_64-linux
           path: |
             ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/*.dll
