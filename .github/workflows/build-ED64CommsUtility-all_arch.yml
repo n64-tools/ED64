@@ -7,22 +7,24 @@ jobs:
     strategy:
       matrix:
         dotnet: [ 'net6.0' ]
-        arch: [win-x86, osx-x64, linux-x64, linux-arm64] # win-x64, win-arm, win-arm64, osx-x64, linux-arm, - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
+        arch: [win-x86, linux-x64] # win-x64, win-arm, win-arm64, osx-x64, linux-arm, osx-x64, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
         configuration: [ 'Release' ] # , 'Debug'
 
-    name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Linux
+    name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         name: Checkout Code
      
-      - name: Setup .NET 6.0
-        if: matrix.dotnet == 'net6.0'
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.0.x
+      #- name: Setup .NET 6.0
+      #  if: matrix.dotnet == 'net6.0'
+      #  uses: actions/setup-dotnet@v2
+      #  with:
+      #    dotnet-version: 6.0.x
           
       - name: Build App
-        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --self-contained
+        run: |
+          dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }}
+          dotnet publish  --runtime ${{ matrix.arch }} --self-contained
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
