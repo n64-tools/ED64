@@ -1,6 +1,7 @@
 name: Linux CI Build for ED64CommsUtility 
  
-on: [push, pull_request]
+# currently dissabled, unless speciffically triggered!
+on: [workflow_dispatch] #push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest

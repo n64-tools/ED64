@@ -26,5 +26,5 @@ jobs:
         with:
           name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-${{ matrix.arch }}-${{ matrix.contained }}
           path: |
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/**/*
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/**/*
+            # Wildcard the publish directory rather than trying to target DLL and EXE files.
+            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/publish/**/*
