@@ -32,4 +32,4 @@ jobs:
         with:
           name: usb64-${{ matrix.dotnet }}-app-linux
           path: |
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/usb64.dll
+            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/*.dll
