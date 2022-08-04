@@ -24,7 +24,7 @@ jobs:
       - name: Build App
         run: |
           dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }}
-          dotnet publish  --runtime ${{ matrix.arch }} --self-contained
+          dotnet publish ./usb64/usb64.sln --runtime ${{ matrix.arch }} --self-contained
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
