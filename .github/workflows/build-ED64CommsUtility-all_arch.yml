@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ 'netcoreapp3.1', 'net6.0' ]
-        arch: [win-x64, linux-x64, osx-x64] # win-x86, win-arm, win-arm64, linux-arm, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
+        dotnet: [ 'net6.0' ] # ,'netcoreapp3.1'
+        arch: [win-x64, linux-x64] # , osx-x64, win-x86, win-arm, win-arm64, linux-arm, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
         configuration: [ 'Release' ] # , 'Debug'
-        contained: [self-contained, no-self-contained]
+        contained: [self-contained] # , no-self-contained
 
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for ${{ matrix.arch }}
     steps:
@@ -19,7 +19,7 @@ jobs:
       - name: Build App
         run: |
           # note: we don''t use 'dotnet build' as it does not support '--runtime', but 'dotnet publish' does and still includes the build process.
-          dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --${{ matrix.contained }} -p:PublishSingleFile=true
+          dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }} --runtime ${{ matrix.arch }} --${{ matrix.contained }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -27,5 +27,5 @@ jobs:
           name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-${{ matrix.arch }}-${{ matrix.contained }}
           path: |
             # Wildcard the publish directory rather than trying to target DLL and EXE files.
-            # Could probably improve by "merging" files into EXE. and exclude json files.
+            # Could probably improve by "merging" files into EXE. and exclude json files. See: https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview?tabs=cli ( -p:PublishSingleFile=true) etc.
             ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/publish/**/*
