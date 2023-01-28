@@ -27,8 +27,8 @@ jobs:
       - name: Build App
         run: |
           # note: we don''t use 'dotnet build' as it does not support '--runtime', but 'dotnet publish' does and still includes the build process.
-          # dotnet restore ./usb64/usb64/usb64.csproj
-          dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --runtime ${{ matrix.arch }} --${{ matrix.contained }} --framework ${{ matrix.dotnet }}
+          # dotnet restore ./ED64CommsUtility/ED64CommsUtility/ED64CommsUtility.csproj
+          dotnet publish ./ED64CommsUtility/ED64CommsUtility.sln --configuration ${{ matrix.configuration }} --runtime ${{ matrix.arch }} --${{ matrix.contained }} --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -37,4 +37,4 @@ jobs:
           path: |
             # Wildcard the publish directory rather than trying to target DLL and EXE files.
             # Could probably improve by "merging" files into EXE. and exclude json files. See: https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview?tabs=cli ( -p:PublishSingleFile=true) etc.
-            ${{ github.workspace }}/usb64/usb64/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/publish/**/*
+            ${{ github.workspace }}/ED64CommsUtility/ED64CommsUtility/bin/${{ matrix.configuration }}/${{ matrix.dotnet }}/${{ matrix.arch }}/publish/**/*

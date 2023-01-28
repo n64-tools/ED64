@@ -109,7 +109,7 @@ u8 demoMenu() {
             usbTerminal();
         }
 
-        //usb client demo compatible with usb64.exe
+        //usb client demo compatible with ED64CommsUtility.exe
         if (selector == MENU_USB_LOADER) {
             usbLoadGame();
         }

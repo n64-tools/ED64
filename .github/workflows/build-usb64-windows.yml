@@ -1,6 +1,6 @@
 name: Windows CI Build for ED64CommsUtility
  
-# currently dissabled, unless speciffically triggered!
+# currently disabled, unless speciffically triggered!
 on: [workflow_dispatch] #push, pull_request]
 jobs:
   build:
@@ -26,13 +26,13 @@ jobs:
           
       - name: Build App
         run: |
-          dotnet restore ./usb64/usb64/usb64.csproj
-          dotnet build ./usb64/usb64/usb64.csproj --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
+          dotnet restore ./ED64CommsUtility/ED64CommsUtility/ED64CommsUtility.csproj
+          dotnet build ./ED64CommsUtility/ED64CommsUtility/ED64CommsUtility.csproj --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: ED64CommsUtility-${{ matrix.dotnet }}-${{ matrix.configuration }}-X86_64-windows
           path: |
-            ${{ github.workspace }}\usb64\usb64\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\*.exe
-            ${{ github.workspace }}\usb64\usb64\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\*.dll
+            ${{ github.workspace }}\ED64CommsUtility\ED64CommsUtility\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\*.exe
+            ${{ github.workspace }}\ED64CommsUtility\ED64CommsUtility\bin\${{ matrix.configuration }}\${{ matrix.dotnet }}\*.dll
