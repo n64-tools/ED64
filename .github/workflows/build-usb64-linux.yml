@@ -24,8 +24,8 @@ jobs:
           
       - name: Build App
         run: |
-          dotnet restore ./usb64/usb64.sln
-          dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
+          dotnet restore ./usb64/usb64/usb64.csproj
+          dotnet build ./usb64/usb64/usb64.csproj --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
