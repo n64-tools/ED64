@@ -55,3 +55,7 @@ Options: `[Off,Rtc,NoRegion,All]`
 #### Debug
 Runs the unf Debugger Console session
 Arg: `-unfdebug`
+
+Runs a TCP proxy on port 3333
+Arg: `-tcpdebug`
+Optionally, add `-tcpdebugport` to specify a different one.

@@ -48,6 +48,11 @@ namespace Krikzz.EverDrive64.Utilities.XSeries
         //[Option("unfdebug", SetName = "rom", Required = false, Default = false, HelpText = "Start UNF Debugger after file loads.")]
         //bool StartUfnDebugger { get; set; }
 
+        [Option("tcpdebug", SetName = "rom", Required = false, Default = false, HelpText = "Start TCP Debugger after file loads.")]
+        bool StartTcpDebugServer { get; set; }
+        [Option("tcpdebugport", SetName = "rom", Required = false, Default = 3333, HelpText = "Set the TCP debugger port.")]
+        uint TcpDebuggerPort { get; set; }
+
         [Option("autostart", SetName = "rom", Required = false, Default = true, HelpText = "Start the ROM after loaded.")]
         bool AutoStartRom { get; set; }
     }
@@ -98,6 +103,8 @@ namespace Krikzz.EverDrive64.Utilities.XSeries
         public string RomOptionFlags { get; set; }
         public bool IsFpgaFile { get; set; }
         //public bool StartUfnDebugger { get; set; }
+        public bool StartTcpDebugServer { get; set; }
+        public uint TcpDebuggerPort { get; set; }
         public bool AutoStartRom { get; set; }
 
 

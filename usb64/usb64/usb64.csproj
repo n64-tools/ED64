@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">netcoreapp3.1;net6.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netcoreapp3.1;net6.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net6.0</TargetFrameworks>
     <Authors>I. Golubovskiy, Robin Jones</Authors>
     <Company>Krikzz / NetworkFusion</Company>
     <Copyright>Copyright © Krikzz, NetworkFusion - 2020</Copyright>
@@ -14,14 +13,8 @@
     <RootNamespace>Krikzz.EverDrive64.Utilities</RootNamespace>
   </PropertyGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0' ">
-    <PackageReference Include="System.IO.Ports" Version="5.0.0" />
-  </ItemGroup>
-  
   <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
 

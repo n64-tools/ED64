@@ -115,6 +115,8 @@ namespace Krikzz.EverDrive64.Utilities.XSeries
                 var loadRom = false;
                 var startRom = false;
                 //var unfDebug = false;
+                var tcpDebugSession = false;
+                var tcpDebugPort = 3333;
 
                 var time = DateTime.UtcNow.Ticks;
 
@@ -186,6 +188,16 @@ namespace Krikzz.EverDrive64.Utilities.XSeries
                         case string x when x.StartsWith("-screen"):
                             Console.WriteLine("Reading Framebuffer.");
                             CommandProcessor.DumpScreenBuffer(ExtractSubArg(arg));
+                            break;
+
+                        case string x when x.StartsWith("-tcpdebug"):
+                            Console.WriteLine("Reading tcpdebug.");
+                            tcpDebugSession = true;
+                            break;
+
+                        case string x when x.StartsWith("-tcpdebugport"):
+                            Console.WriteLine("Reading tcpdebug port.");
+                            tcpDebugPort = int.Parse(ExtractSubArg(arg)); // FIXME: not well!
                             break;
 
                         case string x when x.StartsWith("-cp"):
@@ -260,6 +272,12 @@ namespace Krikzz.EverDrive64.Utilities.XSeries
                 //     Console.Write("Starting unf debug session, ");
                 //     //var debug = new Unf.Debuggger(UsbInterface.port);
                 // }
+
+                if (tcpDebugSession)
+                {
+                    Console.Write($"Starting tcp debug session, on {tcpDebugPort}");
+                    TcpProxy.CreateServer(tcpDebugPort);
+                }
             }
 
         }
