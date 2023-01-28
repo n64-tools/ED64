@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         # dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net6.0' ]
-        dotnet: [ 'net6.0' ]
+        dotnet: [ 'net6' ]
         configuration: ['Release'] # , 'Debug'
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Windows
     steps:
