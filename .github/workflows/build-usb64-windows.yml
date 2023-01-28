@@ -8,11 +8,11 @@ jobs:
     strategy:
       matrix:
         # dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net6.0' ]
-        dotnet: [ 'netcoreapp3.1', 'net6.0' ]
+        dotnet: [ 'net6.0' ]
         configuration: ['Release'] # , 'Debug'
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Windows
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout Code
 
       #- name: Setup .NET Core 3.1
