@@ -11,6 +11,8 @@
     <AssemblyVersion>2.0.0.5</AssemblyVersion>
     <FileVersion>2.0.0.5</FileVersion>
     <RootNamespace>Krikzz.EverDrive64.Utilities</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <ItemGroup>
