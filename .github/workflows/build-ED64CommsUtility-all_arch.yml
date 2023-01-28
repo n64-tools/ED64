@@ -9,7 +9,7 @@ jobs:
         dotnet: [ 'net6.0' ] # ,'netcoreapp3.1'
         arch: [win-x64, linux-x64] # , osx-x64, win-x86, win-arm, win-arm64, linux-arm, linux-arm64 - see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog for further options. 
         configuration: [ 'Release' ] # , 'Debug'
-        contained: [self-contained] # , no-self-contained
+#        contained: [self-contained] # , no-self-contained
 
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for ${{ matrix.arch }}
     steps:
