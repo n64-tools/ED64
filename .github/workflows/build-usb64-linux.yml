@@ -1,7 +1,7 @@
 name: Linux CI Build for ED64CommsUtility 
  
 # currently dissabled, unless speciffically triggered!
-on: [workflow_dispatch] #push, pull_request]
+on:  [push, pull_request] #[workflow_dispatch] #push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
       - name: Build App
         run: |
           dotnet restore ./usb64/usb64.csproj
-          dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
+          dotnet build ./usb64/usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
