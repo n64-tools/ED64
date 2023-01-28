@@ -21,7 +21,7 @@ jobs:
           dotnet-version: 6.0.x
           
       - name: Build App
-        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }}
+        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3

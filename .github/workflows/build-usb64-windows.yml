@@ -21,10 +21,10 @@ jobs:
       #  with:
       #    dotnet-version: 3.1.x
       - name: Setup .NET 6.0
-       if: matrix.dotnet == 'net6.0'
-       uses: actions/setup-dotnet@v2
-       with:
-         dotnet-version: 6.0.x
+        if: matrix.dotnet == 'net6.0'
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
           
       - name: Build App
         run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
