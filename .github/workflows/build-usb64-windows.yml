@@ -10,16 +10,14 @@ jobs:
         # dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net6.0' ]
         dotnet: [ 'net6.0' ]
         configuration: ['Release'] # , 'Debug'
+
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Windows
     steps:
       - uses: actions/checkout@v3
         name: Checkout Code
+        with:
+          fetch-depth: 1
 
-      #- name: Setup .NET Core 3.1
-      #  if: matrix.dotnet == 'netcoreapp3.1'
-      #  uses: actions/setup-dotnet@v2
-      #  with:
-      #    dotnet-version: 3.1.x
       - name: Setup .NET 6.0
         if: matrix.dotnet == 'net6.0'
         uses: actions/setup-dotnet@v2
@@ -27,7 +25,9 @@ jobs:
           dotnet-version: 6.0.x
           
       - name: Build App
-        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
+        run: |
+          dotnet restore ./usb64/usb64.sln
+          dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
