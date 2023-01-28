@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         # dotnet: [ 'net40', 'net45', 'netcoreapp3.1', 'net6.0' ]
-        dotnet: [ 'net6' ]
+        dotnet: [ 'net6.0' ]
         configuration: ['Release'] # , 'Debug'
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Windows
     steps:
@@ -20,14 +20,14 @@ jobs:
       #  uses: actions/setup-dotnet@v2
       #  with:
       #    dotnet-version: 3.1.x
-      #- name: Setup .NET 6.0
-      #  if: matrix.dotnet == 'net6.0'
-      #  uses: actions/setup-dotnet@v2
-      #  with:
-      #    dotnet-version: 6.0.x
+      - name: Setup .NET 6.0
+       if: matrix.dotnet == 'net6.0'
+       uses: actions/setup-dotnet@v2
+       with:
+         dotnet-version: 6.0.x
           
       - name: Build App
-        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --framework ${{ matrix.dotnet }}
+        run: dotnet build ./usb64/usb64.sln --configuration ${{ matrix.configuration }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3

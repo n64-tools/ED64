@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ 'net6' ]
+        dotnet: [ 'net6.0' ]
         configuration: [ 'Release' ] # , 'Debug'
     name: Building ${{ matrix.dotnet }}-${{ matrix.configuration }} App for Linux
     steps:
