@@ -21,7 +21,8 @@ jobs:
       - name: Build App
         run: |
           # note: we don''t use 'dotnet build' as it does not support '--runtime', but 'dotnet publish' does and still includes the build process.
-          dotnet publish ./usb64/usb64/usb64.csproj --configuration ${{ matrix.configuration }} --runtime ${{ matrix.arch }} --${{ matrix.contained }} # --framework ${{ matrix.dotnet }}
+          dotnet restore ./usb64/usb64.sln
+          dotnet publish ./usb64/usb64.sln --configuration ${{ matrix.configuration }} --runtime ${{ matrix.arch }} --${{ matrix.contained }} # --framework ${{ matrix.dotnet }}
   
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
