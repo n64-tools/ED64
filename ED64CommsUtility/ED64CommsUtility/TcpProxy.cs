@@ -37,7 +37,7 @@ namespace Krikzz.EverDrive64.Utilities
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
 
-                    // Set a 10 millisecond timeout for reading.
+                    // Set a 10 millisecond timeout for reading from the tcp stream.
                     stream.ReadTimeout = 10;
 
                     while (client.Connected)

@@ -8,8 +8,8 @@
     <Copyright>Copyright © Krikzz, NetworkFusion - 2020</Copyright>
     <PackageProjectUrl>https://github.com/krikzz/ED64/</PackageProjectUrl>
     <AssemblyName>ED64CommsUtility</AssemblyName>
-    <AssemblyVersion>2.0.0.5</AssemblyVersion>
-    <FileVersion>2.0.0.5</FileVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <RootNamespace>Krikzz.EverDrive64.Utilities</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
